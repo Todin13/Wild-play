@@ -2,7 +2,10 @@ const express = require("express"); // Import express to handle HTTP request
 const mongoose = require("mongoose"); // Import the Mongoose lib to help manage the MongoDB easily
 const cors = require("cors"); // Import CORS to allow React communicate with Express
 const User = require("../backend/connectUserDB"); // Link the models js
+<<<<<<< HEAD
 const router = express.Router();
+=======
+>>>>>>> 3bc226a (version 1.0)
 
 const app = express(); // Initialize express app
 
@@ -22,7 +25,10 @@ mongoose
 
 app.post("/register", async (req, res) => { // This will only listen to the POST request from /register
   try {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3bc226a (version 1.0)
     const { name, username, birthdate, contact, email, userrole, password, confirmPw } = req.body; // Destructure the datas from the request body
     if (!name || !username || !birthdate || !contact || !email || !userrole || !password || !confirmPw) return res.status(400).json({ error: "Please fill in all the field" }); // If one of them missing, print the 400 (Stand for client error) error
 
@@ -30,6 +36,7 @@ app.post("/register", async (req, res) => { // This will only listen to the POST
         return res.status(400).json({ error: "Password doesn't match with Re-type password" }); // If password doesn't match, print the 400 (Stand for client error) error
     }
 
+<<<<<<< HEAD
     const userCount =  await User.countDocuments(); // Get the amount of users
     const userId = (userCount + 1).toString().padStart(5, '0'); // Enusre the num is fill in 5 digits
 
@@ -47,6 +54,9 @@ app.post("/register", async (req, res) => { // This will only listen to the POST
 
     const newUser = new User({ // Create the user instance with all the field you need
       userNum,
+=======
+    const newUser = new User({ // Create the user instance with all the field you need
+>>>>>>> 3bc226a (version 1.0)
       name, 
       username,
       birthdate,
@@ -67,7 +77,11 @@ app.post("/register", async (req, res) => { // This will only listen to the POST
       });
     }
 
+<<<<<<< HEAD
     res.status(500).json({ error: error.message }); // Print this 500 (Stand fro server error) msg if fail
+=======
+    res.status(500).json({ error: "Database error" }); // Print this 500 (Stand fro server error) msg if fail
+>>>>>>> 3bc226a (version 1.0)
   }
 });
 
