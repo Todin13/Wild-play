@@ -51,14 +51,25 @@ const BookingSchema = new mongoose.Schema({
     delivery_location: {type: String},
     paid: { type: Boolean, default: false },
     promocode: { type: String, maxLength: 10, minLength: 10},
+//  trip_id: { type/ mongoose.Schema.Types.ObjectId, ref: "Trip"}
 });
 
-// Review Schema
-const ReviewSchema = new mongoose.Schema({
+// Van Review Schema
+const VanReviewSchema = new mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     van_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Van', required: true },
     rating: { type: Number, required: true, min: 1, max: 5 },
-    review: { type: String, required: true }
+    review: { type: String, required: true },
+    date: Date
+});
+
+// Guide Review Schema
+const GuidReviewSchema = new mongoose.Schema({
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    guide_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Guide', required: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    review: { type: String, required: true },
+    date: Date
 });
 
 // Discount Schema
@@ -69,12 +80,33 @@ const DiscountSchema = new mongoose.Schema({
     end_date: { type: Date, required: true }
 });
 
+// Guide Schema
+const GuideSchema = new mongoose.Schema({
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    duration: { type: Number, required: true},
+    locations: [String],
+    notes: [String],
+//  pictures: need to thing how to save pictures
+})
+
+// Trip Schema
+const TripSchema = new mongoose.Schema({
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    start_date: { type: Date, required: true},
+    end_date: { type: Date, required: true},
+    locations: [String],
+    notes: [String],
+//  pictures: need to thing how to save pictures
+})
 
 // export collection of the schema, schema is only the structure of the collection
 module.exports = {
     User: mongoose.model('User', UserSchema),
     Van: mongoose.model('Van', VanSchema),
     Booking: mongoose.model('Booking', BookingSchema),
-    Review: mongoose.model('Review', ReviewSchema),
-    Discount: mongoose.model('Discount', DiscountSchema)
+    VanReview: mongoose.model('VanReview', VanReviewSchema),
+    GuideReview: mongoose.model('GuideReview', GuidReviewSchema),
+    Discount: mongoose.model('Discount', DiscountSchema),
+    Guide: mongoose.model('Guide', GuideSchema),
+    Trip: mongoose.model('Trip', TripSchema)
 };
