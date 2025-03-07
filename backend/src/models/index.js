@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
         unique: true, 
         match: [/^[a-zA-Z0-9._%+/$^&*#\-\[\]{}]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Email format error"]
     },
-    phone:{type: [Number], minLength: 2, maxlength: 2}, //match: [/^353 \d{3} \d{3} \d{4}$/, "Contact Number format error"]},
+    phone: { type: String, match: [/^353 \d{3} \d{3} \d{4}$/, "Contact Number format error"]},
     user_type: { type: String, enum: ['ADMIN', 'USER'], required: true },
     birthdate: { type: Date, default: Date.now },
     billing_address: {
@@ -31,10 +31,6 @@ const UserSchema = new mongoose.Schema({
         minlength: [3, "Username must atleast 3 characters long"],
         maxlength: [20, "Name can't exceed 20 characters long"]
     },
-    password: {
-        type: String,
-        required: true
-    }
 });
 
 // Van Schema
