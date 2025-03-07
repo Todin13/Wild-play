@@ -9,14 +9,22 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     firstName: String,
     lastName:String,
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }, // saved hashed
-    phone: { type: String },
+    email: { type: String, 
+        required: [true, "E-mail is required"], 
+        unique: true, 
+        match: [/^[a-zA-Z0-9._%+/$^&*#\-\[\]{}]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Email format error"]
+    },
+    phone: { type: String, match: [/^353 \d{3} \d{3} \d{4}$/, "Contact Number format error"]},
     user_type: { type: String, enum: ['ADMIN', 'USER'], required: true },
     birthdate: { type: Date, default: Date.now },
     billing_address: [String],
     driver_license_id: {type: String, unique: true, uppercase: true, minLength:30, maxLength:30},
+    username: {
+        type: String,
+        required: [true, "Username is required"], 
+        minlength: [3, "Username must atleast 3 characters long"],
+        maxlength: [20, "Name can't exceed 20 characters long"]
+    },
 });
 
 // Van Schema
