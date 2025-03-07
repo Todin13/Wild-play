@@ -1,8 +1,9 @@
 const express = require("express"); // Import express to handle HTTP request
-const mongoose = require("mongoose"); // Import the Mongoose lib to help manage the MongoDB easily
 const cors = require("cors"); // Import CORS to allow React communicate with Express
-const User = require("../backend/connectUserDB"); // Link the models js
+const User = require('../models'); // Link the models js
 const router = express.Router();
+const { connectDB, closeDB } = require('../config/db');
+
 
 const app = express(); // Initialize express app
 
@@ -15,10 +16,7 @@ app.use(cors(corsOptions)); // Enable the CORS attach the condition we declare a
 app.use(express.json()); // Allow the server parse JSON data from the request
 
 // Connect to MongoDB
-mongoose
-  .connect("mongodb+srv://oscaroon636:Oscar%40636@cluster0.x4ncz.mongodb.net/WildPlay") // The URL of your db
-  .then(() => console.log("MongoDB Connected")) // The log will print if connect successfully
-  .catch((err) => console.error("MongoDB Connection Error:", err)); // The log will print if connect fail
+connectDB();
 
 app.post("/register", async (req, res) => { // This will only listen to the POST request from /register
   try {
@@ -31,7 +29,6 @@ app.post("/register", async (req, res) => { // This will only listen to the POST
     }
 
     const userCount =  await User.countDocuments(); // Get the amount of users
-    const userId = (userCount + 1).toString().padStart(5, '0'); // Enusre the num is fill in 5 digits
 
     let userPrefix = '';
     
@@ -46,7 +43,6 @@ app.post("/register", async (req, res) => { // This will only listen to the POST
     const userNum = userPrefix + userId; // Merge together
 
     const newUser = new User({ // Create the user instance with all the field you need
-      userNum,
       name, 
       username,
       birthdate,
