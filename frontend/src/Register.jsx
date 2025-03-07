@@ -10,6 +10,8 @@ function App() {
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [userrole, setUserrole] = useState("");
+  const [driver_license, setDriverLicense] = useState("");
+  const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
 
@@ -18,7 +20,7 @@ function App() {
     const response = await fetch("http://localhost:5000/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, username, birthdate, contact, email, userrole, password, confirmPw }),
+      body: JSON.stringify({ name, username, birthdate, contact, email, userrole, driver_license, address, password, confirmPw }),
     });
 
     const data = await response.json();
@@ -77,9 +79,23 @@ function App() {
         <select value={userrole} onChange={(e) => setUserrole(e.target.value)} required>
           <option value="" disabled>Select Role</option>
           <option value="user">User</option>
-          <option value="buisness owner">Buisness Owner</option>
-          <option value="guide">Guide</option>
+          <option value="service provider">Service Provider</option>
         </select>
+      </div>
+      <div>Enter Your Driver Lincense ID
+      <input
+        type="text"
+        placeholder="123456789"
+        value={driver_license}
+        onChange={(e) => setDriverLicense(e.target.value)}
+      />
+      </div>
+      <div>Enter Your Biling Address
+      <input
+        type="text"
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
       </div>
       <div>Enter Your Password
       <input
