@@ -70,6 +70,31 @@ app.post("/register", async (req, res) => { // This will only listen to the POST
     res.status(500).json({ error: error.message }); // Print this 500 (Stand fro server error) msg if fail
   }
 });
+ 
+app.post("/login", async (req, res) => { // This will only listen to the POST request from /login
+  try{ 
+    const { username, password } = req.body; // Destructure the datas from the request body
+
+    const user = await User.findOne({ username }); // Find the user with the username in db
+
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' }); // Reply this msg if user not found or the field is blank
+    }
+
+    if(!password){
+      return res.status(400).json({ message: 'User not Please fill all the blank' }); // Passwrd field can't leave blank
+    }
+
+    if (password !== user.password) { // Compare password
+      return res.status(400).json({ message: 'Invalid password' }); // If password not same reply this message
+    }
+
+    res.status(201).json({ message: "User login successfully!" }); // Success message
+  }catch (error) {
+
+    res.status(500).json({ error: error.message }); // Print this 500 (Stand fro server error) msg if fail
+  }
+});
 
 // Start server on port 5000 and print the log msg 
 app.listen(5000, () => console.log("Server running on port 5000"));
