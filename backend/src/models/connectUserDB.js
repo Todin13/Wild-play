@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({ // This is the part what you your schem
   },
   username: {
     type: String, // The field type
+    unique: [true, "Username exist"], // Username must be unqiue as this is for login
     required: [true, "Username is required"], // Userame is required, if not the web will give the error message 
     minlength: [3, "Username must atleast 3 characters long"], // Username can't shorter than 3 characters, if not the web will give the error message
     maxlength: [20, "Name can't exceed 20 characters long"] // Username can't longer than 20 characters, if not the web will give the error message
@@ -30,7 +31,7 @@ const userSchema = new mongoose.Schema({ // This is the part what you your schem
   },
   email: {
     type: String, // The field type
-    unique: true, // Email should be unique
+    unique: [true, "Email exist"], // Email should be unique
     required: [true, "Email is required"], // Email is required, if not the web will give the error message 
     ///^[a-zA-Z0-9._%+/$^&*#\-\[\]{}] stand for accept every characters, numbers, symbol
     //+@[a-zA-Z0-9.-] follow with @ (the symbol must contain in email), after it is accept every characters, number and . - as this part can be a company name
@@ -48,7 +49,7 @@ const userSchema = new mongoose.Schema({ // This is the part what you your schem
   },
   driver_license: {
     type: String,  // The field type
-    unique: true,  // License should be unique
+    unique: [true, "Driving license exist"],  // License should be unique
     uppercase: true, // All the alphabet will conert to uppercase
     match: [/^\d{9}$/, "Driver Lincense ID format error"], // Ireland License should only have 9 digits
     minLength:[9, "Driver License should be exactly 9 characters"], // License should be only 9 haracters, else print the error msg
