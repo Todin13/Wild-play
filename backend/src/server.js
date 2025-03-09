@@ -1,31 +1,24 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config("../../../.env"); // Load environment variables
-
-// Import Routes
+require('dotenv').config(); // Load environment variables
+const { connectDB } = require('./config/db'); // Import database connection
 const searchRoutes = require('./routes/search');
+const campersRoutes = require('./routes/campers');
+
+
 
 const app = express();
+
+// Connect to MongoDB
+connectDB();
 
 // Middleware
 app.use(cors()); // Enable CORS for API calls
 app.use(express.json()); // Parse JSON request bodies
 
-
-// Construct MongoDB URI from .env variables
-const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority`;
-
-// MongoDB Connection
-mongoose.connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('✅ MongoDB Connected'))
-.catch(err => console.error('❌ MongoDB Connection Error:', err));
-
 // Routes
 app.use('/api/search', searchRoutes);
+app.use('/api/campers', campersRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
