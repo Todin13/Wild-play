@@ -2,6 +2,32 @@ const { Van } = require('../models');
 
 exports.getAllCampers = async (req, res) => {
     try {
+        let filters = {};
+
+        // Apply filters if query parameters exist
+        if (req.query.manufacturer) {
+            filters.manufacturer = req.query.manufacturer;
+        }
+        if (req.query.transmission) {
+            filters.transmission = req.query.transmission;
+        }
+        if (req.query.type) {
+            filters.type = req.query.type;
+        }
+
+        // Filter by price range
+        if (req.query.minPrice || req.query.maxPrice) {
+            filters.price = {};
+            if (req.query.minPrice) filters.price.$gte = parseInt(req.query.minPrice);
+            if (req.query.maxPrice) filters.price.$lte = parseInt(req.query.maxPrice);
+        }
+
+        // Filter by number of beds
+        if (req.query.beds) {
+            filters.beds = parseInt(req.query.beds);
+        }
+
+
         const campers = await Van.find().lean(); // Fetch all vans
         res.json({ campers, count: campers.length });
     } catch (error) {
