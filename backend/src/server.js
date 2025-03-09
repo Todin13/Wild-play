@@ -1,17 +1,33 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const { connectDB } = require("./config/db.js");
+const express = require('express');
+const { connectDB } = require("./config/db.js");const cors = require('cors');
+require('dotenv').config("../../../.env");
+const cors = require('cors');
+
+// Load environment variables
+
+// Import Routes
 const userRoutes = require("./routes/user_routes.js");
+const searchRoutes = require('./routes/search');
+const campersRoutes = require('./routes/campers');
 
-dotenv.config();
-connectDB();
-
-require('dotenv').config({ path: '../.env' });
 
 const app = express();
-app.use(express.json());
 
+// Middleware
+app.use(cors()); // Enable CORS for API calls
+app.use(express.json()); // Parse JSON request bodies
+
+
+// Construct MongoDB URI from .env variables
+
+// Connect to MongoDB
+connectDB();
+
+// Routes
 app.use("/api/users", userRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/campers', campersRoutes);
 
-const PORT = process.env.PORT;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Start Server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
