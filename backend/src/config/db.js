@@ -7,15 +7,15 @@ db.js create the connection and dectionection function to the database
 const mongoose = require('mongoose');
 require('dotenv').config({ path: '../.env' });
 
-const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority&appName=Wild-Play`;
+const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority&appName=Wild-Play`;
 
 // uncomment to check the uri 
-// console.log(uri); 
+// console.log(url); 
 
 const connectDB = async () => {
     if (mongoose.connection.readyState === 1) return; // Prevent multiple connections
     try {
-        await mongoose.connect(uri);
+        await mongoose.connect(url);
         console.log('✅ MongoDB Connected');
     } catch (error) {
         console.error('❌ MongoDB Connection Error:\n', error);
