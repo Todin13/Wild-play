@@ -1,11 +1,6 @@
-/*
-
-db.js create the connection and dectionection function to the database
-
-*/
 
 const mongoose = require('mongoose');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: '../../../../.env' });
 
 const url = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/${process.env.MONGO_DB_NAME}?retryWrites=true&w=majority&appName=Wild-Play`;
 

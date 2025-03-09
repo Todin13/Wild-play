@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 
 // User Schema
 const UserSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     firstName: String,
     lastName:String,
     email: { type: String, 
@@ -39,6 +40,7 @@ const UserSchema = new mongoose.Schema({
 
 // Van Schema
 const VanSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     type: { type: String, required: true },
     manufacturer: { type: String, required: true },
     model: { type: String, required: true },
@@ -59,6 +61,7 @@ const VanSchema = new mongoose.Schema({
 
 // Booking Schema
 const BookingSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     van_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Van', required: true },
     start_date: { type: Date, required: true },
@@ -75,6 +78,7 @@ const BookingSchema = new mongoose.Schema({
 
 // Van Review Schema
 const VanReviewSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     van_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Van', required: true },
     rating: { type: Number, required: true, min: 1, max: 5 },
@@ -84,6 +88,7 @@ const VanReviewSchema = new mongoose.Schema({
 
 // Guide Review Schema
 const GuidReviewSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     guide_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Guide', required: true },
     rating: { type: Number, required: true, min: 1, max: 5 },
@@ -93,6 +98,7 @@ const GuidReviewSchema = new mongoose.Schema({
 
 // Discount Schema
 const DiscountSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     van_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Van', required: true },
     discount: { type: Number, required: true },
     start_date: { type: Date, required: true },
@@ -101,6 +107,7 @@ const DiscountSchema = new mongoose.Schema({
 
 // Guide Schema
 const GuideSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     duration: { type: Number, required: true},
     locations: [String],
@@ -110,6 +117,7 @@ const GuideSchema = new mongoose.Schema({
 
 // Trip Schema
 const TripSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     start_date: { type: Date, required: true},
     end_date: { type: Date, required: true},
