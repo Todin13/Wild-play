@@ -1,10 +1,10 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const connectDB = require("./config/db.js");
+const { connectDB } = require("./config/db.js");
 const userRoutes = require("./routes/user_routes.js");
 
 dotenv.config();
-connectDB;
+connectDB();
 
 require('dotenv').config({ path: '../.env' });
 
