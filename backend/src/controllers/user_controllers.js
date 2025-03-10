@@ -21,6 +21,7 @@ const registerUser = async (req, res) => {
         await newUser.save(); // use await to ensire the db is idle to perform our operation, this operation is sav our data into db
         
         res.status(201).json({ message: "User saved successfully!" });
+        console.log("Adding a new user:\n", newUser);
     }catch(error){
         res.status(400).json({ message: error.message });
         console.log(error);
@@ -47,7 +48,7 @@ const loginUser = async (req, res) => {
     }
 
     res.status(200).json({ message: "User logged in successfully!" });
-
+    console.log("Login user:\n", user);
   } catch (error) {
     res.status(500).json({ error: error.message }); // Handle server errors
     console.log(error);
