@@ -23,7 +23,8 @@ const registerUser = async (req, res) => {
         res.status(201).json({ message: "User saved successfully!" });
     }catch(error){
         res.status(400).json({ message: error.message });
-    }
+        console.log(error);
+  }
 };
 
 const loginUser = async (req, res) => {
@@ -49,6 +50,7 @@ const loginUser = async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ error: error.message }); // Handle server errors
+    console.log(error);
   }
 };
 
