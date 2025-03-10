@@ -17,7 +17,13 @@ const UserSchema = new mongoose.Schema({
     phone:{type: [Number], minLength: 2, maxlength: 2}, //match: [/^353 \d{3} \d{3} \d{4}$/, "Contact Number format error"]},
     user_type: { type: String, enum: ['ADMIN', 'USER'], required: true },
     birthdate: { type: Date, default: Date.now },
-    billing_address: [String],
+    billing_address: {
+        street: String,
+        city: String,
+        county: String,
+        zip: String,
+        country: String
+      },
     driver_license_id: {type: String, unique: true, uppercase: true, minLength:30, maxLength:30},
     username: {
         type: String,
