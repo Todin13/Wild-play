@@ -41,8 +41,8 @@ module.exports = { hashPassword, comparePassword };
 
 
 // Test function to verify hashing works
-// (async () => {
-//     const testPassword = "ababa";
-//     const hashed = await hashPassword(testPassword);
-//     console.log("Hashed Password:", hashed);
-// })();
+(async () => {
+    const testPassword = "ababa";
+    const hashed = await hashPassword(testPassword);
+    console.log("Hashed Password:", hashed);
+})();
