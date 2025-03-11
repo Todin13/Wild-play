@@ -89,18 +89,8 @@ const searchUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    
-    const user = req.user._id;
-    const { id } = req.params;
 
-    // Ensure user can only update their own profile
-    if (user !== id) {
-      return res.status(403).json({ message: 'Not authorized to update this user' });
-    }
-
-    const updates = req.body;
-
-    const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, });
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
@@ -114,14 +104,23 @@ const updateUser = async (req, res) => {
   };
 }
 
+// Delete user controller
 const deleteUser = async (req, res) => {
   try {
+    // Find the user by ID and delete
+    const user = await User.findByIdAndDelete(req.params.id);
 
-  }catch(error){
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return success message
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
     res.status(500).json({ error: error.message }); // Handle server errors
     console.log(error);
-  };
-}
+  }
+};
 
 module.exports = {
     registerUser,
