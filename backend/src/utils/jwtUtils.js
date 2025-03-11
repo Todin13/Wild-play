@@ -4,7 +4,7 @@ Utility using jsonwebtoken like the generation of a new token with user informat
 
 */
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+require('dotenv').config({ path: '../.env' });
 
 /**
  * Generate JWT Token for a user
