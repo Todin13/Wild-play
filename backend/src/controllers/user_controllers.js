@@ -94,7 +94,7 @@ const updateUser = async (req, res) => {
     const { id } = req.params;
 
     // Ensure user can only update their own profile
-    if (userIdFromToken !== id) {
+    if (user !== id) {
       return res.status(403).json({ message: 'Not authorized to update this user' });
     }
 
