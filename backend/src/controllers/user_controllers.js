@@ -39,7 +39,7 @@ const loginUser = async (req, res) => {
 
     // Check if email or password are provided
     if (!email || !password) {
-      return res.status(400).json({ message: "Please fill all the fields" });
+      return res.status(400).json({ message: "Please fill in all the fields" });
     }
 
     const user = await User.findOne({ email }); // Find the user by username
@@ -63,7 +63,70 @@ const loginUser = async (req, res) => {
   }
 };
 
+const searchUser = async (req, res) => {
+  try {
+    const { username } = req.body; // Destructure data from request body
+
+    // Check if username provided
+    if(!username){
+      return res.status(400).json({ message: "Please fill in all the fields" });
+    }
+
+    const user = await User.findOne({ username }); // Find the user by username
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    res.status(200).json({message: "User found:", user});
+    console.log("User found:", user);
+
+  }catch(error){
+    res.status(500).json({ error: error.message }); // Handle server errors
+    console.log(error);
+  };
+}
+
+const updateUser = async (req, res) => {
+  try {
+    
+    const user = req.user._id;
+    const { id } = req.params;
+
+    // Ensure user can only update their own profile
+    if (userIdFromToken !== id) {
+      return res.status(403).json({ message: 'Not authorized to update this user' });
+    }
+
+    const updates = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+
+  }catch(error){
+    res.status(500).json({ error: error.message }); // Handle server errors
+    console.log(error);
+  };
+}
+
+const deleteUser = async (req, res) => {
+  try {
+
+  }catch(error){
+    res.status(500).json({ error: error.message }); // Handle server errors
+    console.log(error);
+  };
+}
+
 module.exports = {
     registerUser,
     loginUser,
+    searchUser,
+    updateUser,
+    deleteUser,
 };
