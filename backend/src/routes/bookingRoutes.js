@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { getAllBookings, setBooking } = require("../controllers/bookingControllers");
-const authMiddleware = require("../middlewares/authMiddleware");
+const authMiddleware = require("../middleware/authMiddleware");
 
 // get all bookings for a user
 router.get("/:user_id", authMiddleware, getAllBookings);

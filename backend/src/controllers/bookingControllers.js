@@ -1,9 +1,14 @@
-const Booking = require("../models/bookingModel");
+const Booking = require("../models/index");
 
 // get all bookings for a given user id
 const getAllBookings = async (req, res) => {
+
+
+
+
     try {
         const {user_id} = req.params;
+        const {user_type} = req.user;
         if (!user_id) {
             return res.status(400).json({ message: "User id is required;" });
         }
