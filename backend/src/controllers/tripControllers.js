@@ -33,17 +33,23 @@ const createTrip = async (req, res) => {
 // Get all trips for the logged-in user with optional filtering
 const getUserTrips = async (req, res) => {
     try {
-        const { start_date, end_date, location } = req.query;
+        const { start_date, end_date, location, sortBy, order } = req.query;
         let filter = { user_id: req.user.id };
 
         if (start_date) filter.start_date = { $gte: new Date(start_date) };
         if (end_date) filter.end_date = { $lte: new Date(end_date) };
         if (location) filter["locations.name"] = { $regex: new RegExp(location, "i") };
 
+        let sortOptions = {};
+        if (sortBy) {
+            sortOptions[sortBy] = order === "desc" ? -1 : 1;
+        }
+
         const trips = await Trip.find(filter);
         res.status(200).json(trips);
     } catch (error) {
         res.status(500).json({ message: "Error retrieving trips", error });
+        console.log(error);
     }
 };
 
