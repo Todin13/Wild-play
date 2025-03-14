@@ -3,7 +3,7 @@
 Method for creating a trip
 
 */
-const { Trip } = require("../models");
+const { Trip, Guide } = require("../models");
 
 /// Create a new trip
 const createTrip = async (req, res) => {
@@ -94,10 +94,67 @@ const deleteTrip = async (req, res) => {
     }
 };
 
+
+// Create a trip from a guide with dates provided in the request
+const createTripFromGuide = async (req, res) => {
+    try {
+        // Retrieve the guide by ID
+        const guide = await Guide.findOne({ _id: req.body.guide_id, user_id: req.user.id });
+        
+        if (!guide) {
+            return res.status(404).json({ message: "Guide not found" });
+        }
+
+        // Destructure start_date and end_date from the request body
+        const { start_date, end_date } = req.body;
+
+        // Ensure the start_date and end_date are valid
+        if (!start_date || !end_date) {
+            return res.status(400).json({ message: "Start date and end date are required" });
+        }
+
+        // Parse the dates to ensure they are valid Date objects
+        const parsedStartDate = new Date(start_date);
+        const parsedEndDate = new Date(end_date);
+
+        if (isNaN(parsedStartDate)) {
+            return res.status(400).json({ message: "Invalid start date format" });
+        }
+        if (isNaN(parsedEndDate)) {
+            return res.status(400).json({ message: "Invalid end date format" });
+        }
+
+        // Check if start date is before end date
+        if (parsedStartDate >= parsedEndDate) {
+            return res.status(400).json({ message: "End date must be after start date" });
+        }
+
+        // Create the trip from the guide data
+        const newTrip = new Trip({
+            user_id: guide.user_id,  // Use the user_id from the guide
+            title: guide.title,      // Use the title from the guide
+            start_date: parsedStartDate,  // Use the parsed start date
+            end_date: parsedEndDate,    // Use the parsed end date
+            locations: guide.locations,  // Use the locations from the guide
+            notes: guide.notes,          // Use the notes from the guide
+            van_id: null,                // You can set this to a default or handle it based on the trip's requirements
+            van_booked: false           // Set the default value for van_booked or handle it based on the trip's requirements
+        });
+
+        // Save the new trip
+        await newTrip.save();
+
+        res.status(201).json({ message: "Trip created from guide successfully", trip: newTrip });
+    } catch (error) {
+        res.status(500).json({ message: "Error creating trip from guide", error });
+    }
+};
+
 module.exports = {
     createTrip,
     getUserTrips,
     getTripById,
     updateTrip,
-    deleteTrip
+    deleteTrip,
+    createTripFromGuide
 };
