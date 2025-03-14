@@ -12,6 +12,7 @@ const dealsRoutes = require('./routes/deals');
 const bookingRoutes = require("./routes/bookingRoutes");
 const tripRoutes = require("./routes/tripRoutes");
 const tripRoutes = require("./routes/tripRoutes");
+const guideRoutes = require("./routes/guideRoutes");
 const userRoutes = require("./routes/userRoutes.js");
 
 // Connect to MongoDB
@@ -32,6 +33,7 @@ app.use('/api/campers', campersRoutes);
 app.use('/api/deals', dealsRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/trips", tripRoutes);
+app.use("/api/guides", guideRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
