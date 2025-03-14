@@ -35,4 +35,13 @@ const setTokenCookie = (res, user) => {
     });
 };
 
-module.exports = { setTokenCookie };
+const clearCookie = (req, res) => {
+    res.cookie("token", "", {
+        httpOnly: false, 
+        secure: false,  
+        sameSite: "lax",
+        maxAge: 0        // Immediately expires the cookie
+    });
+};
+
+module.exports = { setTokenCookie, clearCookie};

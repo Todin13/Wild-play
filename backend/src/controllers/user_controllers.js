@@ -1,5 +1,5 @@
 const { hashPassword, comparePassword } = require("../utils/hashUtils");
-const { setTokenCookie } = require("../utils/jwtUtils");
+const { setTokenCookie, clearCookie } = require("../utils/jwtUtils");
 const { User } = require('../models');
 
 const registerUser = async (req, res) => {
@@ -63,38 +63,13 @@ const loginUser = async (req, res) => {
   }
 };
 
-const searchUser = async (req, res) => {
-  try {
-    const { username } = req.body; // Destructure data from request body
-
-    // Check if username provided
-    if(!username){
-      return res.status(400).json({ message: "Please fill in all the fields" });
-    }
-
-    const user = await User.findOne({ username }); // Find the user by username
-
-    if (!user) {
-      return res.status(400).json({ message: "User not found" });
-    }
-
-    res.status(200).json({message: "User found:", user});
-    console.log("User found:", user);
-
-  }catch(error){
-    res.status(500).json({ message: "Error searching for users" }); // Handle server errors
-    console.log(error);
-  };
-}
-
 const updateUser = async (req, res) => {
   try {
     
     const { id } = req.user;
     const { user } = req.params;
 
-    console.log("id", id);
-    console.log("user", user);
+    console.log("test" ,id, user);
 
     // Ensure user can only update their own profile
     if (user !== id) {
@@ -103,7 +78,7 @@ const updateUser = async (req, res) => {
 
     const updates = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(user, updates, { new: true });
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
@@ -138,15 +113,17 @@ const deleteUser = async (req, res) => {
 
 const searchUserByAge = async (req, res) => {
   try {
-      const { age } = req.body; // Example :25
+      const { min, max } = req.body;
 
       // Calculate the date range
-      const currentDate = new Date();
-      const maxBirthdate = new Date(currentDate.setFullYear(currentDate.getFullYear() - age)); // Example : 2000 - current month - current day
+      const currentDate_1 = new Date();
+      const maxBirthdate = new Date(currentDate_1.setFullYear(currentDate_1.getFullYear() - max));
+      const currentDate_2 = new Date();
+      const minBirthdate = new Date(currentDate_2.setFullYear(currentDate_2.getFullYear() - min)); 
 
       // Search for users within the birthdate range
       const users = await User.find({
-          birthdate: {$gte: maxBirthdate } // now - 2000
+          birthdate: {$lte: minBirthdate, $gte: maxBirthdate }
       });
 
       res.status(200).json(users);console.log(users);
@@ -155,45 +132,37 @@ const searchUserByAge = async (req, res) => {
   }
 };
 
-const searchUserByCountry = async (req, res) => {
+const searchUser = async (req, res) => {
   try {
-      const { country } = req.body;
+    const { username, country, phone, email } = req.body;
 
-      const users = await User.find({ "billing_address.country": country });
+    let query = {};
 
-      res.status(200).json(users);
+    if (username) {
+      query.username = username;
+    }
+
+    if (country) {
+      query["billing_address.country"] = country;
+    }
+
+    if (phone) {
+      query.phone = phone;
+    }
+
+    if (email) {
+      query.email = email;
+    }
+
+    // Find user based on dynamic query
+    const users = await User.find(query);
+
+    res.status(200).json(users);
   } catch (error) {
-      res.status(500).json({ message: "Error searching for users" }); // Handle server errors
+    res.status(500).json({ message: "Error searching for users" }); 
+    console.log(error);
   }
 };
-
-const searchUserByPhone = async (req, res) => {
-  try {
-    const { phone } = req.body; 
-
-    const users = await User.find({phone: phone });
-
-    res.status(200).json(users);
-
-  }catch(error){
-    res.status(500).json({ message: "Error searching for users" }); // Handle server errors
-    console.log(error);
-  };
-}
-
-const searchUserByEmail = async (req, res) => {
-  try {
-    const { email } = req.body; 
-
-    const users = await User.findOne({ "email": email }); 
-
-    res.status(200).json(users);
-    
-  }catch(error){
-    res.status(500).json({ message: "Error searching for users" }); // Handle server errors
-    console.log(error);
-  };
-}
 
 const profile = async (req, res) => {
   try {
@@ -210,6 +179,20 @@ const profile = async (req, res) => {
   };
 }
 
+const logout = async (req, res) => {
+  try{
+
+    clearCookie(req, res);
+
+    res.status(200).json({ message: "Logout successful" });
+
+  }catch(error){
+    res.status(500).json({ error: error.message }); // Handle server errors
+    console.log(error);
+  };
+
+};
+
 module.exports = {
     registerUser,
     loginUser,
@@ -217,8 +200,6 @@ module.exports = {
     updateUser,
     deleteUser,
     searchUserByAge,
-    searchUserByCountry,
-    searchUserByPhone,
-    searchUserByEmail,
     profile,
+    logout,
 };
