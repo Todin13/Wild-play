@@ -1,5 +1,3 @@
-const jwt = require("jsonwebtoken");
-
 // middleware to validate booking details before saving
 const validateBookingData = (req, res, next) => {
     const { user_id, van_id, start_date, end_date, return_location, amount } = req.body;
@@ -11,6 +9,5 @@ const validateBookingData = (req, res, next) => {
 };
 
 module.exports = {
-    verifyUser,
     validateBookingData
 };

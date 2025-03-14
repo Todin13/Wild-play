@@ -3,16 +3,16 @@ const cors = require('cors');
 const cookieParser = require("cookie-parser");
 const { connectDB } = require("./config/db.js");
 
+require('dotenv').config("../.env");
+
 // Import Routes
-const userRoutes = require("./routes/user_routes.js");
 const searchRoutes = require('./routes/search');
 const campersRoutes = require('./routes/campers');
 const dealsRoutes = require('./routes/deals');
 const bookingRoutes = require("./routes/bookingRoutes");
 const tripRoutes = require("./routes/tripRoutes");
-
-require('dotenv').config("../.env");
-
+const tripRoutes = require("./routes/tripRoutes");
+const userRoutes = require("./routes/userRoutes.js");
 
 // Connect to MongoDB
 connectDB();
