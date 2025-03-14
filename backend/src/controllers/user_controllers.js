@@ -82,7 +82,7 @@ const searchUser = async (req, res) => {
     console.log("User found:", user);
 
   }catch(error){
-    res.status(500).json({ error: error.message }); // Handle server errors
+    res.status(500).json({ message: "Error searching for users" }); // Handle server errors
     console.log(error);
   };
 }
@@ -143,7 +143,6 @@ const searchUserByAge = async (req, res) => {
       // Calculate the date range
       const currentDate = new Date();
       const maxBirthdate = new Date(currentDate.setFullYear(currentDate.getFullYear() - age)); // Example : 2000 - current month - current day
-      console.log(maxBirthdate);
 
       // Search for users within the birthdate range
       const users = await User.find({
@@ -164,9 +163,38 @@ const searchUserByCountry = async (req, res) => {
 
       res.status(200).json(users);
   } catch (error) {
-      res.status(500).json({ message: "Error searching for users" });
+      res.status(500).json({ message: "Error searching for users" }); // Handle server errors
   }
 };
+
+const searchUserByPhone = async (req, res) => {
+  try {
+    const { phone } = req.body; 
+
+    const users = await User.find({phone: phone });
+
+    res.status(200).json(users);
+
+  }catch(error){
+    res.status(500).json({ message: "Error searching for users" }); // Handle server errors
+    console.log(error);
+  };
+}
+
+const searchUserByEmail = async (req, res) => {
+  try {
+    const { email } = req.body; 
+
+    const users = await User.findOne({ "email": email }); 
+
+    res.status(200).json(users);
+    
+  }catch(error){
+    res.status(500).json({ message: "Error searching for users" }); // Handle server errors
+    console.log(error);
+  };
+}
+
 
 
 module.exports = {
@@ -177,4 +205,6 @@ module.exports = {
     deleteUser,
     searchUserByAge,
     searchUserByCountry,
+    searchUserByPhone,
+    searchUserByEmail,
 };
