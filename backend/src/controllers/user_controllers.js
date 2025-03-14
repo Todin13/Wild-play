@@ -1,5 +1,5 @@
 const { hashPassword, comparePassword } = require("../utils/hashUtils");
-const { generateToken } = require("../utils/jwtUtils");
+const { setTokenCookie } = require("../utils/jwtUtils");
 const { User } = require('../models');
 
 const registerUser = async (req, res) => {
@@ -53,9 +53,9 @@ const loginUser = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
 
     // Generate JWT token
-    const token = generateToken(user);
+    setTokenCookie(res, user);
 
-    res.status(200).json({ message: "Login successful!", token });
+    res.status(200).json({ message: "Login successful!"});
     console.log("Login user:\n", user);
   } catch (error) {
     res.status(500).json({ error: error.message }); // Handle server errors
