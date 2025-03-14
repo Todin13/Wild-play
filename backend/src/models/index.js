@@ -100,6 +100,8 @@ const DiscountSchema = new mongoose.Schema({
 
 // Guide Schema
 const GuideSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    creation_date: { type: Date, required: true },
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     duration: { type: Number, required: true},
     locations: [{
