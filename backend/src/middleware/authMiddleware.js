@@ -32,7 +32,9 @@ const authenticateUser = (req, res, next) => {
  * Middleware to check if user is an ADMIN
  */
 const isAdmin = (req, res, next) => {
-    if (req.user?.user_type !== "ADMIN") {
+    const { user_type } = req.user;
+    if (user_type !== "ADMIN") {
+        console.log(req.user);
         return res.status(403).json({ message: "Access denied. Admins only." });
     }
     next();

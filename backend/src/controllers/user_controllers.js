@@ -90,8 +90,11 @@ const searchUser = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     
-    const user = req.user._id;
-    const { id } = req.params;
+    const { id } = req.user;
+    const { user } = req.params;
+
+    console.log("id", id);
+    console.log("user", user);
 
     // Ensure user can only update their own profile
     if (user !== id) {
@@ -133,10 +136,45 @@ const deleteUser = async (req, res) => {
 };
 
 
+const searchUserByAge = async (req, res) => {
+  try {
+      const { age } = req.body; // Example :25
+
+      // Calculate the date range
+      const currentDate = new Date();
+      const maxBirthdate = new Date(currentDate.setFullYear(currentDate.getFullYear() - age)); // Example : 2000 - current month - current day
+      console.log(maxBirthdate);
+
+      // Search for users within the birthdate range
+      const users = await User.find({
+          birthdate: {$gte: maxBirthdate } // now - 2000
+      });
+
+      res.status(200).json(users);console.log(users);
+  } catch (error) {
+      res.status(500).json({ message: "Error searching for users" });
+  }
+};
+
+const searchUserByCountry = async (req, res) => {
+  try {
+      const { country } = req.body;
+
+      const users = await User.find({ "billing_address.country": country });
+
+      res.status(200).json(users);
+  } catch (error) {
+      res.status(500).json({ message: "Error searching for users" });
+  }
+};
+
+
 module.exports = {
     registerUser,
     loginUser,
     searchUser,
     updateUser,
     deleteUser,
+    searchUserByAge,
+    searchUserByCountry,
 };

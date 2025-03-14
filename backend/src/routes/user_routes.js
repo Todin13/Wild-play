@@ -1,6 +1,6 @@
 const express = require("express");
 const { authenticateUser, isAdmin } = require("../middleware/authMiddleware");
-const { registerUser, loginUser, searchUser, updateUser, deleteUser } = require("../controllers/user_controllers.js");
+const { registerUser, loginUser, searchUser, updateUser, deleteUser, searchUserByAge, searchUserByCountry } = require("../controllers/user_controllers.js");
 
 const router = express.Router();
 
@@ -8,7 +8,10 @@ const router = express.Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/search", searchUser);
-router.put("/update/:id", authenticateUser, updateUser);
+router.put("/update/:user", authenticateUser, updateUser);
+router.delete("/delete/:id", deleteUser);
+router.get("/age", searchUserByAge);
+router.get("/country", searchUserByCountry);
 
 
 // Protected routes (only authenticated users can access)
