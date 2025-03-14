@@ -89,8 +89,18 @@ const searchUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
+    
+    const user = req.user._id;
+    const { id } = req.params;
 
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, });
+    // Ensure user can only update their own profile
+    if (user !== id) {
+      return res.status(403).json({ message: 'Not authorized to update this user' });
+    }
+
+    const updates = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
@@ -121,6 +131,7 @@ const deleteUser = async (req, res) => {
     console.log(error);
   }
 };
+
 
 module.exports = {
     registerUser,
