@@ -116,6 +116,7 @@ const GuideSchema = new mongoose.Schema({
 // Trip Schema
 const TripSchema = new mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    title: { type: String, required: true},
     start_date: { type: Date, required: true},
     end_date: { type: Date, required: true},
     locations: [{
