@@ -3,21 +3,20 @@
 Method for creating a trip
 
 */
-
 const { Trip } = require("../models");
 
 /// Create a new trip
 const createTrip = async (req, res) => {
     try {
-        const { start_date, end_date, locations, notes } = req.body;
+        const { title, start_date, end_date, locations, notes } = req.body;
 
-        // Ensure start_date is in the future
         if (new Date(start_date) < new Date()) {
             return res.status(400).json({ message: "Start date must be in the future" });
         }
 
         const newTrip = new Trip({
-            user_id: req.user.id, // Extracted from authMiddleware
+            user_id: req.user.id,
+            title,
             start_date,
             end_date,
             locations,
@@ -31,36 +30,40 @@ const createTrip = async (req, res) => {
     }
 };
 
-// Get all trips for the logged-in user
+// Get all trips for the logged-in user with optional filtering
 const getUserTrips = async (req, res) => {
     try {
-        const trips = await Trip.find({ user_id: req.user.id });
+        const { start_date, end_date, location } = req.query;
+        let filter = { user_id: req.user.id };
+
+        if (start_date) filter.start_date = { $gte: new Date(start_date) };
+        if (end_date) filter.end_date = { $lte: new Date(end_date) };
+        if (location) filter["locations.name"] = { $regex: new RegExp(location, "i") };
+
+        const trips = await Trip.find(filter);
         res.status(200).json(trips);
     } catch (error) {
         res.status(500).json({ message: "Error retrieving trips", error });
     }
 };
 
-// Get a single trip by ID (only if it belongs to the user)
+// Get a single trip by ID
 const getTripById = async (req, res) => {
     try {
         const trip = await Trip.findOne({ _id: req.params.id, user_id: req.user.id });
         if (!trip) return res.status(404).json({ message: "Trip not found" });
-
         res.status(200).json(trip);
     } catch (error) {
         res.status(500).json({ message: "Error retrieving trip", error });
     }
 };
 
-// Update a trip (only if the start date is not due)
+// Update a trip
 const updateTrip = async (req, res) => {
     try {
         const trip = await Trip.findOne({ _id: req.params.id, user_id: req.user.id });
-
         if (!trip) return res.status(404).json({ message: "Trip not found" });
 
-        // Check if the trip's start date has already passed
         if (new Date(trip.start_date) <= new Date()) {
             return res.status(403).json({ message: "Cannot modify a trip after its start date" });
         }
@@ -72,7 +75,7 @@ const updateTrip = async (req, res) => {
     }
 };
 
-// Delete a trip (only if it belongs to the user)
+// Delete a trip
 const deleteTrip = async (req, res) => {
     try {
         const trip = await Trip.findOneAndDelete({ _id: req.params.id, user_id: req.user.id });
@@ -90,4 +93,4 @@ module.exports = {
     getTripById,
     updateTrip,
     deleteTrip
-}
+};
