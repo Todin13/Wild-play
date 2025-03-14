@@ -136,6 +136,8 @@ const TripSchema = new mongoose.Schema({
         info: String
     }],
     notes: [String],
+    van_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Van' },
+    van_booked: { type: Boolean, required: true }
 //  pictures: need to thing how to save pictures
 })
 
