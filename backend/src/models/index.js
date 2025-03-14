@@ -102,7 +102,13 @@ const DiscountSchema = new mongoose.Schema({
 const GuideSchema = new mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     duration: { type: Number, required: true},
-    locations: [String],
+    locations: [{
+        name: { type: String, required: true },
+        section: { type: String, required: true },
+        lat: { type: Number, required: true },
+        lon: { type: Number, required: true },
+        info: String
+    }],
     notes: [String],
 //  pictures: need to thing how to save pictures
 })
@@ -112,7 +118,13 @@ const TripSchema = new mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     start_date: { type: Date, required: true},
     end_date: { type: Date, required: true},
-    locations: [String],
+    locations: [{
+        name: { type: String, required: true },
+        section: { type: String, required: true },
+        lat: { type: Number, required: true },
+        lon: { type: Number, required: true },
+        info: String
+    }],
     notes: [String],
 //  pictures: need to thing how to save pictures
 })
