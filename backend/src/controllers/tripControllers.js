@@ -8,7 +8,7 @@ const { Trip } = require("../models");
 /// Create a new trip
 const createTrip = async (req, res) => {
     try {
-        const { title, start_date, end_date, locations, notes } = req.body;
+        const { title, start_date, end_date, locations, notes, van_id, van_booked } = req.body;
 
         if (new Date(start_date) < new Date()) {
             return res.status(400).json({ message: "Start date must be in the future" });
@@ -21,6 +21,8 @@ const createTrip = async (req, res) => {
             end_date,
             locations,
             notes,
+            van_id,
+            van_booked
         });
 
         await newTrip.save();
@@ -45,11 +47,10 @@ const getUserTrips = async (req, res) => {
             sortOptions[sortBy] = order === "desc" ? -1 : 1;
         }
 
-        const trips = await Trip.find(filter);
+        const trips = await Trip.find(filter).sort(sortOptions);
         res.status(200).json(trips);
     } catch (error) {
         res.status(500).json({ message: "Error retrieving trips", error });
-        console.log(error);
     }
 };
 
