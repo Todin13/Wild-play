@@ -1,5 +1,5 @@
 const express = require('express');
-const { connectDB } = require("./config/db.js");const cors = require('cors');
+const { connectDB } = require("./config/db.js");
 require('dotenv').config("../../../.env");
 const cors = require('cors');
 
@@ -7,8 +7,6 @@ const cors = require('cors');
 
 // Import Routes
 const userRoutes = require("./routes/user_routes.js");
-const searchRoutes = require('./routes/search');
-const campersRoutes = require('./routes/campers');
 const searchRoutes = require('./routes/search');
 const campersRoutes = require('./routes/campers');
 
@@ -41,12 +39,7 @@ connectDB();
 app.use("/api/users", userRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/campers', campersRoutes);
-app.use('/api/search', searchRoutes);
-app.use('/api/campers', campersRoutes);
 
-// Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
