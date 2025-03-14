@@ -5,6 +5,7 @@ const cors = require("cors");
 
 // Import Routes
 const tripRoutes = require("./routes/tripRoutes");
+const guideRoutes = require("./routes/guideRoutes");
 const userRoutes = require("./routes/userRoutes.js");
 
 
@@ -18,6 +19,7 @@ app.use(express.json());
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/trips", tripRoutes);
+app.use("/api/guides", guideRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
