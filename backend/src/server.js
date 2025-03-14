@@ -1,6 +1,6 @@
 const express = require('express');
 const { connectDB } = require("./config/db.js");
-require('dotenv').config("../../../.env");
+require('dotenv').config("../.env");
 const cors = require('cors');
 
 // Load environment variables
@@ -10,30 +10,14 @@ const userRoutes = require("./routes/user_routes.js");
 const searchRoutes = require('./routes/search');
 const campersRoutes = require('./routes/campers');
 
+// Connect to MongoDB
+connectDB();
 
 const app = express();
 
 // Middleware
 app.use(cors()); // Enable CORS for API calls
 app.use(express.json()); // Parse JSON request bodies
-
-
-// Construct MongoDB URI from .env variables
-
-// Connect to MongoDB
-connectDB();
-
-// Routes
-
-// Middleware
-app.use(cors()); // Enable CORS for API calls
-app.use(express.json()); // Parse JSON request bodies
-
-
-// Construct MongoDB URI from .env variables
-
-// Connect to MongoDB
-connectDB();
 
 // Routes
 app.use("/api/users", userRoutes);

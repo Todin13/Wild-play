@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const campersController = require('../controllers/campersController'); // Import the controller
-const { authenticateUser, isAdmin } = require('../middlewares/authMiddleware'); // Import middleware
+const { authenticateUser, isAdmin } = require('../middleware/authMiddleware'); // Import middleware
 
 
 router.get('/', campersController.getAllCampers); // Route to fetch all campers
