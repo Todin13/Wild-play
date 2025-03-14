@@ -5,6 +5,8 @@ const { connectDB } = require("./config/db.js");
 const userRoutes = require("./routes/user_routes.js");
 const searchRoutes = require('./routes/search');
 const campersRoutes = require('./routes/campers');
+const dealsRoutes = require('./routes/deals');
+
 require('dotenv').config("../.env");
 
 
@@ -20,6 +22,7 @@ app.use(cookieParser());
 app.use("/api/users", userRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/campers', campersRoutes);
+app.use('/api/deals', dealsRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
