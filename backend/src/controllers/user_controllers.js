@@ -195,7 +195,20 @@ const searchUserByEmail = async (req, res) => {
   };
 }
 
+const profile = async (req, res) => {
+  try {
+    const { id } = req.user;
 
+    const detail = await User.findById( id );
+
+    res.json({ message: "Welcome to your profile!", user: req.user, detail });
+    console.log("Getting /profile for user: ", req.user , detail);
+    
+  }catch(error){
+    res.status(500).json({ error: error.message }); // Handle server errors
+    console.log(error);
+  };
+}
 
 module.exports = {
     registerUser,
@@ -207,4 +220,5 @@ module.exports = {
     searchUserByCountry,
     searchUserByPhone,
     searchUserByEmail,
+    profile,
 };

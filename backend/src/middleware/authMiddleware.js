@@ -4,6 +4,7 @@ Middleware (cookies) to check if the user is logged in
 
 */
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 require('dotenv').config({ path: '../.env' });
 
 /**
@@ -29,6 +30,29 @@ const authenticateUser = (req, res, next) => {
 };
 
 /**
+ * Middleware to authenticate the user based on the JWT token.
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Next middleware function
+ */
+const authenticateToken = (req, res, next) => {
+    const token = req.cookies.token;  // Get token from the cookies
+
+    if (!token) {
+        return res.status(401).json({ message: "No token provided" });
+    }
+
+    // Verify the JWT token
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: "Invalid token" });
+        }
+        req.user = decoded;
+        next(); 
+    });
+};
+
+/**
  * Middleware to check if user is an ADMIN
  */
 const isAdmin = (req, res, next) => {
@@ -40,4 +64,4 @@ const isAdmin = (req, res, next) => {
     next();
 };
 
-module.exports = { authenticateUser, isAdmin };
+module.exports = { authenticateUser, authenticateToken, isAdmin };

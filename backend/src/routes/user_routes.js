@@ -1,6 +1,6 @@
 const express = require("express");
-const { authenticateUser, isAdmin } = require("../middleware/authMiddleware");
-const { registerUser, loginUser, searchUser, updateUser, deleteUser, searchUserByAge, searchUserByCountry, searchUserByPhone, searchUserByEmail } = require("../controllers/user_controllers.js");
+const { authenticateUser, authenticateToken, isAdmin } = require("../middleware/authMiddleware");
+const { registerUser, loginUser, searchUser, updateUser, deleteUser, searchUserByAge, searchUserByCountry, searchUserByPhone, searchUserByEmail, profile } = require("../controllers/user_controllers.js");
 
 const router = express.Router();
 
@@ -17,9 +17,11 @@ router.get("/email", searchUserByEmail);
 
 
 // Protected routes (only authenticated users can access)
-router.get("/profile", authenticateUser, (req, res) => {
-    res.json({ message: "Welcome to your profile!", user: req.user });
-    console.log("Getting /profile for user: ", req.user);
+router.get("/profile", authenticateUser, profile);
+
+router.get("/cookie", authenticateToken, (req, res) => {
+    const user = req.user; 
+    res.status(200).json({ message: "Access granted", user });
 });
 
 // Admin route example

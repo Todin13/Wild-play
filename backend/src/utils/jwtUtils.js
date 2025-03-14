@@ -19,4 +19,21 @@ const generateToken = (user) => {
     );
 };
 
-module.exports = { generateToken };
+/**
+ * Set JWT as an HTTP-only cookie
+ * @param {Object} res - Express response object
+ * @param {Object} user - 
+ */
+const setTokenCookie = (res, user) => {
+    const token = generateToken(user);
+
+    // Set the JWT token as a cookie
+    res.cookie("token", token, {
+        httpOnly: true,       // Makes the cookie inaccessible to JavaScript (for security)
+        secure: process.env.NODE_ENV === "production",  // Only send cookie over HTTPS if in production
+        maxAge: 24 * 60 * 60 * 1000,  // Expire in 1 day
+        sameSite: "Strict" // For security
+    });
+};
+
+module.exports = { generateToken, setTokenCookie };
