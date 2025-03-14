@@ -10,30 +10,42 @@ exports.searchAll = async (req, res) => {
 
         console.log("🔎 Searching for:", keyword);
 
-        const searchQuery = { $regex: keyword, $options: "i" }; // Case-insensitive search
+        // Split the sentence into individual words
+        const searchKeywords = keyword.split(/\s+/);
 
-        // Search in relevant text fields
-        const vans = await Van.find({
-            $or: [
-                { manufacturer: searchQuery },
-                { model: searchQuery },
-                { color: searchQuery },
-                { location: searchQuery },
-                { info: searchQuery }
-            ]
-        }).lean();
-    
+        // Build the search conditions dynamically for each model
+        const createSearchQuery = (field, keywords) => {
+            return keywords.map(keyword => ({
+                [field]: { $regex: keyword, $options: "i" }
+            }));
+        };
 
-        const vanReviews = await VanReview.find({ review: searchQuery }).lean();
-        const guideReviews = await GuideReview.find({ review: searchQuery }).lean();
-        const discounts = await Discount.find().lean(); // Discounts don't have text fields to search
-        const guides = await Guide.find({
-            $or: [{ locations: searchQuery }, { notes: searchQuery }]
-        }).lean();
+        // Build the search query for Van model
+        const vanQueries = [
+            ...createSearchQuery('manufacturer', searchKeywords),
+            ...createSearchQuery('model', searchKeywords),
+            ...createSearchQuery('color', searchKeywords),
+            ...createSearchQuery('location', searchKeywords),
+            ...createSearchQuery('info', searchKeywords)
+        ];
 
-        const trips = await Trip.find({
-            $or: [{ locations: searchQuery }, { notes: searchQuery }]
-        }).lean();
+        // Search Vans based on the built queries
+        const vans = await Van.find({ $or: vanQueries }).lean();
+
+        // Search in relevant fields for VanReviews, GuideReviews, Guides, Trips
+        const vanReviews = await VanReview.find({ review: { $in: searchKeywords } }).lean();
+        const guideReviews = await GuideReview.find({ review: { $in: searchKeywords } }).lean();
+        const discounts = await Discount.find().lean(); // No text fields to search in Discount model
+        const guideQueries = [
+            ...createSearchQuery('locations', searchKeywords),
+            ...createSearchQuery('notes', searchKeywords)
+        ];
+        const guides = await Guide.find({ $or: guideQueries }).lean();
+        const tripQueries = [
+            ...createSearchQuery('locations', searchKeywords),
+            ...createSearchQuery('notes', searchKeywords)
+        ];
+        const trips = await Trip.find({ $or: tripQueries }).lean()
 
         console.log("🚐 Vans Found:", vans.length);
         console.log("💬 Van Reviews Found:", vanReviews.length);
