@@ -14,7 +14,7 @@ require('dotenv').config({ path: '../.env' });
  * @param {Function} next - Next middleware function
  */
 const authenticateUser = (req, res, next) => {
-    const token = req.cookies.token;  // Get token from the cookies
+    const token = req.cookies.__wild_app_token;  // Get token from the cookies
 
     if (!token) {
         return res.status(401).json({ message: "No token provided" });
