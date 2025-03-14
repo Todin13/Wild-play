@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const { Guide, User } = require("../models");
+const { Guide, User, Trip } = require("../models");
 
 /// Create a new guide
 const createGuide = async (req, res) => {
@@ -96,10 +96,41 @@ const deleteGuide = async (req, res) => {
     }
 };
 
+// Create a guide from a trip
+const createGuideFromTrip = async (req, res) => {
+    try {
+
+        // Retrieve the trip by ID
+        const trip = await Trip.findOne({ _id: req.body.trip_id, user_id: req.user.id });
+        
+        if (!trip) {
+            return res.status(404).json({ message: "Trip not found" });
+        }
+
+        // Create the guide from the trip data
+        const newGuide = new Guide({
+            user_id: trip.user_id,
+            title: trip.title,
+            duration: (new Date(trip.end_date) - new Date(trip.start_date)),
+            locations: trip.locations,
+            notes: trip.notes,
+            creation_date: new Date()
+        });
+
+        // Save the new guide
+        await newGuide.save();
+
+        res.status(201).json({ message: "Guide created from trip successfully", guide: newGuide });
+    } catch (error) {
+        res.status(500).json({ message: "Error creating guide from trip", error });
+    }
+};
+
 module.exports = {
     createGuide,
     getUserGuides,
     getGuideById,
     updateGuide,
-    deleteGuide
+    deleteGuide,
+    createGuideFromTrip
 };
