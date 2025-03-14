@@ -7,7 +7,7 @@ Method for creating a trip
 const { Trip } = require("../models");
 
 /// Create a new trip
-exports.createTrip = async (req, res) => {
+const createTrip = async (req, res) => {
     try {
         const { start_date, end_date, locations, notes } = req.body;
 
@@ -32,7 +32,7 @@ exports.createTrip = async (req, res) => {
 };
 
 // Get all trips for the logged-in user
-exports.getUserTrips = async (req, res) => {
+const getUserTrips = async (req, res) => {
     try {
         const trips = await Trip.find({ user_id: req.user.id });
         res.status(200).json(trips);
@@ -42,7 +42,7 @@ exports.getUserTrips = async (req, res) => {
 };
 
 // Get a single trip by ID (only if it belongs to the user)
-exports.getTripById = async (req, res) => {
+const getTripById = async (req, res) => {
     try {
         const trip = await Trip.findOne({ _id: req.params.id, user_id: req.user.id });
         if (!trip) return res.status(404).json({ message: "Trip not found" });
@@ -54,7 +54,7 @@ exports.getTripById = async (req, res) => {
 };
 
 // Update a trip (only if the start date is not due)
-exports.updateTrip = async (req, res) => {
+const updateTrip = async (req, res) => {
     try {
         const trip = await Trip.findOne({ _id: req.params.id, user_id: req.user.id });
 
@@ -73,7 +73,7 @@ exports.updateTrip = async (req, res) => {
 };
 
 // Delete a trip (only if it belongs to the user)
-exports.deleteTrip = async (req, res) => {
+const deleteTrip = async (req, res) => {
     try {
         const trip = await Trip.findOneAndDelete({ _id: req.params.id, user_id: req.user.id });
         if (!trip) return res.status(404).json({ message: "Trip not found" });
@@ -83,3 +83,11 @@ exports.deleteTrip = async (req, res) => {
         res.status(500).json({ message: "Error deleting trip", error });
     }
 };
+
+module.exports = {
+    createTrip,
+    getUserTrips,
+    getTripById,
+    updateTrip,
+    deleteTrip
+}

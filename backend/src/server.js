@@ -5,14 +5,12 @@ const cors = require("cors");
 
 // Import Routes
 const tripRoutes = require("./routes/tripRoutes");
-const userRoutes = require("./routes/user_routes.js");
+const userRoutes = require("./routes/userRoutes.js");
 
 
 connectDB();
 
 const app = express();
-connectDB();
-
 // Middleware
 app.use(cors());
 app.use(express.json());
