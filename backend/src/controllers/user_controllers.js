@@ -111,58 +111,100 @@ const deleteUser = async (req, res) => {
 };
 
 
-const searchUserByAge = async (req, res) => {
+const searchUsers = async (req, res) => {
   try {
-      const { min, max } = req.body;
-
-      // Calculate the date range
-      const currentDate_1 = new Date();
-      const maxBirthdate = new Date(currentDate_1.setFullYear(currentDate_1.getFullYear() - max));
-      const currentDate_2 = new Date();
-      const minBirthdate = new Date(currentDate_2.setFullYear(currentDate_2.getFullYear() - min)); 
-
-      // Search for users within the birthdate range
-      const users = await User.find({
-          birthdate: {$lte: minBirthdate, $gte: maxBirthdate }
-      });
-
-      res.status(200).json(users);console.log(users);
-  } catch (error) {
-      res.status(500).json({ message: "Error searching for users" });
-  }
-};
-
-const searchUser = async (req, res) => {
-  try {
-    const { username, country, phone, email } = req.body;
+    const { username, country, phone, email, firstName, lastName, user_type, birthdate, street, city, county, zip, driver_license } = req.body;
 
     let query = {};
 
+    // Handle searching by other fields
     if (username) {
       query.username = username;
     }
 
-    if (country) {
-      query["billing_address.country"] = country;
+    if (firstName) {
+      query.firstName = firstName;
     }
 
-    if (phone) {
-      query.phone = phone;
+    if (lastName) {
+      query.lastName = lastName;
     }
 
     if (email) {
       query.email = email;
     }
 
-    // Find user based on dynamic query
+    if (phone) {
+      query.phone = phone;
+    }
+
+    if (user_type) {
+      query.user_type = user_type;
+    }
+
+    if (birthdate) {
+      query.birthdate = birthdate;
+    }
+
+    if (street) {
+      query["billing_address.street"] = street;
+    }
+
+    if (city) {
+      query["billing_address.city"] = city;
+    }
+
+    if (county) {
+      query["billing_address.county"] = county;
+    }
+
+    if (zip) {
+      query["billing_address.zip"] = zip;
+    }
+
+    if (country) {
+      query["billing_address.country"] = country;
+    }
+
+    if (driver_license) {
+      query.driver_license = driver_license;
+    }
+
+    // Find users based on the dynamic query
     const users = await User.find(query);
 
     res.status(200).json(users);
+    console.log(users);
   } catch (error) {
-    res.status(500).json({ message: "Error searching for users" }); 
+    res.status(500).json({ message: "Error searching for users" });
     console.log(error);
   }
 };
+
+const searchUserByUsername = async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    // Check if username is provided
+    if (!username) {
+      return res.status(400).json({ message: "Username is required" });
+    }
+
+    // Find user by username
+    const user = await User.findOne({ username });
+
+    // If no user found
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error searching for user" });
+    console.log(error);
+  }
+};
+
 
 const profile = async (req, res) => {
   try {
@@ -196,10 +238,10 @@ const logout = async (req, res) => {
 module.exports = {
     registerUser,
     loginUser,
-    searchUser,
     updateUser,
     deleteUser,
-    searchUserByAge,
+    searchUsers,
+    searchUserByUsername,
     profile,
     logout,
 };
