@@ -126,6 +126,14 @@ const TripSchema = new mongoose.Schema({
 //  pictures: need to thing how to save pictures
 })
 
+const DealSchema = new mongoose.Schema({
+    _id: mongoose.Schema.Types.ObjectId,
+    van_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Van', required: true },
+    discount: { type: Number, required: true },
+    start_date: { type: Date, required: true },
+    end_date: { type: Date, required: true }
+});
+
 // export collection of the schema, schema is only the structure of the collection
 module.exports = {
     User: mongoose.model('User', UserSchema),
@@ -135,5 +143,6 @@ module.exports = {
     GuideReview: mongoose.model('GuideReview', GuidReviewSchema),
     Discount: mongoose.model('Discount', DiscountSchema),
     Guide: mongoose.model('Guide', GuideSchema),
-    Trip: mongoose.model('Trip', TripSchema)
+    Trip: mongoose.model('Trip', TripSchema),
+    Deal: mongoose.model('Deal', DealSchema)
 };
