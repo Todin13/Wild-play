@@ -28,7 +28,7 @@ const setTokenCookie = (res, user) => {
     const token = generateToken(user);
 
     // Set the JWT token as a cookie
-    res.cookie("token", token, {
+    res.cookie("__wild_app_token", token, {
         httpOnly: false,      
         secure: false, 
         sameSite: "lax" // Prevent CORS issue
