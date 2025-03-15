@@ -82,6 +82,7 @@ const editBooking = async (req, res) => {
             paid,
             promocode
         } = req.body;
+        const { user_id, user_type } = req.user;
 
         const booking = await Booking.findById(booking_id);     // find booking by id
 
@@ -89,16 +90,20 @@ const editBooking = async (req, res) => {
             return res.status(404).json({ message: "Booking not found" }); // if booking not found return 404
         }
 
-        booking.van_id = van_id || booking.van_id;
-        booking.start_date = start_date || booking.start_date;
-        booking.end_date = end_date || booking.end_date;
-        booking.pick_up_location = pick_up_location || booking.pick_up_location;
-        booking.return_location = return_location || booking.return_location;
-        booking.status = status || booking.status;
-        booking.amount = amount || booking.amount;
-        booking.delivery_location = delivery_location || booking.delivery_location;
-        booking.paid = paid || booking.paid;
-        booking.promocode = promocode || booking.promocode;
+        if (user_type === 'ADMIN' || booking.user_id.toString() === user_id) {
+            booking.van_id = van_id || booking.van_id;
+            booking.start_date = start_date || booking.start_date;
+            booking.end_date = end_date || booking.end_date;
+            booking.pick_up_location = pick_up_location || booking.pick_up_location;
+            booking.return_location = return_location || booking.return_location;
+            booking.status = status || booking.status;
+            booking.amount = amount || booking.amount;
+            booking.delivery_location = delivery_location || booking.delivery_location;
+            booking.paid = paid || booking.paid;
+            booking.promocode = promocode || booking.promocode;
+        } else {
+            return res.status(403).json({ message: "You are not authorized to edit this booking" }); // if not admin and not owner, return 403
+        }
 
         const updatedBooking = await booking.save();    // save updated booking
         res.status(200).json(updatedBooking);   // if booking updated return 200
@@ -112,6 +117,7 @@ const changeBookingStatus = async (req, res) => {
     try {
         const { booking_id } = req.params;
         const { new_status } = req.body;
+        const { user_id, user_type } = req.user;
 
         const booking = await Booking.findById(booking_id); // find booking by id
 
@@ -124,7 +130,12 @@ const changeBookingStatus = async (req, res) => {
         if (!validStatuses.includes(new_status)) {
             return res.status(400).json({ message: "Invalid booking status" }); // if invalid status return 400
         }
-        booking.status = new_status; // update booking status
+
+        if (user_type === 'ADMIN' || booking.user_id.toString() === user_id) {
+            booking.status = new_status; // update booking status
+        } else {
+            return res.status(403).json({ message: "You are not authorized to change this booking status" }); // if not admin and not owner, return 403
+        }
 
         const updatedBooking = await booking.save(); // save updated booking
         res.status(200).json(updatedBooking); // if booking status updated return 200
@@ -133,9 +144,33 @@ const changeBookingStatus = async (req, res) => {
     }
 };
 
+// delete booking
+const deleteBooking = async (req, res) => {
+    try {
+        const { booking_id } = req.params;
+        const { user_id, user_type } = req.user;
+
+        const booking = await Booking.findById(booking_id); // find booking by id
+
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" }); // if booking not found return 404
+        }
+
+        if (user_type === 'ADMIN' || booking.user_id.toString() === user_id) {
+            await booking.remove(); // delete booking
+            res.status(200).json({ message: "Booking deleted successfully" }); // if booking deleted return 200
+        } else {
+            return res.status(403).json({ message: "You are not authorized to delete this booking" }); // if not admin and not owner return 403
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Error occured while deleting a booking", error }); // if error return 500
+    }
+};
+
 module.exports = { // export booking controllers
     getAllBookings,
     setBooking,
     editBooking,
-    changeBookingStatus
+    changeBookingStatus,
+    deleteBooking
 };
