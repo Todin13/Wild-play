@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
         zip: String,
         country: String
       },
-    driver_license_id: {type: String, unique: true, uppercase: true, minLength:30, maxLength:30},
+    driver_license: {type: String, unique: true, uppercase: true, minLength:30, maxLength:30},
     username: {
         type: String,
         required: [true, "Username is required"], 

@@ -4,7 +4,7 @@ Utility using jsonwebtoken like the generation of a new token with user informat
 
 */
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+require('dotenv').config({ path: '../.env' });
 
 /**
  * Generate JWT Token for a user
@@ -19,4 +19,29 @@ const generateToken = (user) => {
     );
 };
 
-module.exports = { generateToken };
+/**
+ * @param {Object} res - Express response object
+ * @param {Object} user - The user object (for creating the token)
+ */
+const setTokenCookie = (res, user) => {
+
+    const token = generateToken(user);
+
+    // Set the JWT token as a cookie
+    res.cookie("__wild_app_token", token, {
+        httpOnly: false,      
+        secure: false, 
+        sameSite: "lax" // Prevent CORS issue
+    });
+};
+
+const clearCookie = (req, res) => {
+    res.cookie("token", "", {
+        httpOnly: false, 
+        secure: false,  
+        sameSite: "lax",
+        maxAge: 0        // Immediately expires the cookie
+    });
+};
+
+module.exports = { setTokenCookie, clearCookie};
