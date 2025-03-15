@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const controllers = require("../controllers/bookingControllers");
-console.log("Imported Controllers:", controllers);
 const { authenticateUser } = require("../middleware/authMiddleware");
 
 
 // get all bookings for a user
-router.get("/:user_id", authenticateUser, controllers.getAllBookings);
+router.get("/all/:user_id", authenticateUser, controllers.getAllBookings);
+
+// get specific booking by ID
+router.get("/:booking_id", authenticateUser, controllers.getBookingById);
 
 // route to create a new booking
 router.post("/", authenticateUser, controllers.setBooking);

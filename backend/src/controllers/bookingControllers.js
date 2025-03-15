@@ -24,6 +24,21 @@ const getAllBookings = async (req, res) => {
     }
 };
 
+// get specific booking by its ID
+const getBookingById = async (req, res) => {
+    try {
+        const { booking_id } = req.params;
+        const booking = await Booking.findById(booking_id).populate("van_id"); // populate van details
+
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" }); // if booking not found return 404
+        }
+        res.status(200).json(booking); // if booking found return 200
+    } catch (error) {
+        res.status(500).json({ message: "Error retrieving booking", error }); // if error return 500
+    }
+};
+
 // create new booking
 const setBooking = async (req, res) => { // validate and save new booking data in database
     try {
@@ -69,55 +84,47 @@ const setBooking = async (req, res) => { // validate and save new booking data i
 // update booking
 const editBooking = async (req, res) => {
     try {
-        const { booking_id } = req.params;
-        const {
-            van_id,
-            start_date,
-            end_date,
-            pick_up_location,
-            return_location,
-            status,
-            amount,
-            delivery_location,
-            paid,
-            promocode
-        } = req.body;
-        const { user_id, user_type } = req.user;
-
-        const booking = await Booking.findById(booking_id);     // find booking by id
-
-        if (!booking) {
-            return res.status(404).json({ message: "Booking not found" }); // if booking not found return 404
-        }
-
-        if (user_type === 'ADMIN' || booking.user_id.toString() === user_id) {
-            booking.van_id = van_id || booking.van_id;
-            booking.start_date = start_date || booking.start_date;
-            booking.end_date = end_date || booking.end_date;
-            booking.pick_up_location = pick_up_location || booking.pick_up_location;
-            booking.return_location = return_location || booking.return_location;
-            booking.status = status || booking.status;
-            booking.amount = amount || booking.amount;
-            booking.delivery_location = delivery_location || booking.delivery_location;
-            booking.paid = paid || booking.paid;
-            booking.promocode = promocode || booking.promocode;
-        } else {
-            return res.status(403).json({ message: "You are not authorized to edit this booking" }); // if not admin and not owner, return 403
-        }
-
-        const updatedBooking = await booking.save();    // save updated booking
-        res.status(200).json(updatedBooking);   // if booking updated return 200
-    } catch (error) {
-        res.status(500).json({ message: "Error occured while editing a booking", error });  // if error return 500
+      const bookingId = req.params.booking_id;
+      const updatedBookingData = req.body;
+  
+      // Fetch the booking from the database
+      const booking = await Booking.findById(bookingId);
+  
+      if (!booking) {
+        return res.status(404).json({ message: "Booking not found" });
+      }
+  
+      // Check if the user is authorized to edit the booking
+      const isUserAuthorized = req.user.id.toString() === booking.user_id.toString();
+    //   console.log("User authorized:", isUserAuthorized);
+    //   console.log("User req id:", req.user.id.toString());
+    //   console.log("Booking user id:", booking.user_id.toString());
+  
+      if (!isUserAuthorized) {
+        return res.status(403).json({ message: "You are not authorized to edit this booking" });
+      }
+  
+      // Update the booking in the database
+      const updatedBooking = await Booking.findByIdAndUpdate(bookingId, updatedBookingData, { new: true });
+  
+      if (!updatedBooking) {
+        return res.status(404).json({ message: "Booking not found" });
+      }
+  
+      res.status(200).json(updatedBooking);
+    } 
+    catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error updating booking" });
     }
-};
+  };
 
 // change booking status
 const changeBookingStatus = async (req, res) => {
     try {
         const { booking_id } = req.params;
         const { new_status } = req.body;
-        const { user_id, user_type } = req.user;
+        const { id, user_type } = req.user;
 
         const booking = await Booking.findById(booking_id); // find booking by id
 
@@ -131,10 +138,10 @@ const changeBookingStatus = async (req, res) => {
             return res.status(400).json({ message: "Invalid booking status" }); // if invalid status return 400
         }
 
-        if (user_type === 'ADMIN' || booking.user_id.toString() === user_id) {
-            booking.status = new_status; // update booking status
+        if (user_type === 'ADMIN' || booking.user_id.toString() === id.toString()) {
+            booking.status = new_status;
         } else {
-            return res.status(403).json({ message: "You are not authorized to change this booking status" }); // if not admin and not owner, return 403
+            return res.status(403).json({ message: "You are not authorized to change this booking status" });
         }
 
         const updatedBooking = await booking.save(); // save updated booking
@@ -148,27 +155,34 @@ const changeBookingStatus = async (req, res) => {
 const deleteBooking = async (req, res) => {
     try {
         const { booking_id } = req.params;
-        const { user_id, user_type } = req.user;
+        const { id, user_type } = req.user; // change user_id to id
 
-        const booking = await Booking.findById(booking_id); // find booking by id
+        const booking = await Booking.findById(booking_id);
 
         if (!booking) {
-            return res.status(404).json({ message: "Booking not found" }); // if booking not found return 404
+            return res.status(404).json({ message: "Booking not found" });
         }
 
-        if (user_type === 'ADMIN' || booking.user_id.toString() === user_id) {
-            await booking.remove(); // delete booking
-            res.status(200).json({ message: "Booking deleted successfully" }); // if booking deleted return 200
-        } else {
-            return res.status(403).json({ message: "You are not authorized to delete this booking" }); // if not admin and not owner return 403
+        // Fix the user authorization check
+        const isUserAuthorized = user_type === 'ADMIN' || booking.user_id.toString() === id.toString();
+        console.log("Is auth:", isUserAuthorized, "booking.user_id:", booking.user_id.toString(), "user_id:", id);
+
+        if (!isUserAuthorized) {
+            return res.status(403).json({ message: "You are not authorized to delete this booking" });
         }
-    } catch (error) {
-        res.status(500).json({ message: "Error occured while deleting a booking", error }); // if error return 500
+
+        //await booking.remove();
+        await booking.deleteOne();
+
+        res.status(200).json({ message: "Booking deleted successfully" });
+    } catch (error) {        
+        res.status(500).json({ message: "Error occurred while deleting a booking", error });
     }
 };
 
 module.exports = { // export booking controllers
     getAllBookings,
+    getBookingById,
     setBooking,
     editBooking,
     changeBookingStatus,
