@@ -1,4 +1,4 @@
-const Booking = require("../models/index");
+const { Booking } = require("../models/index");
 
 // get all bookings for a given user id
 const getAllBookings = async (req, res) => {

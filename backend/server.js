@@ -3,8 +3,6 @@ const cors = require('cors');
 const cookieParser = require("cookie-parser");
 const { connectDB } = require("./config/db.js");
 
-connectDB();
-
 const userRoutes = require("./routes/user_routes.js");
 const searchRoutes = require('./routes/search');
 const campersRoutes = require('./routes/campers');
