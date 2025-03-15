@@ -2,7 +2,7 @@ const { Deal } = require('../models');
 
 exports.getAllDeals = async (req, res) => {
     try {
-<<<<<<< HEAD
+        
         let filters = {};
 
         if (req.query.van_id) {
@@ -43,10 +43,7 @@ exports.getAllDeals = async (req, res) => {
 
         // Requête pour récupérer les deals, en incluant le filtre par type de van
         const deals = await Deal.find(filters).lean();  // Utiliser les filtres construits
-=======
 
-        const deals = await Deal.find().lean(); // Fetch all vans
->>>>>>> 954bde401e4cb230fe38a8e2c88d8bec0d2130bd
         res.json({ deals, count: deals.length });
     } catch (error) {
         console.error("❌ Error fetching deals:", error);
