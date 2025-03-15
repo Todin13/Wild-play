@@ -1,8 +1,3 @@
-/*
-
-db.js create the connection and dectionection function to the database
-
-*/
 
 const mongoose = require('mongoose');
 require('dotenv').config({ path: '../.env' });
