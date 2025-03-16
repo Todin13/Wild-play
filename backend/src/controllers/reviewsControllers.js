@@ -44,14 +44,14 @@ exports.getVanReviews = async (req, res) => {
 // Create a new guide review
 exports.createGuideReview = async (req, res) => {
     try {
-        const user_id = req.user.id;
+        const {id} = req.user;
         const { guide_id, rating, review } = req.body;
         
         if (!user_id || !guide_id || !rating || !review) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        const newReview = new GuideReview({ user_id, guide_id, rating, review, date: new Date() });
+        const newReview = new GuideReview({ "user_id": id, guide_id, rating, review, date: new Date() });
         await newReview.save();
 
         res.status(201).json({ message: "Guide review added successfully", review: newReview });
