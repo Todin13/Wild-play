@@ -14,9 +14,11 @@ exports.getRoutesInfo = (req, res) => {
                 endpoints: {
                     register: "POST /api/users/register - Register a new user",
                     login: "POST /api/users/login - Login user",
-                    search: "GET /api/users/search - Search users (Admin only)",
+                    search: "GET /api/users/search - Search users using only username",
+                    search: "GET /api/users/search/admin - Search users (Admin only)",
                     update: "PUT /api/users/update/:user - Update user profile",
-                    delete: "DELETE /api/users/delete/:id - Delete a user",
+                    delete: "DELETE /api/users/delete/:id - Delete a user (Admin only)",
+                    delete: "DELETE /api/users/delete - Delete the logged user",
                     profile: "GET /api/users/profile - Get user profile",
                     logout: "POST /api/users/logout - Logout user"
                 }

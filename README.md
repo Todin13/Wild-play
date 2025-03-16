@@ -24,11 +24,13 @@ https://wild-play.vercel.app/
 
 - `POST /register` - Register a new user
 - `POST /login` - Login user
-- `GET /search` - Search users (Admin only)
-- `PUT /update/:user` - Update user profile
-- `DELETE /delete/:id` - Delete a user
+- `GET /search` - Search users based on username
+- `PUT /update/` - Update user profile
+- `DELETE /delete` - Delete the logged account
 - `GET /profile` - Get user profile
 - `POST /logout` - Logout user
+- `GET /search/admin` - Search users (admin only)
+- `DELETE /delete/:id` - Delete the logged account (admin only)
 
 #### 2. Search
 
