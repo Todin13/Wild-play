@@ -48,15 +48,21 @@ exports.addCamper = async (req, res) => {
         }
 
         const newVan = new Van({
+            type: req.body.type,
             manufacturer: req.body.manufacturer,
             model: req.body.model,
             price: req.body.price,
             seats: req.body.seats,
             beds: req.body.beds,
             transmission: req.body.transmission,
-            location: req.body.location,
+            baseRate: req.body.baseRate,
             color: req.body.color,
-            isAvailable: req.body.isAvailable || true
+            location: req.body.location,
+            weight: req.body.weight,
+            dimension: req.body.dimension,
+            isAvailable: req.body.isAvailable || true,
+            utilities: req.body.utilities,
+            info: req.body.info
         });
 
         await newVan.save();
