@@ -4,7 +4,6 @@ Middleware (cookies) to check if the user is logged in
 
 */
 const jwt = require("jsonwebtoken");
-const cookieParser = require("cookie-parser");
 require('dotenv').config({ path: '../.env' });
 
 /**
