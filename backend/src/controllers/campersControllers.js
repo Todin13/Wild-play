@@ -47,6 +47,21 @@ exports.addCamper = async (req, res) => {
             return res.status(403).json({ error: "Unauthorized: Admins only" });
         }
 
+        // Required fields
+        const requiredFields = [
+            "type", "manufacturer", "model", "price", "seats", "beds",
+            "transmission", "baseRate", "color", "location", "weight",
+            "dimension", "utilities", "info"
+        ];
+        
+        // Check for missing fields
+        const missingFields = requiredFields.filter(field => !req.body[field]);
+        if (missingFields.length > 0) {
+            return res.status(400).json({
+                error: `Missing required fields: ${missingFields.join(", ")}`
+            });
+        }
+
         const newVan = new Van({
             type: req.body.type,
             manufacturer: req.body.manufacturer,
@@ -69,9 +84,10 @@ exports.addCamper = async (req, res) => {
         res.status(201).json({ message: "✅ Camper added successfully", camper: newVan });
     } catch (error) {
         console.error("❌ Error adding camper:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: error.message || "Internal Server Error" });
     }
 };
+
 
 exports.deleteCamper = async (req, res) => {
     try {
