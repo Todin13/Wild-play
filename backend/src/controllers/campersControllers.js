@@ -5,18 +5,18 @@ All methods for the van access an view
 */
 const { Van } = require('../models');
 
-exports.getAllCampers = async (req, res) => {
+exports.getAllCampers = async (req, res) => { //get all campers
     try {
-        let filters = {};
+        let filters = {}; // Initialize filters object
 
         // Apply filters if query parameters exist
-        if (req.query.manufacturer) {
+        if (req.query.manufacturer) { // Filter by manufacturer
             filters.manufacturer = req.query.manufacturer;
         }
-        if (req.query.transmission) {
+        if (req.query.transmission) { // Filter by transmission type
             filters.transmission = req.query.transmission;
         }
-        if (req.query.type) {
+        if (req.query.type) { // Filter by type
             filters.type = req.query.type;
         }
 
@@ -34,7 +34,7 @@ exports.getAllCampers = async (req, res) => {
 
 
         const campers = await Van.find().lean(); // Fetch all vans
-        res.json({ campers, count: campers.length });
+        res.json({ campers, count: campers.length }); //show the number of campers
     } catch (error) {
         console.error("❌ Error fetching campers:", error);
         res.status(500).json({ error: "Internal Server Error" });
@@ -44,7 +44,7 @@ exports.getAllCampers = async (req, res) => {
 exports.addCamper = async (req, res) => {
     try {
         if (req.user.user_type !== 'ADMIN') {
-            return res.status(403).json({ error: "Unauthorized: Admins only" });
+            return res.status(403).json({ error: "Unauthorized: Admins only" }); //only admins can add campers
         }
 
         // Required fields
@@ -80,8 +80,8 @@ exports.addCamper = async (req, res) => {
             info: req.body.info
         });
 
-        await newVan.save();
-        res.status(201).json({ message: "✅ Camper added successfully", camper: newVan });
+        await newVan.save(); // Save the new van
+        res.status(201).json({ message: "✅ Camper added successfully", camper: newVan }); //show the camper added
     } catch (error) {
         console.error("❌ Error adding camper:", error);
         res.status(500).json({ error: error.message || "Internal Server Error" });
@@ -91,16 +91,16 @@ exports.addCamper = async (req, res) => {
 
 exports.deleteCamper = async (req, res) => {
     try {
-        if (req.user.user_type !== 'ADMIN') {
+        if (req.user.user_type !== 'ADMIN') { //only admins can delete campers
             return res.status(403).json({ error: "Unauthorized: Admins only" });
         }
 
-        const deletedVan = await Van.findByIdAndDelete(req.params.id);
+        const deletedVan = await Van.findByIdAndDelete(req.params.id); // Find and delete the camper
         if (!deletedVan) {
             return res.status(404).json({ error: "Camper not found" });
         }
 
-        res.json({ message: "✅ Camper deleted successfully", deletedCamper: deletedVan });
+        res.json({ message: "✅ Camper deleted successfully", deletedCamper: deletedVan }); //show the camper deleted
     } catch (error) {
         console.error("❌ Error deleting camper:", error);
         res.status(500).json({ error: "Internal Server Error" });

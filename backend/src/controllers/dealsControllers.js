@@ -4,31 +4,31 @@ All methods for the discounts (deal pages)
 
 */
 const { Deal } = require('../models');
-
-exports.getAllDeals = async (req, res) => {
+ 
+exports.getAllDeals = async (req, res) => { // Récupérer tous les deals
     try {
         
-        let filters = {};
+        let filters = {}; // Initialiser les filtres
 
         if (req.query.van_id) {
-            // Si l'ID est un ObjectId valide, le convertir
+            // If the van_id is a valid ObjectId
             if (mongoose.Types.ObjectId.isValid(req.query.van_id)) {
-                filters.van_id = mongoose.Types.ObjectId(req.query.van_id);  // Conversion en ObjectId
+                filters.van_id = mongoose.Types.ObjectId(req.query.van_id);  // Conversion in ObjectId
             } else {
-                // Si ce n'est pas un ObjectId, traiter le comme une chaîne de caractères (par exemple UUID)
-                filters.van_id = req.query.van_id;  // Utiliser directement comme chaîne de caractères
+                // if the van_id is not a valid ObjectId
+                filters.van_id = req.query.van_id;  // Use the string directly
             }
         }
 
-        if (req.query.discount) {
+        if (req.query.discount) {  // Filter by discount
             filters.discount = req.query.discount;
         }
 
-        if (req.query.minDiscount) {
+        if (req.query.minDiscount) { // Filter by minimum discount
             filters.discount = { ...filters.discount, $gte: req.query.minDiscount };
         }
 
-        if (req.query.maxDiscount) {
+        if (req.query.maxDiscount) { // Filter by maximum discount
             filters.discount = { ...filters.discount, $lte: req.query.maxDiscount };
         }
 
@@ -36,7 +36,7 @@ exports.getAllDeals = async (req, res) => {
         if (req.query.start_date || req.query.end_date) {
             let dateFilter = {};
 
-            if (req.query.start_date) {
+            if (req.query.start_date) { 
                 dateFilter.$gte = new Date(req.query.start_date);
             }
             if (req.query.end_date) {
@@ -46,9 +46,8 @@ exports.getAllDeals = async (req, res) => {
             filters.start_date = dateFilter;
         }
 
-        // Requête pour récupérer les deals, en incluant le filtre par type de van
-        const deals = await Deal.find(filters).lean();  // Utiliser les filtres construits
-
+        // Request to the database with the filters  
+        const deals = await Deal.find(filters).lean();  // use lean() to get plain JS objects instead of Mongoose documents
         res.json({ deals, count: deals.length });
     } catch (error) {
         console.error("❌ Error fetching deals:", error);
@@ -56,7 +55,7 @@ exports.getAllDeals = async (req, res) => {
     }
 };
 
-exports.addDeal = async (req, res) => {
+exports.addDeal = async (req, res) => { //Add a deal
     try {
         if (req.user.user_type !== 'ADMIN') {
             return res.status(403).json({ error: "Unauthorized: Admins only" });
@@ -70,16 +69,16 @@ exports.addDeal = async (req, res) => {
         });
 
         await newDeal.save();
-        res.status(201).json({ message: "✅ Deal added successfully", deal: newDeal });
+        res.status(201).json({ message: "✅ Deal added successfully", deal: newDeal });  
     } catch (error) {
         console.error("❌ Error adding deal:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
-exports.deleteDeal = async (req, res) => {
+exports.deleteDeal = async (req, res) => { // Delete a deal
     try {
-        if (req.user.user_type !== 'ADMIN') {
+        if (req.user.user_type !== 'ADMIN') { // Only admins can delete deals
             return res.status(403).json({ error: "Unauthorized: Admins only" });
         }
 
@@ -88,7 +87,7 @@ exports.deleteDeal = async (req, res) => {
             return res.status(404).json({ error: "Deal not found" });
         }
 
-        res.json({ message: "✅ Deal deleted successfully", deletedDeal: deletedDeal });
+        res.json({ message: "✅ Deal deleted successfully", deletedDeal: deletedDeal }); 
     } catch (error) {
         console.error("❌ Error deleting deal:", error);
         res.status(500).json({ error: "Internal Server Error", debugging: error.message });
