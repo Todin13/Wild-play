@@ -91,6 +91,6 @@ exports.deleteDeal = async (req, res) => {
         res.json({ message: "✅ Deal deleted successfully", deletedDeal: deletedDeal });
     } catch (error) {
         console.error("❌ Error deleting deal:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: "Internal Server Error", debugging: error.message });
     }
 };
