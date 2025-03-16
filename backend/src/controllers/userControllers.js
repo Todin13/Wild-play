@@ -72,18 +72,10 @@ const updateUser = async (req, res) => {
   try {
     
     const { id } = req.user;
-    const { user } = req.params;
-
-    console.log("test" ,id, user);
-
-    // Ensure user can only update their own profile
-    if (user !== id) {
-      return res.status(403).json({ message: 'Not authorized to update this user' });
-    }
 
     const updates = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(user, updates, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
@@ -98,7 +90,25 @@ const updateUser = async (req, res) => {
 }
 
 // Delete user controller
+
 const deleteUser = async (req, res) => {
+  try {
+    // Find the user by ID and delete
+    const user = await User.findByIdAndDelete(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return success message
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message }); // Handle server errors
+    console.log(error);
+  }
+};
+
+const adminDeleteUser = async (req, res) => {
   try {
     // Find the user by ID and delete
     const user = await User.findByIdAndDelete(req.params.id);
@@ -116,7 +126,7 @@ const deleteUser = async (req, res) => {
 };
 
 
-const searchUsers = async (req, res) => {
+const adminSearchUsers = async (req, res) => {
   try {
     const { username, country, phone, email, firstName, lastName, user_type, birthdate, street, city, county, zip, driver_license } = req.body;
 
@@ -186,7 +196,7 @@ const searchUsers = async (req, res) => {
   }
 };
 
-const searchUserByUsername = async (req, res) => {
+const searchUsers = async (req, res) => {
   try {
     const { username } = req.body;
 
@@ -196,14 +206,14 @@ const searchUserByUsername = async (req, res) => {
     }
 
     // Find user by username
-    const user = await User.findOne({ username });
+    const users = await User.find({ username });
 
     // If no user found
-    if (!user) {
+    if (!users) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json(user);
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: "Error searching for user" });
     console.log(error);
@@ -246,7 +256,8 @@ module.exports = {
     updateUser,
     deleteUser,
     searchUsers,
-    searchUserByUsername,
     profile,
     logout,
+    adminDeleteUser,
+    adminSearchUsers,
 };
