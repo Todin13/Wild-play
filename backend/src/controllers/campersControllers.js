@@ -1,3 +1,8 @@
+/*
+
+All methods for the van access an view
+
+*/
 const { Van } = require('../models');
 
 exports.getAllCampers = async (req, res) => {

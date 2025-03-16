@@ -1,7 +1,12 @@
+/*
+
+All discounts routes
+
+*/
 const express = require('express');
 const router = express.Router();
-const dealsController = require('../controllers/dealsController'); // Import the controller
-const { authenticateUser, isAdmin } = require('../middleware/authMiddleware'); // Import middleware
+const dealsController = require('../controllers/dealsControllers'); // Import the controller
+const { authenticateUser, isAdmin } = require('../middlewares/authMiddlewares'); // Import middleware
 
 
 router.get('/', dealsController.getAllDeals); // Route to fetch all campers

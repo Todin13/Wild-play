@@ -1,6 +1,11 @@
+/*
+
+All user routes
+
+*/
 const express = require("express");
-const { authenticateUser, isAdmin } = require("../middleware/authMiddleware");
-const { registerUser, loginUser, searchUsers, updateUser, deleteUser, searchUserByUsername, profile, logout } = require("../controllers/user_controllers.js");
+const { authenticateUser, isAdmin } = require("../middlewares/authMiddlewares.js");
+const {  registerUser, loginUser, searchUsers, updateUser, deleteUser, searchUserByUsername, profile, logout } = require("../controllers/userControllers.js");
 
 const router = express.Router();
 

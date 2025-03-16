@@ -1,4 +1,8 @@
+/*
 
+Method to connect and deconnect to db 
+
+*/
 const mongoose = require('mongoose');
 require('dotenv').config({ path: '../.env' });
 

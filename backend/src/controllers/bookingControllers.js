@@ -1,3 +1,8 @@
+/*
+
+All methods for the booking
+
+*/
 const { Booking } = require("../models/index");
 
 // get all bookings for a given user id

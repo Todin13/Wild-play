@@ -1,7 +1,12 @@
+/*
+
+All booking routes
+
+*/
 const express = require("express");
 const router = express.Router();
 const controllers = require("../controllers/bookingControllers");
-const { authenticateUser } = require("../middleware/authMiddleware");
+const { authenticateUser } = require("../middlewares/authMiddlewares");
 
 
 // get all bookings for a user
