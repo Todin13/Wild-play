@@ -84,7 +84,7 @@ exports.deleteDeal = async (req, res) => {
         }
 
         const deletedDeal = await Deal.findByIdAndDelete(req.params.id);
-        if (!deletedVan) {
+        if (!deletedDeal) {
             return res.status(404).json({ error: "Deal not found" });
         }
 
