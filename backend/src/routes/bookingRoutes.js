@@ -10,7 +10,7 @@ const { authenticateUser } = require("../middlewares/authMiddlewares");
 
 
 // get all bookings for a user
-router.get("/all/:user_id", authenticateUser, controllers.getAllBookings);
+router.get("/all", authenticateUser, controllers.getAllBookings);
 
 // get specific booking by ID
 router.get("/:booking_id", authenticateUser, controllers.getBookingById);

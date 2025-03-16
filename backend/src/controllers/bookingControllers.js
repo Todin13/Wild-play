@@ -9,19 +9,18 @@ const { Booking } = require("../models/index");
 const getAllBookings = async (req, res) => {
     // admin can view all bookings, users view only their own bookings  
     try {
-        const {user_id} = req.params;
-        const {user_type} = req.user;
-        if (!user_id) {
+        const {id, user_type} = req.user;
+        if (!id) {
             return res.status(400).json({ message: "User id required;" });
         }
         if (user_type === 'ADMIN') {
             const bookings = await Booking.find().populate("van_id");
             res.status(200).json(bookings);
         } else {
-            if (!user_id) {
+            if (!id) {
                 return res.status(400).json({ message: "User id required;" });  // if user_id not provided return 400
             }
-            const bookings = await Booking.find({user_id}).populate("van_id");  // fetch bookings for the user
+            const bookings = await Booking.find({id}).populate("van_id");  // fetch bookings for the user
             res.status(200).json(bookings);
         }
     } catch (error) {
