@@ -1,3 +1,8 @@
+/*
+
+All user routes
+
+*/
 const express = require("express");
 const { authenticateUser, isAdmin } = require("../middlewares/authMiddlewares.js");
 const {  registerUser, loginUser, searchUsers, updateUser, deleteUser, searchUserByUsername, profile, logout } = require("../controllers/userControllers.js");

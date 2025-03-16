@@ -1,9 +1,14 @@
+/*
+
+Main file to run the API
+
+*/
 const express = require("express");
 const cors = require('cors');
 const cookieParser = require("cookie-parser");
 const { connectDB } = require("./config/db.js");
 
-require('dotenv').config("../.env");
+require('dotenv').config("../.env"); 
 
 // Import Routes
 const searchRoutes = require('./routes/searchRoutes.js');
@@ -12,6 +17,7 @@ const dealsRoutes = require('./routes/dealsRoutes.js');
 const bookingRoutes = require("./routes/bookingRoutes");
 const tripRoutes = require("./routes/tripRoutes");
 const guideRoutes = require("./routes/guideRoutes");
+const helpRoute = require("./routes/helpRoute");
 const userRoutes = require("./routes/userRoutes.js");
 
 // Connect to MongoDB
@@ -26,6 +32,7 @@ app.use(cors()); // Enable CORS for API calls
 app.use(cookieParser());
 
 // Routes
+app.use("/help", helpRoute);
 app.use("/api/users", userRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/campers', campersRoutes);

@@ -1,3 +1,8 @@
+/*
+
+All methods for the search
+
+*/
 const { Van, VanReview, GuideReview, Discount, Guide, Trip } = require('../models');
 
 exports.searchAll = async (req, res) => {

@@ -1,3 +1,8 @@
+/*
+
+All van routes
+
+*/
 const express = require('express');
 const router = express.Router();
 const campersController = require('../controllers/campersControllers'); // Import the controller

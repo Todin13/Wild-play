@@ -1,3 +1,8 @@
+/*
+
+All methods for the discounts (deal pages)
+
+*/
 const { Deal } = require('../models');
 
 exports.getAllDeals = async (req, res) => {

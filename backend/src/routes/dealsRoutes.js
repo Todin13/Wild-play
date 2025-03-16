@@ -1,3 +1,8 @@
+/*
+
+All discounts routes
+
+*/
 const express = require('express');
 const router = express.Router();
 const dealsController = require('../controllers/dealsControllers'); // Import the controller

@@ -3,7 +3,6 @@
 Trip planning routes for the api
 
 */
-
 const express = require("express");
 const router = express.Router();
 const { createTrip, getUserTrips, getTripById, updateTrip, deleteTrip, createTripFromGuide } = require("../controllers/tripControllers");

@@ -1,4 +1,8 @@
-const mongoose = require("mongoose");
+/*
+
+All methods for the guides
+
+*/
 const { Guide, User, Trip } = require("../models");
 
 /// Create a new guide

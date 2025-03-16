@@ -1,3 +1,8 @@
+/*
+
+All guides routes
+
+*/
 const express = require("express");
 const router = express.Router();
 const { createGuide, getUserGuides, getGuideById, updateGuide, deleteGuide, createGuideFromTrip } = require("../controllers/guideControllers");

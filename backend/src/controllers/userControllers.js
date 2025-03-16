@@ -1,3 +1,8 @@
+/*
+
+All methods for the user
+
+*/
 const { hashPassword, comparePassword } = require("../utils/hashUtils");
 const { setTokenCookie, clearCookie } = require("../utils/jwtUtils");
 const { User } = require('../models');

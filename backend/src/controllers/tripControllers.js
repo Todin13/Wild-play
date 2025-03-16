@@ -1,6 +1,6 @@
 /*
 
-Method for creating a trip
+All methods for the Trips
 
 */
 const { Trip, Guide } = require("../models");
