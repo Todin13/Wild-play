@@ -81,6 +81,11 @@ const updateUser = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
+    if (updates.password) {
+      updatedUser.password = await hashPassword(updates.password);
+      await updatedUser.save();
+    }
+
     res.status(200).json({ message: 'User updated successfully', user: updatedUser });
 
   }catch(error){

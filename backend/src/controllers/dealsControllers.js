@@ -84,13 +84,13 @@ exports.deleteDeal = async (req, res) => {
         }
 
         const deletedDeal = await Deal.findByIdAndDelete(req.params.id);
-        if (!deletedVan) {
+        if (!deletedDeal) {
             return res.status(404).json({ error: "Deal not found" });
         }
 
         res.json({ message: "✅ Deal deleted successfully", deletedDeal: deletedDeal });
     } catch (error) {
         console.error("❌ Error deleting deal:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: "Internal Server Error", debugging: error.message });
     }
 };

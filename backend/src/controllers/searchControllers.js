@@ -9,48 +9,47 @@ exports.searchAll = async (req, res) => {
     try {
         const { keyword } = req.query;
 
-        if (!keyword) {
-            return res.status(400).json({ error: "Missing search keyword" });
+        if (!keyword || typeof keyword !== "string") {
+            return res.status(400).json({ error: "Missing or invalid search keyword" });
         }
 
         console.log("🔎 Searching for:", keyword);
 
-        // Split the sentence into individual words
-        const searchKeywords = keyword.split(/\s+/);
+        // Regex search with case-insensitive option "i"
+        const searchRegex = new RegExp(keyword, "i");
 
-        // Build the search conditions dynamically for each model
-        const createSearchQuery = (field, keywords) => {
-            return keywords.map(keyword => ({
-                [field]: { $regex: keyword, $options: "i" }
-            }));
-        };
+        // Search Vans
+        const vans = await Van.find({
+            $or: [
+                { manufacturer: searchRegex },
+                { model: searchRegex },
+                { color: searchRegex },
+                { location: searchRegex },
+                { info: searchRegex }
+            ]
+        }).lean();
 
-        // Build the search query for Van model
-        const vanQueries = [
-            ...createSearchQuery('manufacturer', searchKeywords),
-            ...createSearchQuery('model', searchKeywords),
-            ...createSearchQuery('color', searchKeywords),
-            ...createSearchQuery('location', searchKeywords),
-            ...createSearchQuery('info', searchKeywords)
-        ];
+        // Search Reviews
+        const vanReviews = await VanReview.find({ review: searchRegex }).lean();
+        const guideReviews = await GuideReview.find({ review: searchRegex }).lean();
 
-        // Search Vans based on the built queries
-        const vans = await Van.find({ $or: vanQueries }).lean();
+        // Search Guides & Trips
+        const guides = await Guide.find({
+            $or: [
+                { locations: { $elemMatch: { name: searchRegex } } },
+                { notes: searchRegex }
+            ]
+        }).lean();
 
-        // Search in relevant fields for VanReviews, GuideReviews, Guides, Trips
-        const vanReviews = await VanReview.find({ review: { $in: searchKeywords } }).lean();
-        const guideReviews = await GuideReview.find({ review: { $in: searchKeywords } }).lean();
-        const discounts = await Discount.find().lean(); // No text fields to search in Discount model
-        const guideQueries = [
-            ...createSearchQuery('locations', searchKeywords),
-            ...createSearchQuery('notes', searchKeywords)
-        ];
-        const guides = await Guide.find({ $or: guideQueries }).lean();
-        const tripQueries = [
-            ...createSearchQuery('locations', searchKeywords),
-            ...createSearchQuery('notes', searchKeywords)
-        ];
-        const trips = await Trip.find({ $or: tripQueries }).lean()
+        const trips = await Trip.find({
+            $or: [
+                { locations: { $elemMatch: { name: searchRegex } } },
+                { notes: searchRegex }
+            ]
+        }).lean();
+
+        // No search needed for discounts, just return all
+        const discounts = await Discount.find().lean();
 
         console.log("🚐 Vans Found:", vans.length);
         console.log("💬 Van Reviews Found:", vanReviews.length);
@@ -73,3 +72,4 @@ exports.searchAll = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+

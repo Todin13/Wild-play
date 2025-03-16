@@ -2,6 +2,8 @@
 
 Griffith college Web Technologie group K backend part
 
+credit: Thibaut Hervet, Thomas Odin, Xiang Yu Oon, Kirill Smirnov
+
 ## Overview
 
 Welcome to the backend part (API)! This documentation provides details on the available endpoints for user authentication, bookings, trips, guides, deals, campers, and search functionalities. It also present the code structure.
@@ -66,7 +68,7 @@ https://wild-play.vercel.app/
 
 **Base Route:** `/api/bookings`
 
-- `GET /all/:user_id` - Get all bookings for a user
+- `GET /all` - Get all bookings for a user
 - `GET /:booking_id` - Get a specific booking
 - `POST /` - Create a new booking
 - `PUT /:booking_id` - Edit an existing booking

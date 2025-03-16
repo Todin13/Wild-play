@@ -2,7 +2,7 @@
 
 Here is the project for Web Technologie course at Griffith College
 
-by Thibaut Hervet, Thomas Odin,
+by Thibaut Hervet, Thomas Odin, Xiang Yu Oon, Kirill Smirnov
 
 ## Structure
 
@@ -58,7 +58,7 @@ https://wild-play.vercel.app/
 
 **Base Route:** `/api/bookings`
 
-- `GET /all/:user_id` - Get all bookings for a user
+- `GET /all/` - Get all bookings for a user
 - `GET /:booking_id` - Get a specific booking
 - `POST /` - Create a new booking
 - `PUT /:booking_id` - Edit an existing booking
