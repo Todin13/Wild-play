@@ -6,11 +6,10 @@ const { connectDB } = require("./config/db.js");
 require('dotenv').config("../.env");
 
 // Import Routes
-const searchRoutes = require('./routes/search');
-const campersRoutes = require('./routes/campers');
-const dealsRoutes = require('./routes/deals');
+const searchRoutes = require('./routes/searchRoutes.js');
+const campersRoutes = require('./routes/campersRoutes.js');
+const dealsRoutes = require('./routes/dealsRoutes.js');
 const bookingRoutes = require("./routes/bookingRoutes");
-const tripRoutes = require("./routes/tripRoutes");
 const tripRoutes = require("./routes/tripRoutes");
 const guideRoutes = require("./routes/guideRoutes");
 const userRoutes = require("./routes/userRoutes.js");
