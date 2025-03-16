@@ -52,7 +52,7 @@ exports.getRoutesInfo = (req, res) => {
                 base: "/api/bookings",
                 description: "Manage bookings",
                 endpoints: {
-                    getAll: "GET /api/bookings/all/:user_id - Get all bookings for a user",
+                    getAll: "GET /api/bookings/all - Get all your bookings",
                     getById: "GET /api/bookings/:booking_id - Get a specific booking",
                     create: "POST /api/bookings - Create a new booking",
                     update: "PUT /api/bookings/:booking_id - Edit an existing booking",

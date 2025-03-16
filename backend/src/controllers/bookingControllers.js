@@ -20,7 +20,7 @@ const getAllBookings = async (req, res) => {
             if (!id) {
                 return res.status(400).json({ message: "User id required;" });  // if user_id not provided return 400
             }
-            const bookings = await Booking.find({id}).populate("van_id");  // fetch bookings for the user
+            const bookings = await Booking.find({"user_id": id}).populate("van_id");  // fetch bookings for the user
             res.status(200).json(bookings);
         }
     } catch (error) {
@@ -47,7 +47,6 @@ const getBookingById = async (req, res) => {
 const setBooking = async (req, res) => { // validate and save new booking data in database
     try {
         const {
-            user_id,
             van_id,
             start_date,
             end_date,
@@ -60,12 +59,14 @@ const setBooking = async (req, res) => { // validate and save new booking data i
             promocode
         } = req.body;
 
-        if (!user_id || !van_id || !start_date || !end_date || !return_location || amount === undefined) {
+        if (!van_id || !start_date || !end_date || !return_location || amount === undefined) {
             return res.status(400).json({ message: "Required data is missing;" });  // if required data is missing return 400
         }
+    
+        const { id } = req.user;
 
         const newBooking = new Booking({
-            user_id,
+            "user_id": id,
             van_id,
             start_date,
             end_date,
