@@ -66,7 +66,7 @@ const BookingSchema = new mongoose.Schema({
     van_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Van', required: true },
     start_date: { type: Date, required: true },
     end_date: { type: Date, required: true },
-    pick_up_location: { type: String, required: true },
+    pick_up_location: { type: String, required: false }, //edited
     return_location: { type: String, required: true },
     status: { type: String, enum: ['PENDING', 'CONFIRMED', 'CANCELLED'], default: 'PENDING'},
     amount: { type: Number, required: true },
