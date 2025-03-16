@@ -14,9 +14,11 @@ exports.getRoutesInfo = (req, res) => {
                 endpoints: {
                     register: "POST /api/users/register - Register a new user",
                     login: "POST /api/users/login - Login user",
-                    search: "GET /api/users/search - Search users (Admin only)",
+                    search: "GET /api/users/search - Search users using only username",
+                    search: "GET /api/users/search/admin - Search users (Admin only)",
                     update: "PUT /api/users/update/:user - Update user profile",
-                    delete: "DELETE /api/users/delete/:id - Delete a user",
+                    delete: "DELETE /api/users/delete/:id - Delete a user (Admin only)",
+                    delete: "DELETE /api/users/delete - Delete the logged user",
                     profile: "GET /api/users/profile - Get user profile",
                     logout: "POST /api/users/logout - Logout user"
                 }
@@ -81,7 +83,24 @@ exports.getRoutesInfo = (req, res) => {
                     delete: "DELETE /api/guides/:id - Delete a guide",
                     fromTrip: "POST /api/guides/fromTrip - Create a guide from a trip"
                 }
-            }
+            },
+            reviews: {
+                base: "/api/reviews",
+                description: "Manage reviews for vans and guides",
+                endpoints: {
+                    createVanReview: "POST /api/reviews/van - Add a review for a van",
+                    getVanReviews: "GET /api/reviews/van/:van_id - Get reviews for a specific van",
+                    createGuideReview: "POST /api/reviews/guide - Add a review for a guide",
+                    getGuideReviews: "GET /api/reviews/guide/:guide_id - Get reviews for a specific guide"
+                }
+            },
+            help: {
+                base: "/help",
+                description: "Provides help and documentation",
+                endpoints: {
+                    getHelp: "GET /help - Access API documentation and guidance"
+                }
+            }            
         }
     });
 };

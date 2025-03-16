@@ -5,18 +5,19 @@ All user routes
 */
 const express = require("express");
 const { authenticateUser, isAdmin } = require("../middlewares/authMiddlewares.js");
-const {  registerUser, loginUser, searchUsers, updateUser, deleteUser, searchUserByUsername, profile, logout } = require("../controllers/userControllers.js");
+const {  registerUser, loginUser, searchUsers, updateUser, deleteUser, adminSearchUsers, profile, logout, adminDeleteUser } = require("../controllers/userControllers.js");
 
 const router = express.Router();
 
-// Public routes
+// Routes
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/search", authenticateUser, isAdmin, searchUsers);
-router.put("/update/:user", authenticateUser, updateUser);
-router.get("/username", searchUserByUsername);
-router.delete("/delete/:id", deleteUser);
-router.post("/logout", logout);
+router.get("/search/admin", authenticateUser, isAdmin, adminSearchUsers);
+router.put("/update/", authenticateUser, updateUser);
+router.get("/search", searchUsers);
+router.delete("/delete/", authenticateUser, deleteUser);
+router.delete("/delete/:id", authenticateUser, isAdmin, adminDeleteUser);
+router.post("/logout",authenticateUser, logout);
 
 // Protected routes (only authenticated users can access)
 router.get("/profile", authenticateUser, profile);
