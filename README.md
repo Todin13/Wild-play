@@ -85,6 +85,21 @@ https://wild-play.vercel.app/
 - `DELETE /:id` - Delete a guide
 - `POST /fromTrip` - Create a guide from a trip
 
+#### 8. Reviews
+
+**Base Route:** `/api/reviews`
+
+- `POST /api/reviews/van` - Add a review for a van
+- `GET /api/reviews/van/:van_id` - Get reviews for a specific van
+- `POST /api/reviews/guide` - Add a review for a guide
+- `GET /api/reviews/guide/:guide_id` - Get reviews for a specific guide
+
+#### 9. Help
+
+**Base Route:** /help
+
+- `GET /help` - Access API documentation and guidance
+
 ### Authentication & Authorization
 
 - Most routes require authentication (`authenticateUser` middleware).
