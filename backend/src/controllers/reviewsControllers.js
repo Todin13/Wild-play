@@ -8,14 +8,14 @@ const { VanReview, GuideReview } = require('../models');
 // Create a new van review
 exports.createVanReview = async (req, res) => {
     try {
-        const user_id = req.user.id;
+        const {id} = req.user;
         const { van_id, rating, review } = req.body;
         
-        if (!user_id || !van_id || !rating || !review) {
+        if ( !van_id || !rating || !review) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        const newReview = new VanReview({ user_id, van_id, rating, review, date: new Date() });
+        const newReview = new VanReview({ "user_id": id, van_id, rating, review, date: new Date() });
         await newReview.save();
 
         res.status(201).json({ message: "Van review added successfully", review: newReview });
