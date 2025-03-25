@@ -24,7 +24,7 @@ Welcome to the backend part (API)! This documentation provides details on the av
 
 ## Base URL
 
-https://wild-play.vercel.app/
+https://wild-play-api.vercel.app/
 
 ## Routes and Endpoints
 

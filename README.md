@@ -14,7 +14,7 @@ For more information : [Backend Readme](backend/README.md)
 
 ### Backend url
 
-https://wild-play.vercel.app/
+https://wild-play-api.vercel.app/
 
 ### Routes and Endpoints
 
