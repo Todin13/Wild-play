@@ -6,7 +6,7 @@ The app will be designed using React and Javascript using vite template.
 
 ## Structure
 
-        project-root/
+        frontend/
         │── public/            # Static assets like favicon, robots.txt
         │── src/               # Source code of the application
         │   │── assets/        # Stores images, icons, fonts, stylesheets
