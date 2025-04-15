@@ -1,30 +1,121 @@
 import "../assets/styles/App.css";
 import { useProfile } from "../hooks/useUser";
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@heroui/react";
 
 export default function Profile() {
   const { user, error } = useProfile();
 
   return (
     <div>
-      <h2>Profile</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {user && user.detail ? (
-        <ul>
-          <li>Name: {user.detail.firstName} {user.detail.lastName}</li>
-          <li>Username: {user.detail.username}</li>
-          <li>Email: {user.detail.email}</li>
-          <li>Phone: {user.detail.phone}</li>
-          <li>Birthdate: {user.detail.birthdate.split('T')[0]}</li>
-          <li>
-            Street: {user.detail.billing_address.street}<br />
-            City: {user.detail.billing_address.city}<br/>
-            County: {user.detail.billing_address.county}<br/>
-            Zip: {user.detail.billing_address.zip}<br/>
-            Country: {user.detail.billing_address.country}<br/>
-          </li>
-          <li>Driver License: {user.detail.driver_license}</li>
-        </ul>
+        <Table removeWrapper aria-label="Example static collection table">
+          <TableHeader>
+            <TableColumn>Field</TableColumn>
+            <TableColumn>Information</TableColumn>
+          </TableHeader>
+          <TableBody>
+            <TableRow key="1">
+              <TableCell>
+                Name:
+              </TableCell>
+              <TableCell>
+                {user.detail.firstName} {user.detail.lastName}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="2">
+              <TableCell>
+                Username:
+              </TableCell>
+              <TableCell>
+                {user.detail.username}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="3">
+              <TableCell>
+                Email:
+              </TableCell>
+              <TableCell>
+                {user.detail.email}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="4">
+              <TableCell>
+                Phone:
+              </TableCell>
+              <TableCell>
+                {user.detail.phone}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="4">
+              <TableCell>
+                Birthdate:
+              </TableCell>
+              <TableCell>
+                {user.detail.birthdate.split('T')[0]}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="4">
+              <TableCell>
+                Street:
+              </TableCell>
+              <TableCell>
+                {user.detail.billing_address.street}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="4">
+              <TableCell>
+                City:
+              </TableCell>
+              <TableCell>
+                {user.detail.billing_address.city}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="4">
+              <TableCell>
+                County:
+              </TableCell>
+              <TableCell>
+                {user.detail.billing_address.county}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="4">
+              <TableCell>
+                Zip:
+              </TableCell>
+              <TableCell>
+                {user.detail.billing_address.zip}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="4">
+              <TableCell>
+                Country:
+              </TableCell>
+              <TableCell>
+                {user.detail.billing_address.country}
+              </TableCell>
+            </TableRow>
+
+            <TableRow key="4">
+              <TableCell>
+                Driver License:
+              </TableCell>
+              <TableCell>
+                {user.detail.driver_license}
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       ) : (
         !error && <p>Loading profile...</p>
       )}

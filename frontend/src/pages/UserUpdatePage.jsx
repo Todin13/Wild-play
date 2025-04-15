@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useUserUpdate } from '../hooks/useUser';
+import { Input, Button, Select, SelectItem } from "@heroui/react";
 
 const UserUpdatePage = () => {
   const {
@@ -33,133 +34,129 @@ const UserUpdatePage = () => {
 
   return (
     <div>
-      <h2>Update Profile</h2>
-
-      <div>
-        <span>First and Last name</span>
-        <input
-          type="text"
-          placeholder="First Name"
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+        <Input 
+          label="First Name" 
+          size='lg' 
+          variant="underlined"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
         />
-        <input
+        <Input 
+          label="Last Name" 
+          size='lg' 
+          variant="underlined"
           type="text"
-          placeholder="Last Name"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
         />
       </div>
 
-      <div>
-        <span>Email</span>
-        <input
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+        <Input 
+          label="Email" 
+          size='lg' 
+          variant="underlined"
           type="text"
-          placeholder="example@gmail.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
 
-      <div>
-        <div>
-          <select value={selectedCode} onChange={(e) => setSelectedCode(e.target.value)}>
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+      {selectedCode && (
+          <Select className="w-full" label="Select a Country Code" size="lg" variant="bordered" defaultSelectedKeys={[selectedCode]} onChange={(e) => setSelectedCode(e.target.value)}>
             {countryCodes.map((item) => (
-              <option key={item.code} value={item.code}>
-                {item.name} ({item.code})
-              </option>
+              <SelectItem textValue={`${item.name} ${item.code}`} key={item.code} value={item.code}>{item.name}({item.code})</SelectItem>
             ))}
-          </select>
-        </div>
-        <input
+          </Select>
+        )}
+        <Input className="w-full" 
+          label="Phone Number" 
+          size='lg' 
+          variant="underlined"
           type="tel"
-          placeholder="123456789"
           value={phoneNumber}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
       </div>
 
-      <div>
-        <span>Date of Birth</span>
-        <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} />
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+        <Input label="Date of Birth" size='lg' variant="underlined" type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} />
       </div>
 
-      <div>
-        <label>Enter Your Address</label>
-        <div>
-          <input
+      <div div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+          <Input 
+            label="Street" 
+            size='lg' 
+            variant="underlined"
             type="text"
             name="street"
-            placeholder="Street"
             value={billingAddress.street || ""}
             onChange={handleAddressChange}
           />
-          <label>Street</label>
-        </div>
-        <div>
-          <input
+          <Input 
+            label="City" 
+            size='lg' 
+            variant="underlined"
             type="text"
             name="city"
-            placeholder="City"
             value={billingAddress.city || ""}
             onChange={handleAddressChange}
           />
-          <label>City</label>
-        </div>
-        <div>
-          <input
+          <Input 
+            label="County" 
+            size='lg' 
+            variant="underlined"
             type="text"
             name="county"
-            placeholder="County"
             value={billingAddress.county || ""}
             onChange={handleAddressChange}
           />
-          <label>County</label>
-        </div>
-        <div>
-          <input
+          <Input 
+            label="Zip Code" 
+            size='lg' 
+            variant="underlined"
             type="text"
             name="zip"
-            placeholder="ZIP Code"
             value={billingAddress.zip || ""}
             onChange={handleAddressChange}
           />
-          <label>ZIP Code</label>
-        </div>
-        <div className="form-floating mb-3">
-          <input
+          <Input 
+            label="Country" 
+            size='lg' 
+            variant="underlined"
             type="text"
             name="country"
-            placeholder="Country"
             value={billingAddress.country || ""}
             onChange={handleAddressChange}
           />
-          <label>Country</label>
-        </div>
       </div>
 
-      <div>
-        <span>Driving License ID</span>
-        <input
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+        <Input 
+          label="Driving License ID" 
+          size='lg' 
+          variant="underlined"
           type="text"
           value={driverLicense}
           onChange={(e) => setDriverLicense(e.target.value)}
         />
       </div>
 
-      <div>
-        <span>Username</span>
-        <input
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+        <Input 
+          label="Username" 
+          size='lg' 
+          variant="underlined"
           type="text"
-          placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
 
-      <div>
-        <button onClick={handleSubmit}>Update Profile</button>
-      </div>
+      <Button color="success" size="lg" variant="ghost" onPress={handleSubmit}>Update Profile</Button>
+
     </div>
   );
 };

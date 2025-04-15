@@ -248,7 +248,9 @@ export function useUserTable() {
     };
   
     const handleSearch = async () => { // Handle search query
-      const query = {};
+      const query = {
+        user_type: "USER" // Hardcoded user_type
+      };
       if (searchValue) query[searchField] = searchValue;
       if (birthdate) query.birthdate = birthdate;
   

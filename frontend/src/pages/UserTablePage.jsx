@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useUserTable } from "../hooks/useUser";
 import '../assets/styles/App.css';
+import { Input, Button, Select, SelectItem, Checkbox, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
 
 function UserTable() {
   const {
@@ -11,67 +12,73 @@ function UserTable() {
 
   return (
     <div>
-      <div>
-        <select value={searchField} onChange={(e) => setSearchField(e.target.value)}>
-          <option value="firstName">First Name</option>
-          <option value="lastName">Last Name</option>
-          <option value="username">Username</option>
-          <option value="email">Email</option>
-          <option value="phone">Phone</option>
-          <option value="driver_license">Driver License</option>
-          <option value="street">Street</option>
-          <option value="city">City</option>
-          <option value="county">County</option>
-          <option value="zip">Zip Code</option>
-          <option value="country">Country</option>
-        </select>
-        <input
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+        <Select className="w-full" label="Search Field" size="sm" variant="bordered" defaultSelectedKeys={[searchField]} value={searchField} onChange={(e) => setSearchField(e.target.value)}>
+          <SelectItem key="firstName" value="firstName">First Name</SelectItem>
+          <SelectItem key="lastName" value="lastName">Last Name</SelectItem>
+          <SelectItem key="username" value="username">Username</SelectItem>
+          <SelectItem key="email" value="email">Email</SelectItem>
+          <SelectItem key="phone" value="phone">Phone</SelectItem>
+          <SelectItem key="driver_license" value="driver_license">Driver License</SelectItem>
+          <SelectItem key="street" value="street">Street</SelectItem>
+          <SelectItem key="city" value="city">City</SelectItem>
+          <SelectItem key="county" value="county">County</SelectItem>
+          <SelectItem key="zip" value="zip">Zip Code</SelectItem>
+          <SelectItem key="country" value="country">Country</SelectItem>
+        </Select>
+        <Input 
+          size='lg' 
+          variant="bordered"
           type="text"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
-        <button onClick={handleSearch}>Search</button>
+        <Button color="success" size="lg" variant="ghost" onPress={handleSearch}>Search</Button>
       </div>
 
-      <div>
-        <input
-          type="checkbox"
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+        <Checkbox
+          color="success"
+          size="lg"
           checked={isChecked}
           onChange={handleBirthdateChecked}
-        />
-        <input
+        >
+        <Input 
+          label="Date of Birth" 
+          size='lg' 
+          variant="underlined"
           type="date"
           disabled={!isChecked}
           value={birthdate}
           onChange={handleBirthdate}
         />
+        </Checkbox>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Full Name</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table removeWrapper aria-label="Example static collection table" className="mt-4 mb-4 gap-4" color="danger" selectionMode="single"> 
+        <TableHeader>
+            <TableColumn>#</TableColumn>
+            <TableColumn>Username</TableColumn>
+            <TableColumn>Full Name</TableColumn>
+            <TableColumn>Email</TableColumn>
+            <TableColumn>Delete</TableColumn>
+        </TableHeader>
+        <TableBody>
           {users.map((user, index) => (
-            <tr key={user._id}>
-              <th>{index + 1}</th>
-              <td>
+            <TableRow key={user._id}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>
                 <Link to={`/userDetail?username=${encodeURIComponent(user.username)}`}>
                   {user.username}
                 </Link>
-              </td>
-              <td>{user.firstName} {user.lastName}</td>
-              <td>{user.email}</td>
-              <td><button onClick={() => deleteUser(user._id)}>Delete</button></td>
-            </tr>
+              </TableCell>
+              <TableCell>{user.firstName} {user.lastName}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell><Button color="danger" size="lg" variant="shadow" onPress={() => deleteUser(user._id)}>Delete</Button></TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }

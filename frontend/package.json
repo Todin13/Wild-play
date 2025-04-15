@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroui/checkbox": "^2.3.16",
     "@heroui/input": "^2.4.17",
     "@heroui/react": "^2.7.6",
     "@heroui/system": "^2.4.13",
