@@ -1,0 +1,137 @@
+/* Ensure top bar takes full width and is sticky at the top */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem; /* Adjust padding */
+  background-color: #f3f4f6; /* bg-gray-100 */
+  border-bottom: 1px solid #e5e7eb; /* border-gray-300 */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100vw; /* Ensure it takes full width */
+  left: 0;
+}
+
+/* Body margin to prevent content overlap */
+body {
+  margin-top: 5rem; /* Adjust this according to navbar height */
+}
+
+/* Navbar - Left section (Logo + Navigation) */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* space between elements */
+}
+
+/* Navbar - Links section */
+.topbar-nav {
+  display: flex;
+  gap: 1.5rem; /* space between links */
+}
+
+/* Button style */
+.topbar-button {
+  padding: 0.5rem 1rem;
+  color: #4b5563; /* text-gray-600 */
+  background-color: transparent;
+  border: 1px solid #e5e7eb; /* border-gray-300 */
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  height: 2.5rem; /* Ensure same height as search input */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topbar-button:hover {
+  background-color: #2563eb; /* hover:bg-blue-600 */
+  color: white; /* hover:text-white */
+}
+
+/* Search bar */
+.topbar-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #e5e7eb; /* border-gray-300 */
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  height: 2.5rem; /* Ensure search bar has the same height */
+}
+
+.topbar-search input {
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+  font-size: 1rem;
+  height: 100%; /* Match the height of the container */
+}
+
+.topbar-search button {
+  background-color: transparent;
+  border: none;
+  color: #4b5563;
+  cursor: pointer;
+  height: 100%; /* Match height with the input */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topbar-search input:focus {
+  outline: 2px solid #2563eb; /* focus:ring-blue-600 */
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .topbar-nav {
+    display: none; /* Hide the nav on mobile */
+    flex-direction: column;
+    gap: 1rem;
+    position: absolute;
+    top: 4rem;
+    right: 0;
+    background-color: #f3f4f6;
+    width: 100vw;
+    padding: 1rem;
+    z-index: 20;
+  }
+
+  .topbar-nav.show {
+    display: flex;
+  }
+
+  .topbar-right {
+    display: none; /* Hide the right section (search + login) */
+  }
+
+  .topbar-hamburger {
+    display: block; /* Show the hamburger on mobile */
+    cursor: pointer;
+  }
+
+  .topbar-search {
+    display: none; /* Hide the search bar on mobile */
+  }
+
+  .topbar-login {
+    display: none; /* Hide the login button on mobile */
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+  .topbar-hamburger {
+    display: none; /* Hide the hamburger on larger screens */
+  }
+}
+
+/* Ensure search and login are next to each other on the right */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* space between search and login */
+}
