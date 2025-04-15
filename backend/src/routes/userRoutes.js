@@ -12,9 +12,9 @@ const router = express.Router();
 // Routes
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/search/admin", authenticateUser, isAdmin, adminSearchUsers);
+router.post("/search/admin", authenticateUser, isAdmin, adminSearchUsers);
 router.put("/update/", authenticateUser, updateUser);
-router.get("/search", searchUsers);
+router.post("/search", searchUsers);
 router.delete("/delete/", authenticateUser, deleteUser);
 router.delete("/delete/:id", authenticateUser, isAdmin, adminDeleteUser);
 router.post("/logout",authenticateUser, logout);

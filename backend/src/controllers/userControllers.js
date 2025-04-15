@@ -10,14 +10,14 @@ const { User } = require('../models');
 const registerUser = async (req, res) => {
 
     try{
-        const {firstname, lastname, email, phone, user_type, birthdate, billing_address, driver_license, username, password } = req.body;
+        const {firstName, lastName, email, phone, user_type, birthdate, billing_address, driver_license, username, password } = req.body;
 
         // Hash password
         const hashedPassword = await hashPassword(password);
 
         const newUser = new User({
-            firstname,
-            lastname, 
+            firstName,
+            lastName, 
             email,
             phone,
             user_type,
