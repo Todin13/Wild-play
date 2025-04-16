@@ -1,29 +1,23 @@
 import { Link } from "react-router-dom";
-import { MagnifyingGlassIcon, Bars3Icon } from "@heroicons/react/24/outline"; // Heroicons v2
-import "@/assets/styles/navbar.css"; // Import the CSS file
-import { useState } from "react"; // Import React hooks
+import { MagnifyingGlassIcon, Bars3Icon } from "@heroicons/react/24/outline";
+import "@/assets/styles/navbar.css";
+import { useState } from "react";
 
 const TopBar = () => {
-  const [isNavOpen, setIsNavOpen] = useState(false); // Track whether the nav menu is open
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
-  // Toggle navigation menu visibility
   const toggleNav = () => {
-    setIsNavOpen((prevState) => !prevState);
+    setIsNavOpen((prev) => !prev);
   };
 
   return (
     <header className="topbar">
-      {/* Left: Logo + Nav */}
+      {/* Left: Logo only */}
       <div className="topbar-left">
         <h1 className="text-xl font-bold text-gray-800">Wild Play</h1>
 
-        {/* Hamburger Menu (Visible on mobile) */}
-        <div className="topbar-hamburger" onClick={toggleNav}>
-          <Bars3Icon className="h-6 w-6 text-gray-600" />
-        </div>
-
-        {/* Nav Links */}
-        <nav className={`topbar-nav ${isNavOpen ? "show" : ""}`}>
+        {/* Desktop nav */}
+        <nav className="topbar-nav desktop-only">
           <Link to="/" className="topbar-button">
             Home
           </Link>
@@ -33,25 +27,51 @@ const TopBar = () => {
         </nav>
       </div>
 
-      {/* Right: Search + Login */}
-      <div className="topbar-right">
-        {/* Mini Search Bar with Magnifying Glass Icon */}
-        <div className="topbar-search">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-40" // Controls the width of the search input
-          />
-          <button className="topbar-search-button">
-            <MagnifyingGlassIcon className="h-5 w-5 text-gray-600" />
-          </button>
+      {/* Right: Desktop search/login, Mobile hamburger */}
+      <div className="topbar-right-container">
+        {/* Desktop-only */}
+        <div className="topbar-right desktop-only">
+          <div className="topbar-search">
+            <input type="text" placeholder="Search..." className="w-40" />
+            <button className="topbar-search-button">
+              <MagnifyingGlassIcon className="h-5 w-5 text-gray-600" />
+            </button>
+          </div>
+          <Link to="/login" className="topbar-button">
+            Login
+          </Link>
         </div>
 
-        {/* Login Link */}
-        <Link to="/login" className="topbar-button">
-          Login
-        </Link>
+        {/* Mobile hamburger (only visible on small screens) */}
+        <div className="topbar-hamburger mobile-only" onClick={toggleNav}>
+          <Bars3Icon className="h-6 w-6 text-gray-600" />
+        </div>
       </div>
+
+      {/* Mobile dropdown menu */}
+      {isNavOpen && (
+        <div className="topbar-mobile-menu mobile-only">
+          <nav className="topbar-nav">
+            <Link to="/" className="topbar-button">
+              Home
+            </Link>
+            <Link to="/guide" className="topbar-button">
+              Travel Guide
+            </Link>
+          </nav>
+          <div className="topbar-right">
+            <div className="topbar-search">
+              <input type="text" placeholder="Search..." className="w-full" />
+              <button className="topbar-search-button">
+                <MagnifyingGlassIcon className="h-5 w-5 text-gray-600" />
+              </button>
+            </div>
+            <Link to="/login" className="topbar-button w-full text-center">
+              Login
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
