@@ -30,7 +30,7 @@ footer svg {
 /* Tailwind Utility classes */
 
 .footer {
-  @apply w-screen fixed bottom-0 flex flex-col;
+  @apply w-screen relative flex flex-col;
 }
 
 .footer-content {
@@ -70,8 +70,7 @@ footer svg {
 }
 
 .footer-button {
-  @apply px-4 py-2 text-text bg-buttonBg border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out;
-  display: inline-block;
+  @apply inline-flex items-center justify-center text-center px-4 py-2 text-text bg-buttonBg border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out;
 }
 
 .footer-button:hover {
