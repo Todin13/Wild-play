@@ -9,19 +9,38 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "hsl(210, 40%, 96%)", // similar to gray-100
-        border: "hsl(210, 20%, 85%)", // gray-300
-        text: "hsl(220, 10%, 40%)", // gray-600
-        textDark: "hsl(220, 13%, 20%)", // gray-800
-        placeholder: "hsl(220, 9%, 60%)", // gray-500
-        accent: "hsl(217, 91%, 60%)", // blue-600
-        accentFocus: "hsl(217, 91%, 65%)", // blue-500
-        textMuted: '#6b7280',
+        bg: "hsl(140, 30%, 20%)",       // Dark green background
+        border: "hsl(140, 20%, 35%)",   // Dark green for border (lighter)
+        text: "hsl(140, 15%, 80%)",     // Lighter dark green text for better readability
+        textDark: "hsl(140, 13%, 10%)", // Dark green text (for dark mode)
+        placeholder: "hsl(140, 10%, 40%)", // Dark green for placeholder
+        accent: "hsl(140, 50%, 55%)",   // Dark green accent
+        accentFocus: "hsl(140, 50%, 60%)", // Lighter dark green accent on focus
+        textMuted: '#4b5d4b',            // Muted dark green text
         white: "#ffffff",
-        instagram: "#e1306c",
-        twitter: "#1da1f2",
-        facebook: "#1877f2",
-        linkedin: "#0077b5",
+    
+        // Social media colors
+        instagram: "#f08d68",  // Slight contrast for Instagram
+        twitter: "#00bfae",    // Slight contrast for Twitter
+        facebook: "#1877f2",   // Facebook's official blue color
+        linkedin: "#0077b5",   // LinkedIn's blue for contrast
+    
+        // Footer-specific (using a deep green)
+        deepgreen: '#2a5d4d',
+        footerBg: '#2a5d4d',   // Dark green for footer
+        wave: '#2a5d4d',       // Wave color
+        footerText: '#ffffff', // White text for footer
+
+        // Button colors (slightly lighter dark green background for buttons)
+        buttonBg: 'hsl(140, 40%, 30%)', // A slightly lighter dark green background for buttons
+        buttonText: 'hsl(140, 50%, 90%)', // Lighter text color on buttons (for contrast)
+
+        // Footer credit text color (lighter green for credit text)
+        footerCreditText: 'hsl(140, 40%, 60%)', // Light green for copyright text
+
+        // Navigation bar colors
+        navBarBg: '#2a5d4d', // Dark green background for nav bar
+        navBarText: 'hsl(140, 40%, 75%)', // Lighter text color for nav bar
       },
     },
   },

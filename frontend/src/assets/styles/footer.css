@@ -1,5 +1,40 @@
+/* Wave animation styles */
+.wave {
+  animation: wave 3s linear infinite;
+}
+
+#wave2 {
+  animation-duration: 5s;
+  animation-direction: reverse;
+  opacity: 0.6;
+}
+
+#wave3 {
+  animation-duration: 7s;
+  opacity: 0.3;
+}
+
+@keyframes wave {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+footer svg {
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+/* Tailwind Utility classes */
+
 .footer {
-  @apply flex flex-col items-center p-8 bg-bg border-t border-border;
+  @apply w-screen fixed bottom-0 flex flex-col;
+}
+
+.footer-content {
+  @apply flex flex-col items-center p-8 pt-0 border-border bg-footerBg text-footerText;
 }
 
 .footer-social {
@@ -11,19 +46,19 @@
 }
 
 .footer-social a:nth-child(1) .social-icon {
-  color: theme('colors.instagram');
+  color: theme("colors.instagram");
 }
 
 .footer-social a:nth-child(2) .social-icon {
-  color: theme('colors.twitter');
+  color: theme("colors.twitter");
 }
 
 .footer-social a:nth-child(3) .social-icon {
-  color: theme('colors.facebook');
+  color: theme("colors.facebook");
 }
 
 .footer-social a:nth-child(4) .social-icon {
-  color: theme('colors.linkedin');
+  color: theme("colors.linkedin");
 }
 
 .social-icon:hover {
@@ -31,11 +66,12 @@
 }
 
 .footer-links {
-  @apply flex gap-8 mb-6;
+  @apply flex justify-center gap-8 mb-6;
 }
 
 .footer-button {
-  @apply px-4 py-2 text-text bg-transparent border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out;
+  @apply px-4 py-2 text-text bg-buttonBg border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out;
+  display: inline-block;
 }
 
 .footer-button:hover {
@@ -43,5 +79,5 @@
 }
 
 .footer-bottom {
-  @apply text-center text-sm text-textMuted;
+  @apply text-center text-sm text-footerText;
 }

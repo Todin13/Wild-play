@@ -1,5 +1,6 @@
+/* Apply nav bar colors from Tailwind theme */
 .topbar {
-  @apply flex justify-between items-center px-8 py-4 sticky top-0 left-0 z-10 w-screen bg-bg border-b border-border;
+  @apply flex justify-between items-center px-8 py-4 fixed top-0 left-0 w-full z-50 bg-navBarBg text-navBarText border-b border-border shadow-md;
 }
 
 .topbar-left {
@@ -11,7 +12,7 @@
 }
 
 .topbar-button {
-  @apply px-4 py-2 text-text bg-transparent border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out h-10 flex items-center justify-center;
+  @apply px-4 py-2 text-text bg-buttonBg border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out h-10 flex items-center justify-center;
 }
 
 .topbar-button:hover {
@@ -19,16 +20,17 @@
 }
 
 .topbar-search {
-  @apply flex items-center gap-2 border border-border rounded-md px-2 h-10 w-full;
+  @apply bg-buttonBg flex items-center gap-2 border border-border rounded-md px-2 h-10 w-full;
 }
 
 .topbar-search input {
-  @apply w-full border-none outline-none text-base h-full bg-bg text-textDark placeholder-placeholder;
+  @apply w-full border-none outline-none text-base h-full bg-buttonBg text-buttonText;
 }
 
-.topbar-search input:focus {
-  @apply ring-2 ring-accentFocus;
+.topbar-search input::placeholder {
+  @apply text-buttonText;
 }
+
 
 .topbar-search button {
   @apply bg-transparent border-none text-text cursor-pointer h-full flex items-center justify-center;
@@ -42,6 +44,11 @@
   @apply flex items-center;
 }
 
+/* Hamburger icon color */
+.topbar-mobile-menu-button {
+  @apply text-navBarText; /* Set hamburger icon color */
+}
+
 /* Responsive helpers */
 .desktop-only {
   display: flex;
@@ -51,7 +58,7 @@
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 850px) {
   .desktop-only {
     display: none !important;
   }
@@ -61,7 +68,7 @@
   }
 
   .topbar-mobile-menu {
-    @apply flex flex-col gap-4 absolute top-16 left-0 w-full bg-bg p-4 z-20 border-t border-border;
+    @apply flex flex-col gap-4 absolute top-16 left-0 w-full bg-navBarBg p-4 z-20 border-t border-border;
   }
 
   .topbar-nav,

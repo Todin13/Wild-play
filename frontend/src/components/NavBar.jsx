@@ -34,7 +34,7 @@ const TopBar = () => {
           <div className="topbar-search">
             <input type="text" placeholder="Search..." className="w-40" />
             <button className="topbar-search-button">
-              <MagnifyingGlassIcon className="h-5 w-5 text-gray-600" />
+              <MagnifyingGlassIcon className="h-5 w-5 text-navBarText" />
             </button>
           </div>
           <Link to="/login" className="topbar-button">
@@ -44,7 +44,7 @@ const TopBar = () => {
 
         {/* Mobile hamburger (only visible on small screens) */}
         <div className="topbar-hamburger mobile-only" onClick={toggleNav}>
-          <Bars3Icon className="h-6 w-6 text-gray-600" />
+          <Bars3Icon className="h-6 w-6 text-navBarText" />
         </div>
       </div>
 
@@ -63,7 +63,7 @@ const TopBar = () => {
             <div className="topbar-search">
               <input type="text" placeholder="Search..." className="w-full" />
               <button className="topbar-search-button">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-600" />
+                <MagnifyingGlassIcon className="h-5 w-5 text-navBarText" />
               </button>
             </div>
             <Link to="/login" className="topbar-button w-full text-center">
