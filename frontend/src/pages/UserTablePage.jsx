@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
+import { useState, useMemo } from "react";
 import { useUserTable } from "../hooks/useUser";
 import '../assets/styles/App.css';
-import { Input, Button, Select, SelectItem, Checkbox, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
+import { Input, Button, Select, SelectItem, Checkbox, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, getKeyValue, } from "@heroui/react";
 
 function UserTable() {
   const {
@@ -9,6 +10,18 @@ function UserTable() {
     setSearchField, setSearchValue, handleSearch,
     handleBirthdateChecked, handleBirthdate, deleteUser
   } = useUserTable();
+
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 4;
+
+  const pages = Math.ceil(users.length / rowsPerPage);
+
+  const items = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return users.slice(start, end);
+  }, [page, users]);
 
   return (
     <div>
@@ -55,30 +68,47 @@ function UserTable() {
         </Checkbox>
       </div>
 
-      <Table removeWrapper aria-label="Example static collection table" className="mt-4 mb-4 gap-4" color="danger" selectionMode="single"> 
-        <TableHeader>
-            <TableColumn>#</TableColumn>
-            <TableColumn>Username</TableColumn>
-            <TableColumn>Full Name</TableColumn>
-            <TableColumn>Email</TableColumn>
-            <TableColumn>Delete</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {users.map((user, index) => (
-            <TableRow key={user._id}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>
-                <Link to={`/userDetail?username=${encodeURIComponent(user.username)}`}>
-                  {user.username}
-                </Link>
-              </TableCell>
-              <TableCell>{user.firstName} {user.lastName}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              <TableCell><Button color="danger" size="lg" variant="shadow" onPress={() => deleteUser(user._id)}>Delete</Button></TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <div>
+        <Table 
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="success"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          }
+          removeWrapper 
+          className="mt-4 mb-4 gap-4" 
+          color="danger" 
+          selectionMode="single">
+            <TableHeader>
+                <TableColumn>#</TableColumn>
+                <TableColumn>Username</TableColumn>
+                <TableColumn>Email</TableColumn>
+                <TableColumn>Delete</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {items.map((user, index) => (
+                <TableRow key={user._id}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>
+                    <Link to={`/userDetail?username=${encodeURIComponent(user.username)}`}>
+                      {user.username}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell><Button color="danger" size="lg" variant="shadow" onPress={() => deleteUser(user._id)}>Delete</Button></TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

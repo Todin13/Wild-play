@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useUserUpdate } from '../hooks/useUser';
-import { Input, Button, Select, SelectItem } from "@heroui/react";
+import { Input, Button, Select, SelectItem, Alert } from "@heroui/react";
 
 const UserUpdatePage = () => {
   const {
@@ -26,6 +26,8 @@ const UserUpdatePage = () => {
     setDriverLicense,
     setUsername,
     handleSubmit,
+    error,
+    success,
   } = useUserUpdate();
 
   const handleAddressChange = (e) => {
@@ -34,6 +36,17 @@ const UserUpdatePage = () => {
 
   return (
     <div>
+      {error &&
+        <div key="danger" className="w-full flex items-center my-3">
+          <Alert color="danger" title={error} />
+        </div>
+      }
+          
+      {success &&
+        <div key="success" className="w-full flex items-center my-3">
+          <Alert color="success" title={success} />
+        </div>
+      }
       <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
         <Input 
           label="First Name" 

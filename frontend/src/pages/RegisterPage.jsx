@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useRegister } from "../hooks/useUser";
 import { Link } from "react-router-dom";
 import "../assets/styles/App.css";
-import { Input, Button, Select, SelectItem } from "@heroui/react";
+import { Input, Button, Select, SelectItem, Alert } from "@heroui/react";
 
 export const EyeSlashFilledIcon = (props) => { // Code from heroUI for password desgin
   return (
@@ -65,7 +65,7 @@ export const EyeFilledIcon = (props) => { // Code from heroUI for password desgi
 };
 
 export default function Register() {
-  const { handleRegister, loading, error, countryCodes, selectedCode, setSelectedCode } = useRegister();
+  const { handleRegister, loading, error, countryCodes, selectedCode, setSelectedCode, success } = useRegister();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -116,6 +116,17 @@ export default function Register() {
 
   return (
     <form onSubmit={onSubmit}>
+      {error &&
+        <div key="danger" className="w-full flex items-center my-3">
+          <Alert color="danger" title={error} />
+        </div>
+      }
+
+      {success &&
+        <div key="success" className="w-full flex items-center my-3">
+          <Alert color="success" title={success} />
+        </div>
+      }
       <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
         <Input label="First Name" size='lg' variant="underlined" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} />
         <Input label="Last Name" size='lg' variant="underlined" type="text" value={lastName} onChange={e => setLastName(e.target.value)} />
@@ -194,8 +205,6 @@ export default function Register() {
       <div>
         Already have an account? <Link to="/login"> Sign In</Link>
       </div>
-      
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );
 }

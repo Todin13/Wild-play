@@ -64,11 +64,7 @@ export const updateUserProfile = async (updatedData) => { // Function to update 
     });
 
     const result = await response.json();
-    if (response.ok) {
-      return result;
-    } else {
-      throw new Error(result.message);
-    }
+    return result;
   } catch (error) {
     console.error("Error updating profile:", error);
     throw new Error("Failed to update profile.");
@@ -85,12 +81,8 @@ export const updatePassword = async (password) => { // Function to update passwo
     });
 
     const result = await response.json();
+    return result;
 
-    if (!response.ok) {
-      return { success: false, message: result.message };
-    }
-
-    return { success: true };
   } catch (error) {
     console.error("Error updating password:", error);
     return { success: false, message: "An error occurred while updating the password." };

@@ -6,6 +6,7 @@ import { loginUser, registerUser, fetchUserProfile, fetchCountryCodes, updateUse
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (email, password) => {
@@ -16,10 +17,9 @@ export const useLogin = () => {
       const data = await loginUser(email, password); // Call API
 
       if (data.message === "Login successful!") {
-        alert(data.message);
+        setSuccess(data.message);
         navigate("/dashboard");
       } else {
-        alert(data.message);
         setError(data.message);
       }
     } catch (err) {
@@ -30,14 +30,16 @@ export const useLogin = () => {
     }
   };
 
-  return { handleLogin, loading, error };
+  return { handleLogin, loading, error, success };
 };
 
 export const useRegister = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     const [countryCodes, setCountryCodes] = useState([]);
     const [selectedCode, setSelectedCode] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadCountryCodes = async () => {
@@ -60,12 +62,17 @@ export const useRegister = () => {
       setError(null);
       try {
         const result = await registerUser(userData); // Call API
-        if (result.error) {
-          setError(result.error);
-          alert(result.error);
-        } else {
-          alert(result.message || "Success");
+        console.log(result);
+        console.log(result.error);
+        console.log(result.message);
+
+        if(result.message === "User saved successfully! Please log in for further possibility"){
+          setSuccess(result.message || "Success");
+          navigate("/login");
+        }else{
+          setError(result.message);
         }
+
       } catch (err) {
         setError("Something went wrong");
         console.error(err);
@@ -74,7 +81,7 @@ export const useRegister = () => {
       }
     };
   
-    return { handleRegister, loading, error,countryCodes, selectedCode, setSelectedCode}; // Set default to 353 or first code if not found
+    return { handleRegister, loading, error,countryCodes, selectedCode, setSelectedCode, success}; // Set default to 353 or first code if not found
 };
 
 export const useProfile = () => {
@@ -116,6 +123,8 @@ export const useUserUpdate = () => {
     });
     const [driverLicense, setDriverLicense] = useState("");
     const [username, setUsername] = useState("");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(null);
   
     useEffect(() => {
       const loadProfile = async () => { // Get user profile
@@ -173,13 +182,20 @@ export const useUserUpdate = () => {
         driver_license: driverLicense,
         username,
       };
+
+      setError("");
+      setSuccess("");
   
       try {
-        await updateUserProfile(updatedData); // Call API
-        alert("Profile updated successfully!");
+        const data = await updateUserProfile(updatedData); // Call API
+        if(data.message === 'User updated successfully'){
+          setSuccess(data.message);
+        }else{
+          setError(data.message)
+        }
       } catch (error) {
         console.error("Error updating profile:", error);
-        alert("Failed to update profile.");
+        setError("Failed to update profile.");
       }
     };
   
@@ -204,29 +220,49 @@ export const useUserUpdate = () => {
       setDriverLicense,
       setUsername,
       handleSubmit,
+      error,
+      success,
     };
 };
 
 export function usePasswordUpdate() {
     const [password, setPassword] = useState('');
     const [confirmPw, setConfirmPw] = useState('');
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState(null);
   
     const handleSubmit = async () => {
-      if (password !== confirmPw) { // Simple PW validation
-        alert("Password doesn't match");
+
+      setError("");
+      setSuccess("");
+
+      if(password === null || confirmPw === null){
+        setError("Please fill in the field");
         return;
       }
-  
-      const response = await updatePassword(password); // Call API
-      
-      if (response.success) {
-        alert("Profile updated successfully!");
-      } else {
-        alert(response.message);
+
+      if (password !== confirmPw) { // Simple PW validation
+        setError("Password doesn't match");
+        return;
+      }
+
+      try{
+        const response = await updatePassword(password); // Call API
+        console.log(response);
+        console.log(response.error);
+
+        if (response.message === 'User updated successfully') {
+          setSuccess("Password updated successfully!");
+        } else {
+          setError(response.error);
+        }
+      } catch (error) {
+        console.error("Error updating password:", error);
+        setError("Failed to update password.");
       }
     };
   
-    return { password, confirmPw, setPassword, setConfirmPw, handleSubmit };
+    return { password, confirmPw, setPassword, setConfirmPw, handleSubmit, error, success, };
 };
 
 export function useUserTable() {

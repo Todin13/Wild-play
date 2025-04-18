@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLogin } from '../hooks/useUser';
 import { Link } from "react-router-dom";
 import '../assets/styles/App.css';
-import { Input, Button } from "@heroui/react";
+import { Input, Button, Alert } from "@heroui/react";
 
 export const EyeSlashFilledIcon = (props) => { // Code from heroUI for password desgin
   return (
@@ -65,7 +65,7 @@ export const EyeFilledIcon = (props) => { // Code from heroUI for password desgi
 };
 
 export default function LoginPage() {
-  const { handleLogin, loading, error } = useLogin();
+  const { handleLogin, loading, error, success } = useLogin();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -81,6 +81,17 @@ export default function LoginPage() {
 
   return (
     <div>
+      {error &&
+        <div key="danger" className="w-full flex items-center my-3">
+          <Alert color="danger" title={error} />
+        </div>
+      }
+          
+      {success &&
+        <div key="success" className="w-full flex items-center my-3">
+          <Alert color="success" title={success} />
+        </div>
+      }
       <form onSubmit={onSubmit}>
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-5">
           <Input
@@ -127,7 +138,6 @@ export default function LoginPage() {
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mt-5 mb-5">
           Don't have an account? <Link to="/register"> Sign Up</Link>
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
     </div>
   );
