@@ -1,13 +1,22 @@
 // Home.jsx
 import MainLayout from "@/layouts/MainLayout";
+import "@/assets/styles/home.css";
+import { SectionTitle } from "@/components/ui/Titles"
+import { getRandomTitle } from '@/utils/randomTitle';
 
 const Home = () => {
   return (
     <MainLayout>
-      <section>
-        <h1>Welcome to the Home Page!</h1>
-        <p>This is your homepage content.</p>
+      <section className="introduction">
+        <div className="">
+          <SectionTitle>{getRandomTitle()}</SectionTitle>
+        </div>
+        <div className=""></div>
       </section>
+      <section className="presentation"></section>
+      <section className="guides"></section>
+      <section className="vans"></section>
+      <section className="tools"></section>
     </MainLayout>
   );
 };

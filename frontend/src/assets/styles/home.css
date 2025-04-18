@@ -1,0 +1,19 @@
+.introduction {
+    @apply bg-white
+}
+
+.presentation {
+    @apply bg-white
+}
+
+.guides {
+    @apply bg-white
+}
+
+.vans {
+    @apply bg-white
+}
+
+.tools {
+    @apply bg-white
+}
