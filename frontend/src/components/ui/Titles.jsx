@@ -1,15 +1,18 @@
 import React from "react";
 
-// Top Page Title Component
-export const PageTitle = ({ children }) => {
-  return <h1 className="text-4xl font-bold text-gray-900 mb-6">{children}</h1>;
-};
+const Title = ({ children, variant = "section" }) => {
+  const baseClasses = "text-center text-title";
 
-// Section Title Component
-export const SectionTitle = ({ children }) => {
+  const variants = {
+    page: "text-4xl font-extrabold",
+    section: "text-2xl font-bold",
+  };
+
   return (
-    <h2 className="text-2xl font-bold text-gray-800 mb-4 flex justify-center">
+    <h1 className={`${baseClasses} ${variants[variant]}`}>
       {children}
-    </h2>
+    </h1>
   );
 };
+
+export default Title;

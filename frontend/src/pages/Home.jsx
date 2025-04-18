@@ -1,20 +1,19 @@
 // Home.jsx
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/home.css";
-import { SectionTitle } from "@/components/ui/Titles";
-import { Button } from "@/components/ui/Buttons";
+import Title from "@/components/ui/Titles";
+import Button from "@/components/ui/Buttons";
 import { getRandomTitle } from "@/utils/randomTitle";
-import useNavigationHooks  from "@/hooks/NavigationHooks";
+import useNavigationHooks from "@/hooks/NavigationHooks";
 
 const Home = () => {
-
   const { goToSearch } = useNavigationHooks();
 
   return (
     <MainLayout>
       <section className="introduction">
         <div className="flex flex-col">
-          <SectionTitle>{getRandomTitle()}</SectionTitle>
+          <Title variant="section">{getRandomTitle()}</Title>
           <p className="text-center p-10 mx-auto max-w-4xl">
             Looking to escape the ordinary? With Wild Play, you can easily rent
             a fully-equipped van and design your dream trip. Whether you're

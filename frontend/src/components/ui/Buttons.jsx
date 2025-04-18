@@ -16,4 +16,4 @@ const Button = ({ children, variant = "primary", onClick }) => {
   );
 };
 
-export { Button };
+export default Button;
