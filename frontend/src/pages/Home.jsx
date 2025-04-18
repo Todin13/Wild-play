@@ -2,6 +2,7 @@
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 import IrlandSVG from "@/assets/images/irland-svg";
+import MountainSVG from "@/assets/images/mountain-svg";
 import Title from "@/components/ui/Titles";
 import Button from "@/components/ui/Buttons";
 import { getRandomTitle } from "@/utils/randomTitle";
@@ -34,7 +35,7 @@ const Home = () => {
       </div>
 
       {/* Section 1 - Intro */}
-      <section className="relative flex flex-wrap max-h-screen overflow-hidden mb-24">
+      <section className="relative flex flex-wrap max-h-screen overflow-hidden md:mb-24">
         {/* Left (Text) */}
         <div className="flex flex-col flex-1 items-center justify-center p-6">
           <div className="bg-intro-card p-8 space-y-6 rounded-lg shadow-card max-w-xl w-full flex flex-col">
@@ -72,7 +73,11 @@ const Home = () => {
         <PhotoCarousel photos={photos} />
       </section>
 
-      <section className="guides"></section>
+      <section className="guides">
+        <div className="flex justify-center">
+          <MountainSVG className="text-deepgreen w-full  h-auto" />
+        </div>
+      </section>
       <section className="vans"></section>
       <section className="tools"></section>
     </MainLayout>
