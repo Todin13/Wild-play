@@ -1,12 +1,8 @@
-import React from 'react';
+import React from "react";
 
 // Top Page Title Component
 export const PageTitle = ({ children }) => {
-  return (
-    <h1 className="text-4xl font-bold text-gray-900 mb-6">
-      {children}
-    </h1>
-  );
+  return <h1 className="text-4xl font-bold text-gray-900 mb-6">{children}</h1>;
 };
 
 // Section Title Component
