@@ -8,11 +8,7 @@ const Title = ({ children, variant = "section" }) => {
     section: "text-2xl font-bold",
   };
 
-  return (
-    <h1 className={`${baseClasses} ${variants[variant]}`}>
-      {children}
-    </h1>
-  );
+  return <h1 className={`${baseClasses} ${variants[variant]}`}>{children}</h1>;
 };
 
 export default Title;
