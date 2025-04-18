@@ -44,10 +44,10 @@ export default {
         navBarText: "hsl(140, 40%, 75%)", // Lighter text color for nav bar
 
         // Updated intro-card color to align with theme
-        'intro-card': 'hsl(140, 25%, 95%)', // Lighter, muted green for the card background
+        "intro-card": "hsl(140, 25%, 95%)", // Lighter, muted green for the card background
       },
       boxShadow: {
-        'card': '0 6px 12px rgba(0, 0, 0, 0.15)', // Deeper shadow for the card
+        card: "0 6px 12px rgba(0, 0, 0, 0.15)", // Deeper shadow for the card
       },
     },
   },
