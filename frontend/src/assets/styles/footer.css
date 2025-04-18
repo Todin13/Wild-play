@@ -70,7 +70,7 @@ footer svg {
 }
 
 .footer-button {
-  @apply inline-flex items-center justify-center text-center px-4 py-2 text-text bg-buttonBg border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out;
+  @apply self-center text-center px-4 py-2 text-text bg-buttonBg border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out rounded-full;
 }
 
 .footer-button:hover {

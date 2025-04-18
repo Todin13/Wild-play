@@ -12,7 +12,7 @@
 }
 
 .topbar-button {
-  @apply px-4 py-2 text-text bg-buttonBg border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out h-10 flex items-center justify-center;
+  @apply self-center rounded-full px-4 py-2 text-text bg-buttonBg border border-border cursor-pointer transition-all duration-200 ease-in-out h-10;
 }
 
 .topbar-button:hover {
@@ -20,20 +20,19 @@
 }
 
 .topbar-search {
-  @apply bg-buttonBg flex items-center gap-2 border border-border rounded-md px-2 h-10 w-full;
+  @apply self-center rounded-full bg-buttonBg flex items-center gap-2 border border-border px-2 h-10;
 }
 
 .topbar-search input {
-  @apply w-full border-none outline-none text-base h-full bg-buttonBg text-buttonText;
+  @apply rounded-full self-center border-none outline-none text-base h-full bg-buttonBg text-buttonText;
 }
 
 .topbar-search input::placeholder {
   @apply text-buttonText;
 }
 
-
 .topbar-search button {
-  @apply bg-transparent border-none text-text cursor-pointer h-full flex items-center justify-center;
+  @apply self-center bg-transparent border-none text-text cursor-pointer h-full;
 }
 
 .topbar-right {

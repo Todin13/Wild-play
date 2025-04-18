@@ -52,6 +52,9 @@ const TopBar = () => {
       {isNavOpen && (
         <div className="topbar-mobile-menu mobile-only">
           <nav className="topbar-nav">
+            <Link to="/login" className="topbar-button text-center">
+              Login
+            </Link>
             <Link to="/" className="topbar-button">
               Home
             </Link>
@@ -59,16 +62,11 @@ const TopBar = () => {
               Travel Guide
             </Link>
           </nav>
-          <div className="topbar-right">
-            <div className="topbar-search">
-              <input type="text" placeholder="Search..." className="w-full" />
-              <button className="topbar-search-button">
-                <MagnifyingGlassIcon className="h-5 w-5 text-navBarText" />
-              </button>
-            </div>
-            <Link to="/login" className="topbar-button w-full text-center">
-              Login
-            </Link>
+          <div className="topbar-search">
+            <input type="text" placeholder="Search..." />
+            <button className="topbar-search-button">
+              <MagnifyingGlassIcon className="h-5 w-5 text-navBarText" />
+            </button>
           </div>
         </div>
       )}
