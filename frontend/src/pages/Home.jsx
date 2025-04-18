@@ -1,6 +1,7 @@
 // Home.jsx
 import MainLayout from "@/layouts/MainLayout";
-import "@/assets/styles/home.css";
+import "@/assets/styles/index.css";
+import IrlandSVG from "@/assets/images/irland-svg";
 import Title from "@/components/ui/Titles";
 import Button from "@/components/ui/Buttons";
 import { getRandomTitle } from "@/utils/randomTitle";
@@ -11,8 +12,8 @@ const Home = () => {
 
   return (
     <MainLayout>
-      <section className="introduction">
-        <div className="flex flex-col">
+      <section className="bg-white flex flew-wrap">
+        <div className="flex flex-col flex-1 items-center justify-center">
           <Title variant="section">{getRandomTitle()}</Title>
           <p className="text-center p-10 mx-auto max-w-4xl">
             Looking to escape the ordinary? With Wild Play, you can easily rent
@@ -26,7 +27,9 @@ const Home = () => {
             Start Your Journey
           </Button>
         </div>
-        <div className=""></div>
+        <div className="self-center desktop-only max-h-[80vh] flex-1">
+          <IrlandSVG />
+        </div>
       </section>
       <section className="presentation"></section>
       <section className="guides"></section>
