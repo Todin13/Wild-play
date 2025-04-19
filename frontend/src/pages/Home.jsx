@@ -8,13 +8,14 @@ import Button from "@/components/ui/Buttons";
 import { getRandomTitle } from "@/utils/randomTitle";
 import useNavigationHooks from "@/hooks/NavigationHooks";
 import PhotoCarousel from "@/modules/PhotoCarousel";
+import GuideCarousel from "@/modules/guides/carousel";
 import photos from "@/data/photos.json";
-import { useFirstGuide } from "@/hooks/GuideHooks";
+import { useFirstTenGuides } from "@/hooks/GuideHooks";
 import GuideCard from "@/components/ui/GuideCard";
 
 const Home = () => {
   const { goToSearch } = useNavigationHooks();
-  const { firstGuide, loading, error } = useFirstGuide();
+  const { guides, loading, error } = useFirstTenGuides();
 
   return (
     <MainLayout>
@@ -82,7 +83,7 @@ const Home = () => {
           <MountainSVG className="text-deepgreen w-full h-auto absolute" />
         </div>
 
-        <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center mb-12 mb:mb-24 lg:mt-48 lg:mb-48">
+        <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center lg:mb-24 lg:mb-48">
           <Title variant="section">Life on the Road</Title>
           <p className="mx-auto mt-4 text-textDark max-w-2xl">
             A glimpse of the freedom, views, and cozy vibes that come with van
@@ -93,12 +94,12 @@ const Home = () => {
         {loading ? (
           <p className="relative text-3xl lg:mb-64">Loading guide...</p>
         ) : error ? (
-          <h1 className="relative text-red-500 text-3xl mb-12 mb:mb-48 mb-12 lg:mb-64">
+          <h1 className="relative text-red-500 text-3xl mb-6 lg:mb-64">
             {error}
           </h1>
-        ) : firstGuide ? (
+        ) : guides.length > 0 ? (
           <div className="relative mb-12 mb:mb-48 lg:mb-64">
-            <GuideCard guide={firstGuide} />
+            <GuideCarousel guides={guides} />
           </div>
         ) : (
           <p>No guide found</p>

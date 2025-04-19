@@ -29,4 +29,32 @@ const useFirstGuide = () => {
   return { firstGuide, loading, error };
 };
 
-export { useFirstGuide };
+const useFirstTenGuides = () => {
+  const [guides, setGuides] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchGuides = async () => {
+      try {
+        setLoading(true);
+        const result = await getUserGuides({});
+        if (result && result.length > 0) {
+          setGuides(result.slice(0, 10));
+        } else {
+          setError("No guides available");
+        }
+      } catch (err) {
+        setError(`Error fetching guides: ${err}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGuides();
+  }, []);
+
+  return { guides, loading, error };
+};
+
+export { useFirstGuide, useFirstTenGuides };
