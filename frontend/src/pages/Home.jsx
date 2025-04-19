@@ -9,13 +9,15 @@ import { getRandomTitle } from "@/utils/randomTitle";
 import useNavigationHooks from "@/hooks/NavigationHooks";
 import PhotoCarousel from "@/modules/PhotoCarousel";
 import GuideCarousel from "@/modules/guides/carousel";
+import VanCarousel from "@/modules/vans/carousel";
 import photos from "@/data/photos.json";
 import { useFirstTenGuides } from "@/hooks/GuideHooks";
-import GuideCard from "@/components/ui/GuideCard";
+import { useTypesVans } from "@/hooks/VanHooks";
 
 const Home = () => {
   const { goToSearch } = useNavigationHooks();
-  const { guides, loading, error } = useFirstTenGuides();
+  const { guides, loading_guides, error_guides } = useFirstTenGuides();
+  const { vans, loading_van, error_van } = useTypesVans();
 
   return (
     <MainLayout>
@@ -84,21 +86,22 @@ const Home = () => {
         </div>
 
         <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center lg:mb-24 lg:mb-48">
-          <Title variant="section">Life on the Road</Title>
+          <Title variant="section">Find Your Ultimate Travel Guide</Title>
           <p className="mx-auto mt-4 text-textDark max-w-2xl">
-            A glimpse of the freedom, views, and cozy vibes that come with van
-            life.
+            Expert tips and route recommendations for an unforgettable journey.
           </p>
         </div>
 
-        {loading ? (
-          <p className="relative text-3xl lg:mb-64">Loading guide...</p>
-        ) : error ? (
-          <h1 className="relative text-red-500 text-3xl mb-6 lg:mb-64">
-            {error}
+        {loading_guides ? (
+          <p className="relative text-3xl mb-6 mt-6 lg:mb-96">
+            Loading guide...
+          </p>
+        ) : error_guides ? (
+          <h1 className="relative text-red-500 text-3xl mb-6 lg:mb-96 mt-6">
+            {error_guides}
           </h1>
         ) : guides.length > 0 ? (
-          <div className="relative mb-12 mb:mb-48 lg:mb-64">
+          <div className="relative mb-12 mb:mb-48 lg:mb-96">
             <GuideCarousel guides={guides} />
           </div>
         ) : (
@@ -106,7 +109,29 @@ const Home = () => {
         )}
       </section>
 
-      <section className="vans"></section>
+      {/* Section 4 - Vans */}
+      <section className="relative flex flex-col justify-center items-center">
+        <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center lg:mb-24 lg:mb-48">
+          <Title variant="section">Find Your Ultimate Van</Title>
+          <p className="mx-auto mt-4 text-textDark max-w-2xl">
+            Expertly selected vans for your next adventure on the road.
+          </p>
+        </div>
+
+        {loading_van ? (
+          <p className="relative text-3xl mb-6 mt-6 lg:mb-64">Loading van...</p>
+        ) : error_van ? (
+          <h1 className="relative text-red-500 text-3xl mb-6 mt-6 lg:mb-64">
+            {error_van}
+          </h1>
+        ) : vans.length > 0 ? (
+          <div className="relative mb-12 mb:mb-48 lg:mb-64">
+            <VanCarousel vans={vans} />
+          </div>
+        ) : (
+          <p>No van found</p>
+        )}
+      </section>
       <section className="tools"></section>
     </MainLayout>
   );
