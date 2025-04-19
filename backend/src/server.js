@@ -26,10 +26,29 @@ connectDB();
 
 const app = express();
 
+
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://wild-play.vercel.app/',
+  'https://wild-play-todin13s-projects.vercel.app/',
+  'https://wild-play-git-userpage-todin13s-projects.vercel.app/',
+  'https://wild-play-git-searchpage-todin13s-projects.vercel.app',
+  'https://wild-play-git-fixing-cors-todin13s-projects.vercel.app/'
+];
+
+// Set up CORS middleware to allow only whitelisted origins and enable cookies
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow access
+    } else {
+      callback(new Error('Not allowed by CORS')); // Reject access
+    }
+  },
+  credentials: true // Allow cookies and session credentials
+}));
 app.use(express.json());
-app.use(cors()); // Enable CORS for API calls
 app.use(cookieParser());
 
 // Routes
