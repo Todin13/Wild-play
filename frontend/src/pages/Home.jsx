@@ -9,14 +9,17 @@ import { getRandomTitle } from "@/utils/randomTitle";
 import useNavigationHooks from "@/hooks/NavigationHooks";
 import PhotoCarousel from "@/modules/PhotoCarousel";
 import photos from "@/data/photos.json";
+import { useFirstGuide } from "@/hooks/GuideHooks";
+import GuideCard from "@/components/ui/GuideCard";
 
 const Home = () => {
   const { goToSearch } = useNavigationHooks();
+  const { firstGuide, loading, error } = useFirstGuide();
 
   return (
     <MainLayout>
       {/* Diagonal Split Background */}
-      <div className="desktop-only absolute top-0 right-0 w-full h-auto text-deepgreen">
+      <div className="desktop-only absolute top-0 right-0 w-full h-auto absolute text-deepgreen">
         <svg
           viewBox="0 0 1662 2437"
           xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +64,7 @@ const Home = () => {
       </section>
 
       {/* Section 2 - Carousel */}
-      <section className="relative w-full flex flex-col items-center justify-center px-6 py-24">
+      <section className="relative w-full flex flex-col items-center justify-center px-6 py-24 lg:mb-48">
         <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center">
           <Title variant="section">Life on the Road</Title>
           <p className="mx-auto mt-4 text-textDark max-w-2xl">
@@ -73,11 +76,35 @@ const Home = () => {
         <PhotoCarousel photos={photos} />
       </section>
 
-      <section className="guides">
-        <div className="flex justify-center">
-          <MountainSVG className="text-deepgreen w-full  h-auto" />
+      {/* Section 3 - Guides */}
+      <section className="relative flex flex-col justify-center items-center">
+        <div className="flex justify-center desktop-only">
+          <MountainSVG className="text-deepgreen w-full h-auto absolute" />
         </div>
+
+        <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center mb-12 mb:mb-24 lg:mt-48 lg:mb-48">
+          <Title variant="section">Life on the Road</Title>
+          <p className="mx-auto mt-4 text-textDark max-w-2xl">
+            A glimpse of the freedom, views, and cozy vibes that come with van
+            life.
+          </p>
+        </div>
+
+        {loading ? (
+          <p className="relative text-3xl lg:mb-64">Loading guide...</p>
+        ) : error ? (
+          <h1 className="relative text-red-500 text-3xl mb-12 mb:mb-48 mb-12 lg:mb-64">
+            {error}
+          </h1>
+        ) : firstGuide ? (
+          <div className="relative mb-12 mb:mb-48 lg:mb-64">
+            <GuideCard guide={firstGuide} />
+          </div>
+        ) : (
+          <p>No guide found</p>
+        )}
       </section>
+
       <section className="vans"></section>
       <section className="tools"></section>
     </MainLayout>
