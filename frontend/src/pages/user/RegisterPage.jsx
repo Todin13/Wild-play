@@ -208,7 +208,7 @@ export default function Register() {
       </div>
 
       <div className="flex justify-center items-center md:flex-nowrap gap-4 mt-5 mb-5">
-        Already have an account? <Link to="/login"><Button color="primary" size="sm" variant="light">Sign In</Button></Link>
+        Already have an account? <Link to="/login">Sign In</Link>
       </div>
     </form>
     </div>
