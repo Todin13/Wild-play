@@ -7,7 +7,7 @@ import Title from "@/components/ui/Titles";
 import Button from "@/components/ui/Buttons";
 import { getRandomTitle } from "@/utils/randomTitle";
 import useNavigationHooks from "@/hooks/NavigationHooks";
-import PhotoCarousel from "@/components/PhotoCarousel";
+import PhotoCarousel from "@/modules/PhotoCarousel";
 import photos from "@/data/photos.json";
 
 const Home = () => {
