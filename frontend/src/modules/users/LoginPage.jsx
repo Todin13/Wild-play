@@ -81,7 +81,7 @@ export default function LoginPage() {
 
   return (
     <MainLayout>
-    <div className="flex w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-8">
+    <div className="flex flex-wrap justify-center items-center gap-4 mb-5 mt-20 md:flex-nowrap">
       {error &&
         <div key="danger" className="w-full flex items-center my-3">
           <Alert color="danger" title={error} />
@@ -93,7 +93,7 @@ export default function LoginPage() {
           <Alert color="success" title={success} />
         </div>
       }
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} className="scale-110 max-w-xl bg-intro-card p-8 space-y-6 rounded-lg shadow-card">
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-5">
           <Input
             label="Email"

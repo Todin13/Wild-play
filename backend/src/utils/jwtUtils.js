@@ -37,9 +37,9 @@ const setTokenCookie = (res, user) => {
 
 const clearCookie = (req, res) => {
     res.cookie("__wild_app_token", "", {
-        httpOnly: true, 
-        secure: true,  
-        sameSite: "None",
+        httpOnly: false,      
+        secure: false, 
+        sameSite: "lax",
         maxAge: 0        // Immediately expires the cookie
     });
 };
