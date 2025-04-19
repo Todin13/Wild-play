@@ -16,13 +16,13 @@ function useNavigationHooks() {
   /**
    * Navigate specifically to the van search page
    */
-  const goToSearchVan = () => {
-    navigate('/search-van');
+  const goToContactUs = () => {
+    navigate('/contact');
   };
 
   return {
     goToSearch,
-    goToSearchVan,
+    goToContactUs,
   };
 }
 
