@@ -105,7 +105,7 @@ const Home = () => {
             <GuideCarousel guides={guides} />
           </div>
         ) : (
-          <p>No guide found</p>
+          <p className="relative text-3xl mb-6 mt-6 lg:mb-64">No guide found</p>
         )}
       </section>
 
@@ -129,7 +129,7 @@ const Home = () => {
             <VanCarousel vans={vans} />
           </div>
         ) : (
-          <p>No van found</p>
+          <p className="relative text-3xl mb-6 mt-6 lg:mb-64">No van found</p>
         )}
       </section>
       <section className="tools"></section>
