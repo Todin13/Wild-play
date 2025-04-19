@@ -1,14 +1,64 @@
-/*
-
-Main file to run the API
-
-*/
+// Main file to run the API
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const { connectDB } = require("./config/db.js");
+require("dotenv").config({ path: "../.env" });
 
-require("dotenv").config("../.env");
+const app = express();
+
+// Connect to MongoDB
+connectDB();
+
+// Middleware
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://wild-play.vercel.app",
+  "https://wild-play-git-userpage-todin13s-projects.vercel.app",
+  "https://wild-play-git-searchpage-todin13s-projects.vercel.app",
+];
+
+// Global error handler (ensures CORS headers even on error)
+app.use((err, req, res, next) => {
+  console.error("Global Error Handler:", err.message);
+
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+  res.status(err.status || 500).json({
+    message: err.message || "Something went wrong",
+  });
+});
+
+// CORS Configuration
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
+
+// Preflight handling
+app.options("*", cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
+
+// Built-in middleware
+app.use(express.json());
+app.use(cookieParser());
 
 // Import Routes
 const searchRoutes = require("./routes/searchRoutes.js");
@@ -20,50 +70,6 @@ const guideRoutes = require("./routes/guideRoutes");
 const helpRoute = require("./routes/helpRoute");
 const userRoutes = require("./routes/userRoutes.js");
 const reviewsRoutes = require("./routes/reviewsRoutes.js");
-
-// Connect to MongoDB
-connectDB();
-
-const app = express();
-
-// Middleware
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://wild-play.vercel.app",
-  "https://wild-play-todin13s-projects.vercel.app",
-  "https://wild-play-git-userpage-todin13s-projects.vercel.app",
-  "https://wild-play-git-searchpage-todin13s-projects.vercel.app",
-];
-
-// Set up CORS middleware to allow only whitelisted origins and enable cookies
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true); // Allow access
-      } else {
-        callback(new Error("Not allowed by CORS")); // Reject access
-      }
-    },
-    credentials: true, // Allow cookies and session credentials
-  })
-);
-app.options(
-  "*",
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
-
-app.use(express.json());
-app.use(cookieParser());
 
 // Routes
 app.use("/help", helpRoute);
@@ -77,6 +83,27 @@ app.use("/api/trips", tripRoutes);
 app.use("/api/guides", guideRoutes);
 app.use("/api/reviews", reviewsRoutes);
 
-// Start the server
+// Fallback route
+app.use("/", (req, res) => {
+  res.status(200).json({ message: "API is running!" });
+});
+
+// Global error handler (ensures CORS headers even on error)
+app.use((err, req, res, next) => {
+  console.error("Global Error Handler:", err.message);
+
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+  res.status(err.status || 500).json({
+    message: err.message || "Something went wrong",
+  });
+});
+
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});

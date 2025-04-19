@@ -121,3 +121,12 @@ export const logoutUser = async () => { //Function to logout
     };
   }
 };
+
+export const checkLoginStatus = async () => {
+  try {
+    const res = await API.get('/users/cookie'); // Full URL: https://yourbackend.com/cookie
+    return res;
+  } catch (err) {
+    console.error('Failed:', err.response?.data || err.message);
+  }
+};

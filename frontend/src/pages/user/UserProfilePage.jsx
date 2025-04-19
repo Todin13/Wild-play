@@ -1,6 +1,6 @@
 import { useProfile } from "@/hooks/UserHooks";
 import { Link } from 'react-router-dom';
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from "@heroui/react";
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 

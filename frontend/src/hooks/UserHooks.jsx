@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Cookies from "js-cookie";
-import { jwtDecode } from 'jwt-decode';
-import { loginUser, registerUser, fetchUserProfile, fetchCountryCodes, updateUserProfile, updatePassword, fetchUsers, searchUsers, deleteUserById, getUserDetail, logoutUser } from '../modules/users/api';
+import { loginUser, registerUser, fetchUserProfile, fetchCountryCodes, updateUserProfile, updatePassword, fetchUsers, searchUsers, deleteUserById, getUserDetail, logoutUser, checkLoginStatus } from '../modules/users/api';
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -362,26 +360,25 @@ export function useUserDashboard() {
     const [userType, setUserType] = useState(null);
   
     useEffect(() => {
-      // Add debugging to see all cookies
-      console.log("All cookies:", document.cookie);
-      
-      const token = Cookies.get("__wild_app_token");
-      console.log("Token found:", token);
-      
-      setIsLoggedIn(!!token);
-
-     if (token) {
+      const fetchUser = async () => {
         try {
-          const decodedToken = jwtDecode(token);
-          console.log("Decoded token:", decodedToken);
-          setUserType(decodedToken.user_type);
-        } catch (error) {
-          console.error("Invalid token:", error);
-          // Consider clearing the invalid token
-          Cookies.remove("__wild_app_token");
-          setIsLoggedIn(false);
+          const res = await checkLoginStatus();
+          
+          if (res && res.data && res.data.user) {
+            console.log("User is logged in:", res.data.user);
+            setIsLoggedIn(true);
+            setUserType(res.data.user.user_type); // or res.data.user.user_type
+          } else {
+            console.log("No valid cookie or user not logged in.");
+            setUserType(null);
+          }
+        } catch (err) {
+          console.error("Login check failed:", err);
+          setUserType(null); // Not logged in
         }
-      }
+      };
+  
+      fetchUser();
     }, []);
 
     const handleLogout = async () => {
