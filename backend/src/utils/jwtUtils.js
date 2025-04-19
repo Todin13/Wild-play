@@ -29,17 +29,17 @@ const setTokenCookie = (res, user) => {
 
     // Set the JWT token as a cookie
     res.cookie("__wild_app_token", token, {
-        httpOnly: true,      
+        httpOnly: false,      
         secure: true, 
-        sameSite: "None" // Prevent CORS issue
+        sameSite: "none" // Prevent CORS issue
     });
 };
 
 const clearCookie = (req, res) => {
     res.cookie("__wild_app_token", "", {
-        httpOnly: true,      
+        httpOnly: false,      
         secure: true, 
-        sameSite: "None",
+        sameSite: "none",
         maxAge: 0        // Immediately expires the cookie
     });
 };

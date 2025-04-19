@@ -362,22 +362,28 @@ export function useUserDashboard() {
     const [userType, setUserType] = useState(null);
   
     useEffect(() => {
-      const token = Cookies.get("__wild_app_token"); // Get token from cookies
-      setIsLoggedIn(!!token); // Set login state based on token presence
+      // Add debugging to see all cookies
+      console.log("All cookies:", document.cookie);
+      
+      const token = Cookies.get("__wild_app_token");
+      console.log("Token found:", token);
+      
+      setIsLoggedIn(!!token);
 
-      if (token) {
+     if (token) {
         try {
-          // Decode token to get payload
           const decodedToken = jwtDecode(token);
-          
+          console.log("Decoded token:", decodedToken);
           setUserType(decodedToken.user_type);
         } catch (error) {
           console.error("Invalid token:", error);
+          // Consider clearing the invalid token
+          Cookies.remove("__wild_app_token");
+          setIsLoggedIn(false);
         }
       }
     }, []);
 
-  
     const handleLogout = async () => {
       const result = await logoutUser(); // Call API
       if (result.success) {
