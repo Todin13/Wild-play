@@ -1,8 +1,9 @@
-// pages/UserUpdatePage.js
-
 import React from 'react';
-import { useUserUpdate } from '../hooks/useUser';
+import { useUserUpdate } from '@/hooks/UserHooks';
 import { Input, Button, Select, SelectItem, Alert } from "@heroui/react";
+import MainLayout from "@/layouts/MainLayout";
+import "@/assets/styles/index.css";
+import { MapIcon } from '@heroicons/react/24/outline';
 
 const UserUpdatePage = () => {
   const {
@@ -35,7 +36,8 @@ const UserUpdatePage = () => {
   };
 
   return (
-    <div>
+    <MainLayout>
+    <div className="flex flex-col w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 max-w-4xl mx-auto">
       {error &&
         <div key="danger" className="w-full flex items-center my-3">
           <Alert color="danger" title={error} />
@@ -171,6 +173,7 @@ const UserUpdatePage = () => {
       <Button color="success" size="lg" variant="ghost" onPress={handleSubmit}>Update Profile</Button>
 
     </div>
+    </MainLayout>
   );
 };
 

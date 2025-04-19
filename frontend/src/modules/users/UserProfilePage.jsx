@@ -1,15 +1,18 @@
-import "../assets/styles/App.css";
-import { useProfile } from "../hooks/useUser";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@heroui/react";
+import { useProfile } from "@/hooks/UserHooks";
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Link} from "@heroui/react";
+import MainLayout from "@/layouts/MainLayout";
+import "@/assets/styles/index.css";
 
 export default function Profile() {
   const { user, error } = useProfile();
 
   return (
-    <div>
+    <MainLayout>
+    <div className="flex flex-col flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-5 max-w-4xl mx-auto">
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {user && user.detail ? (
+        <>
         <Table removeWrapper aria-label="Example static collection table">
           <TableHeader>
             <TableColumn>Field</TableColumn>
@@ -116,9 +119,16 @@ export default function Profile() {
             </TableRow>
           </TableBody>
         </Table>
+
+          <div className="flex w-full flex-wrap justify-center md:flex-nowrap gap-4 mt-5 mb-5">
+            <Link isBlock showAnchorIcon color="success" href="/update">Update Profile</Link>
+            <Link isBlock showAnchorIcon color="success" href="/pwupd">Update Password</Link>
+          </div>
+        </>
       ) : (
         !error && <p>Loading profile...</p>
       )}
     </div>
+    </MainLayout>
   );
 }

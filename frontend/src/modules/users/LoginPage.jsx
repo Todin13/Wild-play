@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useLogin } from '../hooks/useUser';
-import { Link } from "react-router-dom";
-import '../assets/styles/App.css';
-import { Input, Button, Alert } from "@heroui/react";
+import { useLogin } from '@/hooks/UserHooks';
+import { Input, Button, Alert, Link } from "@heroui/react";
+import MainLayout from "@/layouts/MainLayout";
+import "@/assets/styles/index.css";
 
 export const EyeSlashFilledIcon = (props) => { // Code from heroUI for password desgin
   return (
@@ -80,7 +80,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
+    <MainLayout>
+    <div className="flex w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-8">
       {error &&
         <div key="danger" className="w-full flex items-center my-3">
           <Alert color="danger" title={error} />
@@ -129,16 +130,17 @@ export default function LoginPage() {
           />
         </div>
 
-        <div>
+        <div className="flex justify-center items-center">
           <Button color="success" size='lg' variant="ghost" type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Submit"}
           </Button>
         </div>
 
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mt-5 mb-5">
-          Don't have an account? <Link to="/register"> Sign Up</Link>
+          Don't have an account? <Link isBlock showAnchorIcon color="success" href="/register"> Sign Up</Link>
         </div>
       </form>
     </div>
+    </MainLayout>
   );
 }

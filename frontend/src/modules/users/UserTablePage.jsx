@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState, useMemo } from "react";
-import { useUserTable } from "../hooks/useUser";
-import '../assets/styles/App.css';
+import { useUserTable } from "@/hooks/UserHooks";
 import { Input, Button, Select, SelectItem, Checkbox, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@heroui/react";
+import MainLayout from "@/layouts/MainLayout";
+import "@/assets/styles/index.css";
 
 function UserTable() {
   const {
@@ -24,8 +25,9 @@ function UserTable() {
   }, [page, users]);
 
   return (
-    <div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+    <MainLayout>
+    <div className="flex flex-col w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-8">
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4 max-w-4xl mx-auto">
         <Select className="w-full" label="Search Field" size="sm" variant="bordered" defaultSelectedKeys={[searchField]} value={searchField} onChange={(e) => setSearchField(e.target.value)}>
           <SelectItem key="firstName" value="firstName">First Name</SelectItem>
           <SelectItem key="lastName" value="lastName">Last Name</SelectItem>
@@ -49,7 +51,7 @@ function UserTable() {
         <Button color="success" size="lg" variant="ghost" onPress={handleSearch}>Search</Button>
       </div>
 
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4 max-w-4xl mx-auto">
         <Checkbox
           color="success"
           size="lg"
@@ -110,6 +112,7 @@ function UserTable() {
         </Table>
       </div>
     </div>
+    </MainLayout>
   );
 }
 

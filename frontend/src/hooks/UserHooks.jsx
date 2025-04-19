@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from "js-cookie";
-import { loginUser, registerUser, fetchUserProfile, fetchCountryCodes, updateUserProfile, updatePassword, fetchUsers, searchUsers, deleteUserById, getUserDetail, logoutUser } from '../features/userController';
+import { jwtDecode } from 'jwt-decode';
+import { loginUser, registerUser, fetchUserProfile, fetchCountryCodes, updateUserProfile, updatePassword, fetchUsers, searchUsers, deleteUserById, getUserDetail, logoutUser } from '../modules/users/api';
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ export const useLogin = () => {
 
       if (data.message === "Login successful!") {
         setSuccess(data.message);
-        navigate("/dashboard");
+        navigate("/");
       } else {
         setError(data.message);
       }
@@ -357,21 +358,35 @@ export function useUserDetail() {
 
 export function useUserDashboard() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userType, setUserType] = useState(null);
   
     useEffect(() => {
       const token = Cookies.get("__wild_app_token"); // Get token from cookies
       setIsLoggedIn(!!token); // Set login state based on token presence
+
+      if (token) {
+        try {
+          // Decode token to get payload
+          const decodedToken = jwtDecode(token);
+          
+          setUserType(decodedToken.user_type);
+          
+          // Use the information as needed
+        } catch (error) {
+          console.error("Invalid token:", error);
+        }
+      }
     }, []);
+
   
     const handleLogout = async () => {
       const result = await logoutUser(); // Call API
       if (result.success) {
-        alert(result.message);
-        window.location.href = "/dashboard";
+        window.location.href = "/";
       } else {
         alert(result.message);
       }
     };
   
-    return { isLoggedIn, handleLogout };
+    return { isLoggedIn, handleLogout, userType };
 };

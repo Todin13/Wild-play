@@ -1,12 +1,14 @@
-import "../assets/styles/App.css";
-import { useUserDetail } from "../hooks/useUser";
+import { useUserDetail } from "@/hooks/UserHooks";
 import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell} from "@heroui/react";
+import MainLayout from "@/layouts/MainLayout";
+import "@/assets/styles/index.css";
 
 function UserDetail() {
   const { user, loading } = useUserDetail();
 
   return (
-    <div>
+    <MainLayout>
+    <div className="flex flex-col flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-5 max-w-4xl mx-auto">
       {loading ? (
         <p>Loading user data...</p>
       ) : (
@@ -118,6 +120,7 @@ function UserDetail() {
         </Table>
       )}
     </div>
+    </MainLayout>
   );
 }
 

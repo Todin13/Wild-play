@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useRegister } from "../hooks/useUser";
-import { Link } from "react-router-dom";
-import "../assets/styles/App.css";
-import { Input, Button, Select, SelectItem, Alert } from "@heroui/react";
+import { useRegister } from "@/hooks/UserHooks";
+import { Input, Button, Select, SelectItem, Alert, Link } from "@heroui/react";
+import MainLayout from "@/layouts/MainLayout";
+import "@/assets/styles/index.css";
 
 export const EyeSlashFilledIcon = (props) => { // Code from heroUI for password desgin
   return (
@@ -115,7 +115,9 @@ export default function Register() {
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <MainLayout>
+    <div className="flex w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5">
+    <form onSubmit={onSubmit} >
       {error &&
         <div key="danger" className="w-full flex items-center my-3">
           <Alert color="danger" title={error} />
@@ -200,11 +202,15 @@ export default function Register() {
           label="Confirm Password" size='lg' variant="underlined"put type={isVisible2 ? "text" : "password"} value={confirmPw} onChange={e => setConfirmPw(e.target.value)} />
       </div>
 
-      <Button color="success" size="lg" variant="ghost" type="submit" disabled={loading}>{loading ? "Submitting..." : "Submit"}</Button>
-      
-      <div>
-        Already have an account? <Link to="/login"> Sign In</Link>
+      <div className="flex justify-center items-center">
+        <Button color="success" size="lg" variant="ghost" type="submit" disabled={loading}>{loading ? "Submitting..." : "Submit"}</Button>
+      </div>
+
+      <div className="flex justify-center items-center md:flex-nowrap gap-4 mt-5 mb-5">
+        Already have an account? <Link isBlock showAnchorIcon color="success" href="/login"> Sign In</Link>
       </div>
     </form>
+    </div>
+    </MainLayout>
   );
 }

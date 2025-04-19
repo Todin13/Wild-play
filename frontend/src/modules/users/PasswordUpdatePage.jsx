@@ -1,7 +1,8 @@
-import { usePasswordUpdate } from '../hooks/useUser';
+import { usePasswordUpdate } from '@/hooks/UserHooks';
 import { useState } from 'react';
-import '../assets/styles/App.css';
 import { Input, Button, Alert } from "@heroui/react";
+import MainLayout from "@/layouts/MainLayout";
+import "@/assets/styles/index.css";
 
 export const EyeSlashFilledIcon = (props) => { // Code from heroUI for password desgin
   return (
@@ -75,8 +76,9 @@ function PasswordUpdate() {
   
 
   return (
+    <MainLayout>
     <>
-      <div>
+      <div className="flex flex-col flex-wrap justify-center items-center max-w-4xl mx-auto md:flex-nowrap gap-4 mb-5 mt-5">
         {error &&
           <div key="danger" className="w-full flex items-center my-3">
             <Alert color="danger" title={error} />
@@ -139,10 +141,11 @@ function PasswordUpdate() {
         </div>
       </div>
 
-      <div>
+      <div className="flex w-full flex-wrap justify-center md:flex-nowrap gap-4 mt-5 mb-5">
         <Button color="success" size='lg' variant="ghost" onPress={handleSubmit}>Update Password</Button>
       </div>
     </>
+    </MainLayout>
   );
 }
 
