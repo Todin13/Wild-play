@@ -122,8 +122,8 @@ export default function Profile() {
         </Table>
 
           <div className="flex w-full flex-wrap justify-center md:flex-nowrap gap-4 mt-5 mb-5">
-            <Link to="/update">Update Profile</Link>
-            <Link to="/pwupd">Update Password</Link>
+            <Button color="primary" size="sm" variant="light"><Link to="/update">Update Profile</Link></Button>
+            <Button color="primary" size="sm" variant="light"><Link to="/pwupd">Update Password</Link></Button>
           </div>
         </>
       ) : (
