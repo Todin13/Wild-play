@@ -141,7 +141,7 @@ const Home = () => {
       </section>
 
       {/* Section 5 - Tools */}
-      <section className="relative flex flex-col justify-center items-center py-24 lg:mb-48">
+      <section className="relative flex flex-col justify-center items-center py-24 ">
         {/* Big Card Container for Tools */}
         <div className="max-w-screen-xl w-full lg:bg-deepgreen lg:rounded-2xl lg:shadow-2xl mb:bg-deepgreen mb:rounded-2xl mb:shadow-2xl p-12">
           <div className="desktop-only w-full text-center mb-12 flex flex-col">

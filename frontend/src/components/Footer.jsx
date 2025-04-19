@@ -94,9 +94,6 @@ const Footer = () => {
           <Link to="/about" className="footer-button">
             About Us
           </Link>
-          <Link to="/team" className="footer-button">
-            Team
-          </Link>
         </div>
 
         <div className="footer-bottom">

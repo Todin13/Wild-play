@@ -1,10 +1,17 @@
 /* Apply nav bar colors from Tailwind theme */
 .topbar {
-  @apply flex justify-between items-center px-8 py-4 fixed top-0 left-0 w-full z-50 bg-navBarBg text-navBarText border-b border-border shadow-md;
+  @apply flex justify-between items-center px-8 py-4 
+         lg:px-12 lg:py-6 
+         fixed top-0 left-0 w-full z-50 
+         bg-navBarBg text-navBarText border-b border-border shadow-md;
 }
 
 .topbar-left {
   @apply flex items-center gap-6;
+}
+
+.topbar-left h1 {
+  @apply text-xl lg:text-2xl font-bold text-text;
 }
 
 .topbar-nav {
@@ -12,19 +19,27 @@
 }
 
 .topbar-button {
-  @apply self-center rounded-full px-4 py-2 text-text bg-buttonBg border border-border cursor-pointer transition-all duration-200 ease-in-out h-10;
+  @apply flex items-center justify-center 
+         rounded-full px-4 py-2 text-text text-base 
+         lg:text-lg lg:px-6 lg:py-3 
+         bg-buttonBg border border-border cursor-pointer 
+         transition-all duration-200 ease-in-out h-10 lg:h-12;
 }
+
 
 .topbar-button:hover {
   @apply bg-accent text-white;
 }
 
 .topbar-search {
-  @apply self-center rounded-full bg-buttonBg flex items-center gap-2 border border-border px-2 h-10;
+  @apply self-center rounded-full bg-buttonBg flex items-center gap-2 
+         border border-border px-2 h-10 lg:h-12 lg:px-4;
 }
 
 .topbar-search input {
-  @apply rounded-full self-center border-none outline-none text-base h-full bg-buttonBg text-buttonText;
+  @apply rounded-full self-center border-none outline-none 
+         text-base lg:text-lg h-full 
+         bg-buttonBg text-buttonText w-40 lg:w-56;
 }
 
 .topbar-search input::placeholder {
@@ -33,6 +48,10 @@
 
 .topbar-search button {
   @apply self-center bg-transparent border-none text-text cursor-pointer h-full;
+}
+
+.topbar-search-button svg {
+  @apply h-5 w-5 lg:h-6 lg:w-6 text-navBarText;
 }
 
 .topbar-right {

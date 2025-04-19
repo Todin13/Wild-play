@@ -42,7 +42,7 @@ footer svg {
 }
 
 .social-icon {
-  @apply text-4xl transition-all duration-300 ease-in-out;
+  @apply text-4xl lg:text-6xl transition-all duration-300 ease-in-out;
 }
 
 .footer-social a:nth-child(1) .social-icon {
@@ -70,7 +70,10 @@ footer svg {
 }
 
 .footer-button {
-  @apply self-center text-center px-4 py-2 text-text bg-buttonBg border border-border rounded-md cursor-pointer transition-all duration-200 ease-in-out rounded-full;
+  @apply self-center text-center px-4 py-2 text-text text-base 
+         lg:text-xl lg:px-8 lg:py-4 
+         bg-buttonBg border border-border rounded-md cursor-pointer 
+         transition-all duration-200 ease-in-out rounded-full;
 }
 
 .footer-button:hover {
@@ -78,5 +81,5 @@ footer svg {
 }
 
 .footer-bottom {
-  @apply text-center text-sm text-footerText;
+  @apply text-center text-sm lg:text-lg text-footerText;
 }
