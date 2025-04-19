@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { useUserTable } from "../hooks/useUser";
 import '../assets/styles/App.css';
-import { Input, Button, Select, SelectItem, Checkbox, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, getKeyValue, } from "@heroui/react";
+import { Input, Button, Select, SelectItem, Checkbox, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@heroui/react";
 
 function UserTable() {
   const {
