@@ -1,6 +1,6 @@
 import React from "react";
 
-const Title = ({ children, variant = "section" }) => {
+const Title = ({ children, variant = "section" , className = ""}) => {
   const baseClasses = "text-center text-title";
 
   const variants = {
@@ -8,7 +8,7 @@ const Title = ({ children, variant = "section" }) => {
     section: "text-2xl font-bold",
   };
 
-  return <h1 className={`${baseClasses} ${variants[variant]}`}>{children}</h1>;
+  return <h1 className={`${baseClasses} ${variants[variant]} ${className}`}>{children}</h1>;
 };
 
 export default Title;

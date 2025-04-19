@@ -43,6 +43,12 @@ export default {
         navBarBg: "#2a5d4d", // Dark green background for nav bar
         navBarText: "hsl(140, 40%, 75%)", // Lighter text color for nav bar
 
+        // Mountain color
+        "mountain-deepgreen": "hsl(139, 25.90%, 21.20%)",
+
+        "tool-deepgreen": "#006400",
+        "tool-darkgreen": "#004d00",
+
         // Updated intro-card color to align with theme
         "intro-card": "hsl(140, 25%, 95%)", // Lighter, muted green for the card background
         voga: {

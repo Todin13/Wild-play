@@ -13,6 +13,13 @@ import VanCarousel from "@/modules/vans/carousel";
 import photos from "@/data/photos.json";
 import { useFirstTenGuides } from "@/hooks/GuideHooks";
 import { useTypesVans } from "@/hooks/VanHooks";
+import {
+  MapPinIcon,
+  MapIcon,
+  ClipboardDocumentIcon,
+  TruckIcon,
+} from "@heroicons/react/24/outline"; // Importing Heroicons
+import ToolCard from "@/components/ui/ToolCard"; // The ToolCard component
 
 const Home = () => {
   const { goToSearch } = useNavigationHooks();
@@ -82,10 +89,10 @@ const Home = () => {
       {/* Section 3 - Guides */}
       <section className="relative flex flex-col justify-center items-center">
         <div className="flex justify-center desktop-only">
-          <MountainSVG className="text-deepgreen w-full h-auto absolute" />
+          <MountainSVG className="text-mountain-deepgreen w-full h-auto absolute" />
         </div>
 
-        <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center lg:mb-24 lg:mb-48">
+        <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center mb:mb-24 lg:mb-48">
           <Title variant="section">Find Your Ultimate Travel Guide</Title>
           <p className="mx-auto mt-4 text-textDark max-w-2xl">
             Expert tips and route recommendations for an unforgettable journey.
@@ -111,7 +118,7 @@ const Home = () => {
 
       {/* Section 4 - Vans */}
       <section className="relative flex flex-col justify-center items-center">
-        <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center lg:mb-24 lg:mb-48">
+        <div className="w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center mb:mb-24 lg:mb-48">
           <Title variant="section">Find Your Ultimate Van</Title>
           <p className="mx-auto mt-4 text-textDark max-w-2xl">
             Expertly selected vans for your next adventure on the road.
@@ -132,7 +139,65 @@ const Home = () => {
           <p className="relative text-3xl mb-6 mt-6 lg:mb-64">No van found</p>
         )}
       </section>
-      <section className="tools"></section>
+
+      {/* Section 5 - Tools */}
+      <section className="relative flex flex-col justify-center items-center py-24 lg:mb-48">
+        {/* Big Card Container for Tools */}
+        <div className="max-w-screen-xl w-full lg:bg-deepgreen lg:rounded-2xl lg:shadow-2xl mb:bg-deepgreen mb:rounded-2xl mb:shadow-2xl p-12">
+          <div className="desktop-only w-full text-center mb-12 flex flex-col">
+            <Title variant="section" className="text-white">
+              Explore Our Tools
+            </Title>
+            <p className="mx-auto mt-4 max-w-2xl text-white">
+              A collection of essential tools to help you plan your adventure
+              and make the most of your journey.
+            </p>
+          </div>
+
+          <div className="mobile-only w-auto max-w-2xl bg-intro-card/70 backdrop-blur-md border border-gray-200 rounded-full shadow-2xl px-6 py-6 text-center mb-12 flex flex-col">
+            <Title variant="section">
+              Explore Our Tools
+            </Title>
+            <p className="mx-auto mt-4 text-textDark max-w-2xl">
+              A collection of essential tools to help you plan your adventure
+              and make the most of your journey.
+            </p>
+          </div>
+
+          {/* Tools Grid */}
+          <div className="flex flex-wrap justify-center gap-12">
+            {/* Van Location Tool */}
+            <ToolCard
+              title="Van Location"
+              description="Find the current location of your van."
+              icon={<MapPinIcon className="h-12 w-12 text-tool-darkgreen" />}
+            />
+
+            {/* Trip Creation Tool */}
+            <ToolCard
+              title="Create a Trip"
+              description="Plan your trip from your current location and choose your destinations."
+              icon={<MapIcon className="h-12 w-12 text-tool-darkgreen" />}
+            />
+
+            {/* Guide and Van Review Tool */}
+            <ToolCard
+              title="Guide & Van Reviews"
+              description="Read reviews from other travelers on guides and vans."
+              icon={
+                <ClipboardDocumentIcon className="h-12 w-12 text-tool-darkgreen" />
+              }
+            />
+
+            {/* Van Location from a Guide Tool */}
+            <ToolCard
+              title="Van Location from Guide"
+              description="Get recommendations for van locations from expert guides."
+              icon={<TruckIcon className="h-12 w-12 text-tool-darkgreen" />}
+            />
+          </div>
+        </div>
+      </section>
     </MainLayout>
   );
 };
