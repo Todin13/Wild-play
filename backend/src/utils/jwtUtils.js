@@ -30,20 +30,16 @@ const setTokenCookie = (res, user) => {
     // Set the JWT token as a cookie
     res.cookie("__wild_app_token", token, {
         httpOnly: false,      
-        secure: true, 
-        sameSite: "none", // Prevent CORS issue
-        domain: "https://wild-play-api-git-userpage-todin13s-projects.vercel.app", // makes it usable across subdomains
-        path: "/"  
+        secure: false, 
+        sameSite: "lax", // Prevent CORS issue
     });
 };
 
 const clearCookie = (req, res) => {
     res.cookie("__wild_app_token", "", {
         httpOnly: false,      
-        secure: true, 
-        sameSite: "none",
-        domain: "https://wild-play-api-git-userpage-todin13s-projects.vercel.app", // makes it usable across subdomains
-        path: "/" ,
+        secure: false, 
+        sameSite: "lax",
         maxAge: 0        // Immediately expires the cookie
     });
 };

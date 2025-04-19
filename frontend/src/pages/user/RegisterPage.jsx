@@ -66,7 +66,7 @@ export const EyeFilledIcon = (props) => { // Code from heroUI for password desgi
 };
 
 export default function Register() {
-  const { handleRegister, loading, error, countryCodes, selectedCode, setSelectedCode, success } = useRegister();
+  const { handleRegister, loading, error, countryCodes, selectedCode, setSelectedCode, success, setError } = useRegister();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -102,7 +102,7 @@ export default function Register() {
   const onSubmit = (e) => {
     e.preventDefault();
     if (password !== confirmPw) {
-      alert("Password doesn't match");
+      setError("Password doesn't match");
       return;
     }
 

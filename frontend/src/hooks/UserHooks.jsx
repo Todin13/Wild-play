@@ -75,14 +75,14 @@ export const useRegister = () => {
         }
 
       } catch (err) {
-        setError("Something went wrong");
+        setError(err.message);
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
   
-    return { handleRegister, loading, error,countryCodes, selectedCode, setSelectedCode, success}; // Set default to 353 or first code if not found
+    return { handleRegister, loading, error,countryCodes, selectedCode, setSelectedCode, success, setError}; // Set default to 353 or first code if not found
 };
 
 export const useProfile = () => {
