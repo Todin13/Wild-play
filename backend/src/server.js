@@ -70,6 +70,7 @@ app.use("/help", helpRoute);
 app.use("/api/users", userRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/campers", campersRoutes);
+app.use("/api/campers?", campersRoutes);
 app.use("/api/deals", dealsRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/trips", tripRoutes);
