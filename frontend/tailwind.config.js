@@ -45,6 +45,17 @@ export default {
 
         // Updated intro-card color to align with theme
         "intro-card": "hsl(140, 25%, 95%)", // Lighter, muted green for the card background
+        voga: {
+          background: "#F0F8F4", // Soft, light green background
+          card: "#FFFFFF", // White for card
+          border: "#D1E7D1", // Light green border
+          title: "#3A5A40", // Darker green for title
+          text: "#5D6F56", // Muted green text
+          textMuted: "#A3B59C", // Lighter green-gray for muted text
+          accent: "#7A9D72", // Soft green accent
+          highlight: "#A8D0A1", // Soft, pastel green highlight
+          dark: "#2D4A34", // Deep, forest green for dark text or accents
+        },
       },
       boxShadow: {
         card: "0 6px 12px rgba(0, 0, 0, 0.15)", // Deeper shadow for the card

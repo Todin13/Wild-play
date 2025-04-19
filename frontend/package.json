@@ -12,6 +12,8 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@heroui/react": "^2.7.6",
+    "axios": "^1.8.4",
+    "dayjs": "^1.11.13",
     "framer-motion": "^12.7.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
