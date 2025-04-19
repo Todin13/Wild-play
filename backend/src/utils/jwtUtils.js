@@ -32,7 +32,6 @@ const setTokenCookie = (res, user) => {
         httpOnly: false,      
         secure: true, 
         sameSite: "none", // Prevent CORS issue
-        domain: "http://localhost:5173",
     });
 };
 
@@ -41,7 +40,6 @@ const clearCookie = (req, res) => {
         httpOnly: false,      
         secure: true, 
         sameSite: "none",
-        domain: "http://localhost:5173",
         maxAge: 0        // Immediately expires the cookie
     });
 };
