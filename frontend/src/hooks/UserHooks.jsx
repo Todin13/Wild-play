@@ -371,8 +371,6 @@ export function useUserDashboard() {
           const decodedToken = jwtDecode(token);
           
           setUserType(decodedToken.user_type);
-          
-          // Use the information as needed
         } catch (error) {
           console.error("Invalid token:", error);
         }
