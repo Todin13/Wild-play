@@ -9,12 +9,12 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    proxy: {
-      "/api": {
-        target: "https://wild-play-api.vercel.app",
-        changeOrigin: true,
-      },
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     "/api": {
+  //       target: "https://wild-play-api.vercel.app",
+  //       changeOrigin: true,
+  //     },
+  //   },
+  // },
 });
