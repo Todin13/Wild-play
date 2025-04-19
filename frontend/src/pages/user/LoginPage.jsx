@@ -82,7 +82,7 @@ export default function LoginPage() {
 
   return (
     <MainLayout>
-    <div className="flex flex-col flex-wrap justify-center items-center gap-4 mb-5 mt-20 md:flex-nowrap">
+    <div className="flex flex-col flex-wrap justify-center items-center gap-4 mb-5 mt-20 md:flex-nowrap custom-font-input">
       {error &&
         <div key="danger" className="w-full flex items-center my-3 max-w-4xl">
           <Alert color="danger" title={error} />

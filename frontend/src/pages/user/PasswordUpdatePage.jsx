@@ -78,7 +78,7 @@ function PasswordUpdate() {
   return (
     <MainLayout>
     <>
-      <div className="flex flex-col flex-wrap justify-center items-center max-w-4xl mx-auto md:flex-nowrap gap-4 mb-5 mt-5">
+      <div className="flex flex-col flex-wrap justify-center items-center max-w-4xl mx-auto md:flex-nowrap gap-4 mb-5 mt-5 custom-font-input">
         {error &&
           <div key="danger" className="w-full flex items-center my-3 max-w-4xl">
             <Alert color="danger" title={error} />

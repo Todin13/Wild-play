@@ -11,6 +11,10 @@
   display: none;
 }
 
+.custom-font-input {
+  font-family: Comic Sans MS, Comic Sans, cursive;
+}
+
 @media (max-width: 850px) {
   .desktop-only {
     display: none !important;

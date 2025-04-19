@@ -8,7 +8,7 @@ function UserDetail() {
 
   return (
     <MainLayout>
-    <div className="flex flex-col flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-5 max-w-4xl mx-auto">
+    <div className="flex flex-col flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-5 max-w-4xl mx-auto custom-font-input">
       {loading ? (
         <p>Loading user data...</p>
       ) : (

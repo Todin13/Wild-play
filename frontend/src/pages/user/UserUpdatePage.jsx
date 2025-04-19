@@ -37,7 +37,7 @@ const UserUpdatePage = () => {
 
   return (
     <MainLayout>
-    <div className="flex flex-col w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 max-w-4xl mx-auto">
+    <div className="flex flex-col w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 max-w-4xl mx-auto custom-font-input">
       {error &&
         <div key="danger" className="w-full flex items-center my-3 max-w-4xl">
           <Alert color="danger" title={error} />
