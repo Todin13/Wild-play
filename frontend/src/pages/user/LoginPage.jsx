@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLogin } from '@/hooks/UserHooks';
-import { Input, Button, Alert, Link } from "@heroui/react";
+import { Link } from 'react-router-dom';
+import { Input, Button, Alert } from "@heroui/react";
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 
@@ -137,7 +138,7 @@ export default function LoginPage() {
         </div>
 
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mt-5 mb-5">
-          Don't have an account? <Link isBlock showAnchorIcon color="success" href="/register"> Sign Up</Link>
+          Don't have an account? <Link to="/register"><Button color="primary" size="sm" variant="light">Sign Up</Button></Link>
         </div>
       </form>
     </div>

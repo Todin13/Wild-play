@@ -2,13 +2,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
 import ContactUs from "@/pages/ContactUs";
 import AboutUs from "@/pages/AboutUs";
-import Register from "@/modules/users/RegisterPage";
-import Login from "@/modules/users/LoginPage";
-import Profile from "@/modules/users/UserProfilePage";
-import Update from "@/modules/users/UserUpdatePage";
-import PwUpdate from "@/modules/users/PasswordUpdatePage";
-import UserTable from "@/modules/users/UserTablePage";
-import UserDetail from "@/modules/users/UserDetailPage";
+import Register from "@/pages/user/RegisterPage";
+import Login from "@/pages/user/LoginPage";
+import Profile from "@/pages/user/UserProfilePage";
+import Update from "@/pages/user/UserUpdatePage";
+import PwUpdate from "@/pages/user/PasswordUpdatePage";
+import UserTable from "@/pages/user/UserTablePage";
+import UserDetail from "@/pages/user/UserDetailPage";
 
 const AppRouter = () => (
   <BrowserRouter>

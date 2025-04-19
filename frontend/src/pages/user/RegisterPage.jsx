@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRegister } from "@/hooks/UserHooks";
-import { Input, Button, Select, SelectItem, Alert, Link } from "@heroui/react";
+import { Link } from 'react-router-dom';
+import { Input, Button, Select, SelectItem, Alert } from "@heroui/react";
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 
@@ -207,7 +208,7 @@ export default function Register() {
       </div>
 
       <div className="flex justify-center items-center md:flex-nowrap gap-4 mt-5 mb-5">
-        Already have an account? <Link isBlock showAnchorIcon color="success" href="/login"> Sign In</Link>
+        Already have an account? <Link to="/login"><Button color="primary" size="sm" variant="light">Sign In</Button></Link>
       </div>
     </form>
     </div>
