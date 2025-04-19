@@ -1,26 +1,16 @@
-import { Routes, Route } from "react-router-dom";
-import Register from "../pages/RegisterPage";
-import Login from "../pages/LoginPage";
-import Profile from "../pages/UserProfilePage";
-import User from "../pages/UserDashboardPage";
-import Update from "../pages/UserUpdatePage";
-import PwUpdate from "../pages/PasswordUpdatePage";
-import UserTable from "../pages/UserTablePage";
-import UserDetail from "../pages/UserDetailPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "@/pages/Home";
+import ContactUs from "@/pages/ContactUs";
+import AboutUs from "@/pages/AboutUs";
 
-function AppRoutes() {
-  return (
+const AppRouter = () => (
+  <BrowserRouter>
     <Routes>
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/update" element={<Update />} />
-      <Route path="/pwupd" element={<PwUpdate />} />
-      <Route path="/dashboard" element={<User />} />
-      <Route path="/userTable" element={<UserTable />} />
-      <Route path="/userDetail" element={<UserDetail />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/contact" element={<ContactUs />} />
+      <Route path="/about" element={<AboutUs />} />
     </Routes>
-  );
-}
+  </BrowserRouter>
+);
 
-export default AppRoutes;
+export default AppRouter;
