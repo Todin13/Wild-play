@@ -1,5 +1,6 @@
 import { useProfile } from "@/hooks/UserHooks";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Link} from "@heroui/react";
+import { Link } from 'react-router-dom';
+import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/react";
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 
@@ -121,8 +122,8 @@ export default function Profile() {
         </Table>
 
           <div className="flex w-full flex-wrap justify-center md:flex-nowrap gap-4 mt-5 mb-5">
-            <Link isBlock showAnchorIcon color="success" href="/update">Update Profile</Link>
-            <Link isBlock showAnchorIcon color="success" href="/pwupd">Update Password</Link>
+            <Link to="/update">Update Profile</Link>
+            <Link to="/pwupd">Update Password</Link>
           </div>
         </>
       ) : (

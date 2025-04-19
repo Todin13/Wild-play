@@ -138,7 +138,7 @@ export default function LoginPage() {
         </div>
 
         <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mt-5 mb-5">
-          Don't have an account? <Link to="/register">Sign Up</Link>
+          Don't have an account?<Button><Link to="/register">Sign Up</Link></Button>
         </div>
       </form>
     </div>
