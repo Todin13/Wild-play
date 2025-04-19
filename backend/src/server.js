@@ -33,7 +33,6 @@ const allowedOrigins = [
   "https://wild-play-todin13s-projects.vercel.app",
   "https://wild-play-git-userpage-todin13s-projects.vercel.app",
   "https://wild-play-git-searchpage-todin13s-projects.vercel.app",
-  "https://wild-play-git-fixing-cors-todin13s-projects.vercel.app",
 ];
 
 // Set up CORS middleware to allow only whitelisted origins and enable cookies
