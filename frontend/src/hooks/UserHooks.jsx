@@ -237,12 +237,13 @@ export function usePasswordUpdate() {
       setError("");
       setSuccess("");
 
-      if(password === null || confirmPw === null){
+      // Simple PW validation
+      if(!password || !confirmPw){
         setError("Please fill in the field");
         return;
       }
 
-      if (password !== confirmPw) { // Simple PW validation
+      if (password !== confirmPw) {
         setError("Password doesn't match");
         return;
       }

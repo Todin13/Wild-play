@@ -80,7 +80,7 @@ function PasswordUpdate() {
     <>
       <div className="flex flex-col flex-wrap justify-center items-center max-w-4xl mx-auto md:flex-nowrap gap-4 mb-5 mt-5">
         {error &&
-          <div key="danger" className="w-full flex items-center my-3">
+          <div key="danger" className="w-full flex items-center my-3 max-w-4xl">
             <Alert color="danger" title={error} />
           </div>
         }
