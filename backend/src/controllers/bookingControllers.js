@@ -189,7 +189,8 @@ const cancelBooking = async (req, res) => {
     const { booking_id } = req.params;
   
     try {
-      const booking = await Booking.findById(booking_id);
+      // Populate the van_id to get the full Van object
+      const booking = await Booking.findById(booking_id).populate("van_id");
   
       if (!booking) {
         return res.status(404).json({ message: "Booking not found" });
@@ -199,11 +200,18 @@ const cancelBooking = async (req, res) => {
         return res.status(400).json({ message: "Booking is already cancelled" });
       }
   
+      // Cancel booking
       booking.status = "CANCELLED";
+      await booking.save();
   
-      const updatedBooking = await booking.save();
+      // Set van to available and save
+      const van = booking.van_id;
+      if (van) {
+        van.isAvailable = true;
+        await van.save();
+      }
   
-      res.status(200).json(updatedBooking);
+      res.status(200).json(booking);
     } catch (err) {
       console.error("Error cancelling booking:", err);
       res.status(500).json({ message: "Server error while cancelling booking" });
