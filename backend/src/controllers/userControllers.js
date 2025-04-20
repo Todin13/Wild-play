@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
     // Generate JWT token
     setTokenCookie(res, user);
 
-    res.status(200).json({ message: "Login successful!"});
+    res.status(200).json({ message: "Login successful!", user: user});
     console.log("Login user:\n", user);
   } catch (error) {
     res.status(500).json({ error: error.message }); // Handle server errors
