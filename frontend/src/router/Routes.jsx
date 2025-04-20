@@ -1,5 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
+import GuideSearchPage from "@/pages/SearchGuidePage";
+import GuideDetailPage from "@/pages/GuideDetailPage";
 import ContactUs from "@/pages/ContactUs";
 import AboutUs from "@/pages/AboutUs";
 import Register from "@/pages/user/RegisterPage";
@@ -40,8 +42,8 @@ const AppRoutes = () => (
       <Route path="/campervans" element={<Campervans />}/>
       <Route path="/deals" element={<Deals />} />
       <Route path="/admin" element={<AdminDashboard />} />
-      {/* Add more routes as needed */}
-      {/* Catch-all route for 404 */}
+      <Route path="/search-guides" element={<GuideSearchPage />} />
+      <Route path="/guides" element={<GuideDetailPage />} />
     </Routes>
 );
 
