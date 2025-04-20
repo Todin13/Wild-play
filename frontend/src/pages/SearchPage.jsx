@@ -28,17 +28,18 @@ export default function SearchPage() {
   useEffect(() => {
     async function loadDefaults() {
       try {
-        const [vansRes, dealsRes, guidesRes] = await Promise.all([
-          fetch("http://localhost:5050/api/campers"),
-          fetch("http://localhost:5050/api/deals"),
-          fetch("http://localhost:5050/api/guides")
+         const [ vansRes, dealsRes, guidesRes ] = await Promise.all([
+          API.get('/campers'),
+          API.get('/deals'),
+          API.get('/guides'),
         ]);
         if (!vansRes.ok || !dealsRes.ok || !guidesRes.ok) {
           throw new Error("Failed to fetch default data");
         }
-        const vansData = await vansRes.json();
-        const dealsData = await dealsRes.json();
-        const guidesData = await guidesRes.json();
+        // responses from axios are under `.data`
+        const vansData   = vansRes.data;
+        const dealsData  = dealsRes.data;
+        const guidesData = guidesRes.data;
 
         const vansList = Array.isArray(vansData.campers) ? vansData.campers : [];
         const dealsList = Array.isArray(dealsData.deals) ? dealsData.deals : [];

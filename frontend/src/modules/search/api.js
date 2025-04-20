@@ -1,33 +1,22 @@
 import API from '@/utils/api';
 
 export default async function handler(req, res) {
-   
-  
-    try {
-      const backendRes = await fetch(
-        `http://localhost:5050/api/search?keyword=${encodeURIComponent(keyword)}`
-      );
-      if (!backendRes.ok) {
-        return res.status(backendRes.status).json({ error: backendRes.statusText });
-      }
-      const data = await backendRes.json();
-      return res.status(200).json(data);
-    } catch (err) {
-      return res.status(500).json({ error: 'Internal server error' });
-    }
+  const { keyword } = req.query;
+  if (!keyword || typeof keyword !== 'string') {
+    return res.status(400).json({ error: 'Missing or invalid search keyword' });
   }
 
-  // Get all vans with optional filtering
-  export const getAllSearch = async () => {
-    try {
-      const { keyword } = req.query;
-      if (!keyword) return res.status(400).json({ error: 'Keyword required' });
-      const response = await API.get(`/search?${keyword}`);
-      return response.data;
-    } catch (error) {
-      console.error('Failed to fetch data', error);
-      throw error;
-    }
-  };
-  
-  
+  try {
+    
+    const response = await API.get('/search', { params: { keyword } });
+    return res.status(200).json(response.data);
+  } catch (err) {
+    const status = err.response?.status || 500;
+    const message =
+      err.response?.data?.error ||
+      err.response?.statusText ||
+      err.message ||
+      'Internal server error';
+    return res.status(status).json({ error: message });
+  }
+}
