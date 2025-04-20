@@ -10,7 +10,7 @@ const ContactUs = () => {
     <MainLayout>
       <section className="max-w-4xl mx-auto px-6 py-16 text-center text-text">
         <Title variant="page" className="mb-6 text-title">
-          Contact Us {user.username}
+          Contact Usss {user.username}
         </Title>
         <p className="text-lg mb-8 text-textMuted">
           Have a project in mind? Want to collaborate? Just feel like saying hi?
