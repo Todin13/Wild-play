@@ -58,16 +58,17 @@ function UserTable() {
           checked={isChecked}
           onChange={handleBirthdateChecked}
         >
+        </Checkbox>
         <Input 
           label="Date of Birth" 
-          size='lg' 
+          size='sm' 
           variant="underlined"
           type="date"
+          className="max-w-xs"
           disabled={!isChecked}
           value={birthdate}
           onChange={handleBirthdate}
         />
-        </Checkbox>
       </div>
 
       <div>

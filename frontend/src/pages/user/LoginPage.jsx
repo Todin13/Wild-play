@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLogin } from '@/hooks/UserHooks';
+import { useUser } from '@/hooks/UserHooks'; // Import this to use UserContext
 import { Link } from 'react-router-dom';
 import { Input, Button, Alert } from "@heroui/react";
 import MainLayout from "@/layouts/MainLayout";
@@ -66,7 +66,8 @@ export const EyeFilledIcon = (props) => { // Code from heroUI for password desgi
 };
 
 export default function LoginPage() {
-  const { handleLogin, loading, error, success } = useLogin();
+  const { handleLogin, loading, error, success, user } = useUser();
+  console.log("User logged in !!!",user); // use this to get user
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

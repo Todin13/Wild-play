@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
 import ContactUs from "@/pages/ContactUs";
 import AboutUs from "@/pages/AboutUs";
@@ -11,7 +11,6 @@ import UserTable from "@/pages/user/UserTablePage";
 import UserDetail from "@/pages/user/UserDetailPage";
 
 const AppRouter = () => (
-  <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/contact" element={<ContactUs />} />
@@ -24,7 +23,6 @@ const AppRouter = () => (
       <Route path="/userTable" element={<UserTable />} />
       <Route path="/userDetail" element={<UserDetail />} />
     </Routes>
-  </BrowserRouter>
 );
 
 export default AppRouter;

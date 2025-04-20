@@ -1,8 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext, createContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { loginUser, registerUser, fetchUserProfile, fetchCountryCodes, updateUserProfile, updatePassword, fetchUsers, searchUsers, deleteUserById, getUserDetail, logoutUser, checkLoginStatus } from '../modules/users/api';
 
-export const useLogin = () => {
+const UserContext = createContext();
+
+export const useUser = () => useContext(UserContext);
+
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -14,9 +19,11 @@ export const useLogin = () => {
 
     try {
       const data = await loginUser(email, password); // Call API
+      console.log("test",data.user);
 
       if (data.message === "Login successful!") {
         setSuccess(data.message);
+        setUser(data.user);
         navigate("/");
       } else {
         setError(data.message);
@@ -29,7 +36,11 @@ export const useLogin = () => {
     }
   };
 
-  return { handleLogin, loading, error, success };
+  return (
+    <UserContext.Provider value={{ user, loading, error, success, handleLogin }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export const useRegister = () => {
@@ -358,6 +369,8 @@ export function useUserDetail() {
 export function useUserDashboard() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userType, setUserType] = useState(null);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
   
     useEffect(() => {
       const fetchUser = async () => {
@@ -367,7 +380,14 @@ export function useUserDashboard() {
           if (res && res.data && res.data.user) {
             console.log("User is logged in:", res.data.user);
             setIsLoggedIn(true);
-            setUserType(res.data.user.user_type); // or res.data.user.user_type
+            setUserType(res.data.user.user_type);
+
+            const { ok, data } = await fetchUserProfile();
+
+            if (ok) {
+              setUser(data);
+              console.log("User logged in:",data);
+            }
           } else {
             console.log("No valid cookie or user not logged in.");
             setUserType(null);
@@ -375,20 +395,28 @@ export function useUserDashboard() {
         } catch (err) {
           console.error("Login check failed:", err);
           setUserType(null); // Not logged in
+        }finally{
+          setTimeout(() => {
+            setLoading(false);
+          }, 100);
         }
       };
   
       fetchUser();
     }, []);
-
-    const handleLogout = async () => {
-      const result = await logoutUser(); // Call API
-      if (result.success) {
-        window.location.href = "/";
-      } else {
-        alert(result.message);
-      }
-    };
   
-    return { isLoggedIn, handleLogout, userType };
+    return { isLoggedIn, userType, user, loading };
+};
+
+export function useUserLogout() {
+  const handleLogout = async () => {
+    const result = await logoutUser(); // Call API
+    if (result.success) {
+      window.location.href = "/";
+    } else {
+      alert(result.message);
+    }
+  };
+
+  return handleLogout;
 };
