@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
 import GuideDetailCard from "@/components/ui/GuideDetail";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useReviews } from "@/hooks/ReviewsHooks";
+import ReviewCarousel from "@/modules/reviews/carousel";
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -25,6 +27,9 @@ const GuideDetailPage = () => {
     firstLocation?.lat && firstLocation?.lon
       ? [firstLocation.lat, firstLocation.lon]
       : [48.8566, 2.3522]; // fallback to Paris
+
+  // Fetch reviews using the custom hook
+  const { reviews, loading, error } = useReviews("guide", guide?._id);
 
   return (
     <MainLayout>
@@ -75,7 +80,7 @@ const GuideDetailPage = () => {
 
                 {/* Custom Bottom Popup */}
                 {selectedLocation && (
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] h-auto min-h-[15%] max-h-[30%] bg-white/90 backdrop-blur-md shadow-lg rounded-xl border border-emerald-300 px-6 py-4 flex items-center justify-between z-[1000]">
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] h-auto min-h-[15%] max-h-[30%] bg-white/90 backdrop-blur-md shadow-lg rounded-xl px-6 py-4 flex items-center justify-between z-[1000]">
                     <div className="w-full">
                       <h3 className="text-2xl font-bold text-emerald-800">
                         {selectedLocation.name}
@@ -99,6 +104,22 @@ const GuideDetailPage = () => {
                 )}
               </div>
             </div>
+          )}
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-12">
+          <h2 className="text-3xl font-semibold text-voga-title mb-6 text-center ">
+            Reviews
+          </h2>
+          {loading ? (
+            <p className="text-center text-xl">Loading reviews...</p>
+          ) : error ? (
+            <p className="text-red-600 text-xl">{error}</p>
+          ) : reviews.length > 0 ? (
+            <ReviewCarousel reviews={reviews} /> // Use ReviewCarousel here
+          ) : (
+            <p className="text-center text-xl">No reviews yet.</p>
           )}
         </div>
       </section>
