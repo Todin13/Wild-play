@@ -2,7 +2,7 @@ import React from "react";
 import MainLayout from "@/layouts/MainLayout";
 import Title from "@/components/ui/Titles";
 import Button from "@/components/ui/Buttons";
-import { useUser } from "@/hooks/UserHook";
+import { useUser } from "@/hooks/UserHooks";
 
 const ContactUs = () => {
   const {user} = useUser();
