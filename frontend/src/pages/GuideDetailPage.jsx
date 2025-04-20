@@ -1,14 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
 import GuideDetailCard from "@/components/ui/GuideDetail";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Tooltip,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -24,8 +18,7 @@ L.Icon.Default.mergeOptions({
 const GuideDetailPage = () => {
   const location = useLocation();
   const { guide } = location.state || {};
-
-  const mapRef = useRef(null);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   const firstLocation = guide?.locations?.[0];
   const defaultCenter =
@@ -33,27 +26,10 @@ const GuideDetailPage = () => {
       ? [firstLocation.lat, firstLocation.lon]
       : [48.8566, 2.3522]; // fallback to Paris
 
-  // Fix map not resizing correctly when shown in sticky/flex layout
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (mapRef.current) {
-        mapRef.current.invalidateSize();
-        mapRef.current.setView(defaultCenter);
-      }
-    }, 300); // slight delay to ensure DOM is ready
-
-    return () => clearTimeout(timer);
-  }, [defaultCenter]);
-
   return (
     <MainLayout>
       <section className="px-4 lg:px-12 py-12 mx-auto min-w-[95vw]">
-        <div
-          className="
-            flex flex-col items-center gap-6
-            lg:flex-row lg:gap-24 lg:justify-center
-          "
-        >
+        <div className="flex flex-col items-center gap-6 lg:flex-row lg:gap-20 lg:justify-center">
           {/* Guide Card */}
           <div className="w-full lg:w-[45%] max-w-[525px]">
             <GuideDetailCard guide={guide} />
@@ -61,16 +37,13 @@ const GuideDetailPage = () => {
 
           {/* Map */}
           {guide.locations && guide.locations.length > 0 && (
-            <div className="w-full lg:w-[50%] sticky top-24 h-[50vh] lg:h-[80vh]">
-              <div className="w-full h-full rounded-3xl overflow-hidden shadow-lg border border-voga-border">
+            <div className="w-full lg:w-[50%] sticky top-24 h-[50vh] lg:h-[80vh] relative">
+              <div className="w-full h-full rounded-3xl overflow-hidden shadow-lg border border-voga-border relative">
                 <MapContainer
                   center={defaultCenter}
                   zoom={6}
                   scrollWheelZoom
-                  className="h-full w-full"
-                  whenCreated={(mapInstance) => {
-                    mapRef.current = mapInstance;
-                  }}
+                  className="h-full w-full z-0"
                 >
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -78,19 +51,52 @@ const GuideDetailPage = () => {
                   />
                   {guide.locations.map((loc, idx) =>
                     loc.lat && loc.lon ? (
-                      <Marker key={idx} position={[loc.lat, loc.lon]}>
-                        <Popup>
-                          <strong>{loc.name}</strong>
-                          <br />
-                          {loc.section}
-                        </Popup>
-                        <Tooltip direction="top" offset={[0, -10]} opacity={1}>
+                      <Marker
+                        key={idx}
+                        position={[loc.lat, loc.lon]}
+                        eventHandlers={{
+                          click: () => {
+                            setSelectedLocation(loc);
+                          },
+                        }}
+                      >
+                        <Tooltip
+                          direction="top"
+                          offset={[0, -10]}
+                          opacity={1}
+                          className="!bg-white/80 text-emerald-800 font-semibold px-4 py-2 text-lg rounded-xl shadow-lg backdrop-blur-sm border border-emerald-300"
+                        >
                           {loc.name}
                         </Tooltip>
                       </Marker>
                     ) : null
                   )}
                 </MapContainer>
+
+                {/* Custom Bottom Popup */}
+                {selectedLocation && (
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] h-auto min-h-[15%] max-h-[30%] bg-white/90 backdrop-blur-md shadow-lg rounded-xl border border-emerald-300 px-6 py-4 flex items-center justify-between z-[1000]">
+                    <div className="w-full">
+                      <h3 className="text-2xl font-bold text-emerald-800">
+                        {selectedLocation.name}
+                      </h3>
+                      <p className="text-lg text-gray-700 italic mb-1">
+                        {selectedLocation.section}
+                      </p>
+                      {selectedLocation.info && (
+                        <p className="text-lg text-gray-600">
+                          {selectedLocation.info}
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      className="text-md text-gray-500 hover:text-gray-800 ml-4 whitespace-nowrap"
+                      onClick={() => setSelectedLocation(null)}
+                    >
+                      Close
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
