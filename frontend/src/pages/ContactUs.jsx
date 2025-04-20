@@ -2,9 +2,11 @@ import React from "react";
 import MainLayout from "@/layouts/MainLayout";
 import Title from "@/components/ui/Titles";
 import Button from "@/components/ui/Buttons";
+import { useUser } from "@/hooks/UserHook";
 
 const ContactUs = () => {
-
+  const {user} = useUser();
+  console.log(user);
   return (
     <MainLayout>
       <section className="max-w-4xl mx-auto px-6 py-16 text-center text-text">
