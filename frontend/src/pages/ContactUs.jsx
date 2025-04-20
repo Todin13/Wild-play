@@ -6,12 +6,11 @@ import { useUser } from "@/hooks/UserHook";
 
 const ContactUs = () => {
   const {user} = useUser();
-  console.log(user);
   return (
     <MainLayout>
       <section className="max-w-4xl mx-auto px-6 py-16 text-center text-text">
         <Title variant="page" className="mb-6 text-title">
-          Contact Us
+          Contact Us {user.username}
         </Title>
         <p className="text-lg mb-8 text-textMuted">
           Have a project in mind? Want to collaborate? Just feel like saying hi?
