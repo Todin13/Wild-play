@@ -168,7 +168,12 @@ const BookingDetails = () => {
                 </div>
               )}
             </div>
-            <hr className="my-4 border-t-4 border-white rounded-lg" />
+
+            {booking.status !== "CANCELLED" && (
+                <hr className="my-4 border-t-4 border-white rounded-lg" />
+            )}
+
+            
             
             {booking.status !== "CANCELLED" && (
               <div className="">
