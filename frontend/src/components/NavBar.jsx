@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import { MagnifyingGlassIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import "@/assets/styles/navbar.css";
 import { useState } from "react";
+import { useUserDashboard } from "@/hooks/UserHooks";
 
 const TopBar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const { isLoggedIn, user, loading } = useUserDashboard();
 
   const toggleNav = () => {
     setIsNavOpen((prev) => !prev);
@@ -37,9 +39,19 @@ const TopBar = () => {
               <MagnifyingGlassIcon className="h-5 w-5 text-navBarText" />
             </button>
           </div>
-          <Link to="/login" className="topbar-button">
-            Login
-          </Link>
+          {!loading && (
+            isLoggedIn ? (
+              <>
+                <Link to="/profile" className="topbar-button">
+                  <button>{user.detail.username}</button>
+                </Link>
+              </>
+            ) : (
+              <Link to="/login" className="topbar-button">
+                Login
+              </Link>
+            )
+          )}
         </div>
 
         {/* Mobile hamburger (only visible on small screens) */}
@@ -52,9 +64,19 @@ const TopBar = () => {
       {isNavOpen && (
         <div className="topbar-mobile-menu mobile-only">
           <nav className="topbar-nav">
-            <Link to="/login" className="topbar-button text-center">
-              Login
-            </Link>
+          {!loading && (
+            isLoggedIn ? (
+              <>
+                <Link to="/profile" className="topbar-button text-center">
+                  <button>{user.detail.username}</button>
+                </Link>
+              </>
+            ) : (
+              <Link to="/login" className="topbar-button text-center">
+                Login
+              </Link>
+            )
+          )}
             <Link to="/" className="topbar-button">
               Home
             </Link>

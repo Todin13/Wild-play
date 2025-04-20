@@ -10,14 +10,14 @@ const { User } = require('../models');
 const registerUser = async (req, res) => {
 
     try{
-        const {firstname, lastname, email, phone, user_type, birthdate, billing_address, driver_license, username, password } = req.body;
+        const {firstName, lastName, email, phone, user_type, birthdate, billing_address, driver_license, username, password } = req.body;
 
         // Hash password
         const hashedPassword = await hashPassword(password);
 
         const newUser = new User({
-            firstname,
-            lastname, 
+            firstName,
+            lastName, 
             email,
             phone,
             user_type,
@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
     // Generate JWT token
     setTokenCookie(res, user);
 
-    res.status(200).json({ message: "Login successful!"});
+    res.status(200).json({ message: "Login successful!", user: user});
     console.log("Login user:\n", user);
   } catch (error) {
     res.status(500).json({ error: error.message }); // Handle server errors
@@ -75,7 +75,7 @@ const updateUser = async (req, res) => {
 
     const updates = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true, });
 
     if (!updatedUser) {
       return res.status(404).json({ message: 'User not found' });
