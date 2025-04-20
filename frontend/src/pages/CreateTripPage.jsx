@@ -70,6 +70,15 @@ const CreateTripPage = () => {
     }
   };
 
+  const handleMarkerDragEnd = (idx, e) => {
+    const { lat, lng } = e.target.getLatLng();
+    setTripData((prev) => {
+      const updated = [...prev.locations];
+      updated[idx] = { ...updated[idx], lat, lon: lng };
+      return { ...prev, locations: updated };
+    });
+  };
+
   const addNote = () => {
     setTripData((prev) => ({ ...prev, notes: [...prev.notes, ""] }));
   };
@@ -292,11 +301,7 @@ const CreateTripPage = () => {
 
           {/* Map Section */}
           <div className="w-full lg:w-[60%] h-[500px] lg:h-full rounded-3xl overflow-hidden border shadow-md relative z-0">
-            <MapContainer
-              center={[20, 0]}
-              zoom={2}
-              className="w-full h-full"
-            >
+            <MapContainer center={[20, 0]} zoom={2} className="w-full h-full">
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; OpenStreetMap contributors"
@@ -313,6 +318,18 @@ const CreateTripPage = () => {
               {tripData.locations.map((loc, idx) =>
                 loc.lat && loc.lon ? (
                   <Marker key={idx} position={[loc.lat, loc.lon]} />
+                ) : null
+              )}
+              {tripData.locations.map((loc, idx) =>
+                loc.lat || loc.lon ? (
+                  <Marker
+                    key={idx}
+                    position={[loc.lat, loc.lon]}
+                    draggable={true}
+                    eventHandlers={{
+                      dragend: (e) => handleMarkerDragEnd(idx, e),
+                    }}
+                  />
                 ) : null
               )}
             </MapContainer>
