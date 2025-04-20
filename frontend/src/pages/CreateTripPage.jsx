@@ -102,11 +102,11 @@ const CreateTripPage = () => {
 
   return (
     <MainLayout>
-      <div className="w-full max-w-7xl mx-auto p-8">
-        <div className="flex flex-col lg:flex-row gap-8 h-[calc(100vh-4rem)]">
+      <div className="w-full min-w-[95%] p-8">
+        <div className="flex flex-col lg:flex-row gap-8 lg:h-[calc(100vh-4rem)]">
           {/* Form Section */}
           <div
-            className="flex-1 bg-white p-8 rounded-3xl shadow-xl border border-gray-300 space-y-8 overflow-y-auto"
+            className="w-full lg:w-[45%] bg-white p-8 rounded-3xl shadow-xl border border-gray-300 space-y-8 overflow-y-auto"
             style={{ maxHeight: "100%" }}
           >
             <h2 className="text-3xl font-bold text-center text-voga-title">
@@ -160,7 +160,6 @@ const CreateTripPage = () => {
                   <h3 className="text-2xl font-semibold text-voga-title">
                     Locations
                   </h3>
-                  {/* Only show this link on small screens */}
                   <button
                     type="button"
                     className="text-blue-500 underline text-sm block lg:hidden"
@@ -171,7 +170,7 @@ const CreateTripPage = () => {
                 </div>
 
                 {tripData.locations.map((location, index) => (
-                  <div key={index} className="flex gap-4 items-center">
+                  <div key={index} className="flex gap-4 items-center relative">
                     <div className="flex-1 border p-4 rounded-lg space-y-4 bg-gray-50">
                       <div className="grid grid-cols-2 gap-4">
                         <input
@@ -217,14 +216,15 @@ const CreateTripPage = () => {
                         className="w-full p-3 border rounded"
                       />
                     </div>
+
+                    {/* Close button (X) on the right */}
                     {tripData.locations.length > 1 && (
-                      <button
-                        type="button"
+                      <div
                         onClick={() => removeLocation(index)}
-                        className="text-red-500 font-bold hover:underline"
+                        className="absolute top-0 right-0 text-red-500 font-bold cursor-pointer text-xl"
                       >
-                        Delete
-                      </button>
+                        ×
+                      </div>
                     )}
                   </div>
                 ))}
@@ -245,7 +245,7 @@ const CreateTripPage = () => {
                 {tripData.notes.map((note, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-4 justify-center"
+                    className="flex items-center gap-4 justify-center relative"
                   >
                     <textarea
                       value={note}
@@ -253,13 +253,12 @@ const CreateTripPage = () => {
                       className="w-full p-4 border rounded-lg"
                       placeholder={`Note ${index + 1}`}
                     />
-                    <button
-                      type="button"
+                    <div
                       onClick={() => removeNote(index)}
-                      className="text-red-500 font-bold hover:underline"
+                      className="absolute top-0 right-0 text-red-500 font-bold cursor-pointer text-xl"
                     >
-                      Delete
-                    </button>
+                      ×
+                    </div>
                   </div>
                 ))}
                 <div>
@@ -292,11 +291,11 @@ const CreateTripPage = () => {
           </div>
 
           {/* Map Section */}
-          <div className="w-full lg:w-[40%] h-[1000px] rounded-3xl overflow-hidden border shadow-md relative z-0">
+          <div className="w-full lg:w-[60%] h-[500px] lg:h-full rounded-3xl overflow-hidden border shadow-md relative z-0">
             <MapContainer
               center={[20, 0]}
               zoom={2}
-              className="h-full w-full"
+              className="w-full h-full"
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
