@@ -2,15 +2,13 @@ import React from "react";
 import MainLayout from "@/layouts/MainLayout";
 import Title from "@/components/ui/Titles";
 import Button from "@/components/ui/Buttons";
-import { useUser } from "@/hooks/UserHooks";
 
 const ContactUs = () => {
-  const {user} = useUser();
   return (
     <MainLayout>
       <section className="max-w-4xl mx-auto px-6 py-16 text-center text-text">
         <Title variant="page" className="mb-6 text-title">
-          Contact Usss {user.username}
+          Contact Us
         </Title>
         <p className="text-lg mb-8 text-textMuted">
           Have a project in mind? Want to collaborate? Just feel like saying hi?
