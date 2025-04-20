@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
 import GuideDetailCard from "@/components/ui/GuideDetail";
@@ -7,6 +7,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useReviews } from "@/hooks/ReviewsHooks";
 import ReviewCarousel from "@/modules/reviews/carousel";
+import ReviewForm from "@/components/ui/ReviewForm"; // Assuming the ReviewForm component is imported
+import Button from "@/components/ui/Buttons"; // Import the Button component
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -21,6 +23,7 @@ const GuideDetailPage = () => {
   const location = useLocation();
   const { guide } = location.state || {};
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [showReviewForm, setShowReviewForm] = useState(false); // State to control the visibility of the review form modal
 
   const firstLocation = guide?.locations?.[0];
   const defaultCenter =
@@ -29,7 +32,10 @@ const GuideDetailPage = () => {
       : [48.8566, 2.3522]; // fallback to Paris
 
   // Fetch reviews using the custom hook
-  const { reviews, loading, error } = useReviews("guide", guide?._id);
+  const { reviews, reviewsLoading, reviewsError } = useReviews(
+    "guide",
+    guide?._id
+  );
 
   return (
     <MainLayout>
@@ -94,12 +100,12 @@ const GuideDetailPage = () => {
                         </p>
                       )}
                     </div>
-                    <button
-                      className="text-md text-gray-500 hover:text-gray-800 ml-4 whitespace-nowrap"
+                    <Button
+                      variant="primary"
                       onClick={() => setSelectedLocation(null)}
                     >
                       Close
-                    </button>
+                    </Button>
                   </div>
                 )}
               </div>
@@ -108,21 +114,44 @@ const GuideDetailPage = () => {
         </div>
 
         {/* Reviews Section */}
-        <div className="mt-12">
+        <div className="mt-36">
           <h2 className="text-3xl font-semibold text-voga-title mb-6 text-center ">
             Reviews
           </h2>
-          {loading ? (
+          {reviewsLoading ? (
             <p className="text-center text-xl">Loading reviews...</p>
-          ) : error ? (
-            <p className="text-red-600 text-xl">{error}</p>
+          ) : reviewsError ? (
+            <p className="text-red-600 text-xl">{reviewsError}</p>
           ) : reviews.length > 0 ? (
             <ReviewCarousel reviews={reviews} /> // Use ReviewCarousel here
           ) : (
             <p className="text-center text-xl">No reviews yet.</p>
           )}
         </div>
+
+        {/* Button to show Review Form */}
+        <div className="flex justify-center mt-6">
+          <Button
+            variant="primary"
+            onClick={() => setShowReviewForm(true)}
+            className="text-3xl py-6 px-10 font-semibold" // Bigger text, padding, and font weight
+          >
+            Add Your Review
+          </Button>
+        </div>
       </section>
+
+      {/* Pop-up Review Form Modal */}
+      {showReviewForm && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[1000]">
+          {/* Review Form Modal */}
+          <ReviewForm
+            type="guide"
+            id={guide?._id}
+            setShowReviewForm={setShowReviewForm}
+          />
+        </div>
+      )}
     </MainLayout>
   );
 };
