@@ -4,9 +4,11 @@ import "@/assets/styles/navbar.css";
 import { useState } from "react";
 import { useUserDashboard } from "@/hooks/UserHooks";
 
+
 const TopBar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const { isLoggedIn, user, loading } = useUserDashboard();
+  const { isLoggedIn, user, userType, loading } = useUserDashboard();
+  const isAdmin = isLoggedIn && userType === 'ADMIN';
 
   const toggleNav = () => {
     setIsNavOpen((prev) => !prev);
@@ -50,10 +52,17 @@ const TopBar = () => {
               </button>
             </Link>
           </div>
+          {/* Admin dashboard link, shown only to admins */}
+          {isAdmin && (
+            <Link to="/admin" className="topbar-button">
+              Admin Dashboard
+            </Link>
+          )}
+          
           {!loading && (
             isLoggedIn ? (
               <>
-                <Link to="/profile" className="topbar-button">
+               <Link to="/profile" className="topbar-button">
                   <button>{user.detail.username}</button>
                 </Link>
               </>
@@ -88,6 +97,14 @@ const TopBar = () => {
               </Link>
             )
           )}
+
+          {/* Admin dashboard link, shown only to admins */}
+          {isAdmin && (
+            <Link to="/admin" className="ml-4 px-2 py-1 bg-white text-green-800 rounded hover:bg-gray-100">
+              Admin Dashboard
+            </Link>
+          )}
+        
             <Link to="/" className="topbar-button">
               Home
             </Link>
