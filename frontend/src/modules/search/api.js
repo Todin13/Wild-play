@@ -1,6 +1,7 @@
+import API from '@/utils/api';
+
 export default async function handler(req, res) {
-    const { keyword } = req.query;
-    if (!keyword) return res.status(400).json({ error: 'Keyword required' });
+   
   
     try {
       const backendRes = await fetch(
@@ -15,4 +16,18 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Internal server error' });
     }
   }
+
+  // Get all vans with optional filtering
+  export const getAllSearch = async () => {
+    try {
+      const { keyword } = req.query;
+      if (!keyword) return res.status(400).json({ error: 'Keyword required' });
+      const response = await API.get(`/search?${keyword}`);
+      return response.data;
+    } catch (error) {
+      console.error('Failed to fetch data', error);
+      throw error;
+    }
+  };
+  
   

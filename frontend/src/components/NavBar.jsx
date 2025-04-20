@@ -43,10 +43,12 @@ const TopBar = () => {
         {/* Desktop-only */}
         <div className="topbar-right desktop-only">
           <div className="topbar-search">
-            <input type="text" placeholder="Search..." className="w-40" />
-            <button className="topbar-search-button">
-              <MagnifyingGlassIcon className="h-5 w-5 text-navBarText" />
-            </button>
+            <Link to="/search_page">
+              <button className="topbar-search-button">
+                <MagnifyingGlassIcon className="h-5 w-5 text-navBarText" />
+                Search
+              </button>
+            </Link>
           </div>
           {!loading && (
             isLoggedIn ? (

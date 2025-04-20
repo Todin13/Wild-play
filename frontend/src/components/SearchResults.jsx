@@ -1,5 +1,7 @@
 import React from "react";
 import ResultCard from "@/components/ui/ResultCard";
+import CampersCarousel from "@/modules/vans/CampersCarousel";
+import DealsCarousel from "@/modules/deals/carousel";
 
 export default function SearchResults({ results, loading, error }) {
   if (loading) return <p>Loading results...</p>;
@@ -17,10 +19,9 @@ export default function SearchResults({ results, loading, error }) {
       {results.vans?.length > 0 && (
         <section>
           <h3 className="text-xl font-semibold mb-2">Vans</h3>
-          <div className="flex space-x-4 overflow-x-auto pb-4">
-            {results.vans.map((van) => (
-              <ResultCard key={van._id} category="vans" item={van} />
-            ))}
+          <div className="overflow-hidden pb-4">
+            {/* Carousel shows 4 cards and slides one at a time */}
+            <CampersCarousel vans={results.vans} />
           </div>
         </section>
       )}
@@ -47,13 +48,12 @@ export default function SearchResults({ results, loading, error }) {
         </section>
       )}
 
-      {results.deals?.length > 0 && (
+{results.deals?.length > 0 && (
         <section>
           <h3 className="text-xl font-semibold mb-2">Deals</h3>
-          <div className="flex space-x-4 overflow-x-auto pb-4">
-            {results.deals.map((deal) => (
-              <ResultCard key={deal._id} category="deals" item={deal} />
-            ))}
+          <div className="overflow-hidden pb-4">
+            {/* Carousel shows 4 cards and slides one at a time */}
+            <DealsCarousel deals={results.deals} />
           </div>
         </section>
       )}

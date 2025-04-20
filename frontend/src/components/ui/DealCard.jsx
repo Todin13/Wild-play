@@ -7,6 +7,9 @@ import { CurrencyDollarIcon, MapPinIcon, TruckIcon } from '@heroicons/react/24/o
  * - deal: object with fields { id, title, imageUrl, location, price, baseRate, specs: [], linkInfo, linkBook }
  */
 export function DealCard({ deal }) {
+  const specs = Array.isArray(deal.specs) ? deal.specs : [];
+
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
       {/* Deal image */}
@@ -25,13 +28,14 @@ export function DealCard({ deal }) {
 
         {/* Specs list */}
         <ul className="flex-1 space-y-1 text-sm text-gray-700 mb-4">
-          {deal.specs.map((spec, i) => (
+          {specs.map((spec, i) => (
             <li key={i} className="flex items-center">
               <TruckIcon className="w-4 h-4 mr-1 text-gray-500" />
               {spec}
             </li>
           ))}
         </ul>
+
 
         {/* Pricing */}
         <div className="mb-4">
