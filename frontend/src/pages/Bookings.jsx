@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link } from "react-router-dom"; 
 import MainLayout from "@/layouts/MainLayout"; 
 import "@/assets/styles/index.css"; 
+import { CalendarDaysIcon } from "@heroicons/react/24/outline";
+
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -10,7 +12,7 @@ const Bookings = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch("http://localhost:5019/api/bookings/all", {
+        const response = await fetch("http://wild-play-api.vercel.app/api/bookings/all", {
           credentials: "include",
         });
 
@@ -31,7 +33,12 @@ const Bookings = () => {
   }, []);
 
   return (
-    <MainLayout>      
+    <MainLayout>
+      <div className="pt-10 align-self-center flex flex-col items-center text-4xl">
+        <Link to="/bookings/new" className=" bg-green-600 hover:bg-green-800 text-[#e5ebe7] font-bold p-4 px-6 rounded-full shadow-md" >
+          Book a Van
+        </Link>
+      </div>      
       <section className="relative m-8 p-4 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {loading ? (
           <div className="text-center text-lg col-span-full">Loading...</div>
@@ -42,21 +49,23 @@ const Bookings = () => {
             <Link
               key={booking._id}
               to={`/bookings/${booking._id}`} 
-              className="bg-[#dcf2eb] text-center shadow-md rounded-2xl p-4 flex flex-col h-full hover:bg-[#bde0d1]" // Added hover effect
+              className="bg-[#dcf2eb] text-center shadow-md rounded-2xl p-4 flex flex-col h-full hover:bg-[#bde0d1]" 
             >
               <div className="flex justify-between mb-4">
                 <h2 className="text-xl font-bold text-gray-800">
                   {booking?.van_id?.color} {booking?.van_id?.manufacturer} {booking?.van_id?.model}
                 </h2>            
-                <p className="text-gray-500">
+                <div className="text-gray-500 flex items-center justify-end gap-1">
+                  <CalendarDaysIcon className="h-5 w-5 text-gray-500" />
                   <span className="font-bold text-gray-600">
                     {new Date(booking?.start_date).toLocaleDateString()}
-                  </span>{" "} 
-                  to{" "}
+                  </span>
+                  <span>to</span>
                   <span className="font-bold text-gray-600">
                     {new Date(booking?.end_date).toLocaleDateString()}
                   </span>
-                </p>
+                </div>
+                
               </div>
 
               <div className="space-y-2">

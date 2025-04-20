@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 
 const BookingDetails = () => {
   const { booking_id } = useParams();
+  const navigate = useNavigate();
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -12,7 +13,7 @@ const BookingDetails = () => {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5019/api/bookings/${booking_id}`, {
+        const response = await fetch(`http://wild-play-api.vercel.app/api/bookings/${booking_id}`, {
           credentials: "include",
         });
 
@@ -34,7 +35,7 @@ const BookingDetails = () => {
 
   const handleCancelBooking = async () => {
     try {
-      const response = await fetch(`http://localhost:5019/api/bookings/${booking_id}/cancel`, {
+      const response = await fetch(`http://wild-play-api.vercel.app/api/bookings/${booking_id}/cancel`, {
         method: "PATCH",
         credentials: "include",
       });
@@ -46,6 +47,10 @@ const BookingDetails = () => {
       const updatedBooking = await response.json();
       setBooking(updatedBooking);
       setShowConfirm(false);
+
+      setTimeout(() => {
+        navigate("/bookings");
+      }, 500);
     } catch (error) {
       console.error("Error cancelling booking:", error);
       alert("Failed to cancel booking.");
@@ -87,19 +92,19 @@ const BookingDetails = () => {
 
             <div className="space-y-4">
               {booking?.start_date && (
-                <p><span className="font-semibold text-gray-700">Start Date:</span>{" "}{formatDate(booking.start_date)}</p>
+                <p><span className="font-semibold text-gray-700">Start Date:</span> {formatDate(booking.start_date)}</p>
               )}
               {booking?.end_date && (
-                <p><span className="font-semibold text-gray-700">End Date:</span>{" "}{formatDate(booking.end_date)}</p>
+                <p><span className="font-semibold text-gray-700">End Date:</span> {formatDate(booking.end_date)}</p>
               )}
               {booking?.pick_up_location && (
-                <p><span className="font-semibold text-gray-700">Pickup Location:</span>{" "}{booking.pick_up_location}</p>
+                <p><span className="font-semibold text-gray-700">Pickup Location:</span> {booking.pick_up_location}</p>
               )}
               {booking?.return_location && (
-                <p><span className="font-semibold text-gray-700">Return Location:</span>{" "}{booking.return_location}</p>
+                <p><span className="font-semibold text-gray-700">Return Location:</span> {booking.return_location}</p>
               )}
               {booking?.delivery_location && (
-                <p><span className="font-semibold text-gray-700">Delivery Location:</span>{" "}{booking.delivery_location}</p>
+                <p><span className="font-semibold text-gray-700">Delivery Location:</span> {booking.delivery_location}</p>
               )}
               {booking?.promocode && (
                 <p><span className="font-semibold text-gray-700">Promocode:</span> {booking.promocode}</p>
@@ -117,7 +122,7 @@ const BookingDetails = () => {
                 <p><span className="font-semibold text-gray-700">Type:</span> {booking.van_id.type}</p>
               )}
               {booking?.van_id?.manufacturer && (
-                <p><span className="font-semibold text-gray-700">Manufacturer:</span>{" "}{booking.van_id.manufacturer}</p>
+                <p><span className="font-semibold text-gray-700">Manufacturer:</span> {booking.van_id.manufacturer}</p>
               )}
               {booking?.van_id?.model && (
                 <p><span className="font-semibold text-gray-700">Model:</span> {booking.van_id.model}</p>
@@ -144,10 +149,10 @@ const BookingDetails = () => {
                 <p><span className="font-semibold text-gray-700">Weight:</span> {booking.van_id.weight} kg</p>
               )}
               {Array.isArray(booking?.van_id?.dimension) && booking.van_id.dimension.length > 0 && (
-                <p><span className="font-semibold text-gray-700">Dimensions:</span>{" "}{booking.van_id.dimension.join("m x ")}m</p>
+                <p><span className="font-semibold text-gray-700">Dimensions:</span> {booking.van_id.dimension.join("m x ")}m</p>
               )}
               {booking?.van_id?.location && (
-                <p><span className="font-semibold text-gray-700">Location:</span>{" "}{booking.van_id.location}</p>
+                <p><span className="font-semibold text-gray-700">Location:</span> {booking.van_id.location}</p>
               )}
               {booking?.van_id?.info && (
                 <p><span className="font-semibold text-gray-700">Info:</span> {booking.van_id.info}</p>
@@ -170,17 +175,14 @@ const BookingDetails = () => {
             </div>
 
             {booking.status !== "CANCELLED" && (
+              <>
                 <hr className="my-4 border-t-4 border-white rounded-lg" />
-            )}
-
-            
-            
-            {booking.status !== "CANCELLED" && (
-              <div className="">
-                <button onClick={() => setShowConfirm(true)} className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-xl transition" >
-                  Cancel Booking
-                </button>
-              </div>
+                <div>
+                  <button onClick={() => setShowConfirm(true)} className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-full transition">
+                    Cancel Booking
+                  </button>
+                </div>
+              </>
             )}
           </div>
         )}

@@ -3,7 +3,7 @@
 All methods for the booking
 
 */
-const { Booking } = require("../models/index");
+const { Booking, Van } = require("../models/index");
 
 // get all bookings for a given user id
 const getAllBookings = async (req, res) => {
@@ -46,6 +46,8 @@ const getBookingById = async (req, res) => {
 // create new booking
 const setBooking = async (req, res) => { // validate and save new booking data in database
     try {
+        // console.log("recieved data:", req.body);
+        // console.log("user id:", req.user?.id);
         const {
             van_id,
             start_date,
@@ -80,6 +82,7 @@ const setBooking = async (req, res) => { // validate and save new booking data i
         });
 
         const savedBooking = await newBooking.save();   // save new booking
+        await Van.findByIdAndUpdate(van_id, { isAvailable: false });
         res.status(201).json(savedBooking);     // if booking saved return 201
     } catch (error) {
         res.status(500).json({ message: "Error saving booking", error });   // if error return 500
@@ -188,10 +191,8 @@ const deleteBooking = async (req, res) => {
 const cancelBooking = async (req, res) => {
     const { booking_id } = req.params;
   
-    try {
-      // Populate the van_id to get the full Van object
-      const booking = await Booking.findById(booking_id).populate("van_id");
-  
+    try {    
+      const booking = await Booking.findById(booking_id).populate("van_id");  
       if (!booking) {
         return res.status(404).json({ message: "Booking not found" });
       }
@@ -200,11 +201,9 @@ const cancelBooking = async (req, res) => {
         return res.status(400).json({ message: "Booking is already cancelled" });
       }
   
-      // Cancel booking
       booking.status = "CANCELLED";
       await booking.save();
   
-      // Set van to available and save
       const van = booking.van_id;
       if (van) {
         van.isAvailable = true;

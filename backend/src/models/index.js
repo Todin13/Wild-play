@@ -69,7 +69,11 @@ const BookingSchema = new mongoose.Schema({
     amount: { type: Number, required: true },
     delivery_location: {type: String},
     paid: { type: Boolean, default: false },
-    promocode: { type: String, maxLength: 10, minLength: 10},
+    promocode: { type: String, maxLength: 10, minLength: 10, required: false, validate: {
+        validator: (v) => !v || v.length === 10,
+        message: "Promocode must be exactly 10 characters long",
+      },
+    },
 //  trip_id: { type/ mongoose.Schema.Types.ObjectId, ref: "Trip"}
 });
 
@@ -139,8 +143,18 @@ const DealSchema = new mongoose.Schema({
     van_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Van', required: true },
     discount: { type: Number, required: true },
     start_date: { type: Date, required: true },
-    end_date: { type: Date, required: true }
-});
+    end_date: { type: Date, required: true },
+    promocode: {
+      type: String,
+      default: null,
+      validate: {
+        validator: function (v) {
+          return v === null || v.length === 10;
+        },
+        message: 'Promocode must be exactly 10 characters long if provided.',
+      },
+    },
+  });
 
 // export collection of the schema, schema is only the structure of the collection
 module.exports = {

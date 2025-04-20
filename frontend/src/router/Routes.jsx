@@ -11,6 +11,7 @@ import UserTable from "@/pages/user/UserTablePage";
 import UserDetail from "@/pages/user/UserDetailPage";
 import Bookings from "@/pages/Bookings";
 import BookingDetails from "@/pages/BookingDetails";
+import NewBooking from "@/pages/NewBooking";
 
 const AppRouter = () => (
     <Routes>
@@ -26,6 +27,7 @@ const AppRouter = () => (
       <Route path="/userDetail" element={<UserDetail />} />
       <Route path="/bookings" element={<Bookings />} />
       <Route path="/bookings/:booking_id" element={<BookingDetails />} />
+      <Route path="/bookings/new" element={<NewBooking />} />
     </Routes>
 );
 
