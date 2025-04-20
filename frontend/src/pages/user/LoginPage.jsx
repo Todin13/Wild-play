@@ -66,8 +66,7 @@ export const EyeFilledIcon = (props) => { // Code from heroUI for password desgi
 };
 
 export default function LoginPage() {
-  const { handleLogin, loading, error, success, user } = useUser();
-  console.log("User logged in !!!",user); // use this to get user
+  const { handleLogin, loading, error, success } = useUser();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

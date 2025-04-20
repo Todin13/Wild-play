@@ -19,7 +19,6 @@ export const UserProvider = ({ children }) => {
 
     try {
       const data = await loginUser(email, password); // Call API
-      console.log("test",data.user);
 
       if (data.message === "Login successful!") {
         setSuccess(data.message);
@@ -378,7 +377,6 @@ export function useUserDashboard() {
           const res = await checkLoginStatus();
           
           if (res && res.data && res.data.user) {
-            console.log("User is logged in:", res.data.user);
             setIsLoggedIn(true);
             setUserType(res.data.user.user_type);
 
@@ -386,7 +384,6 @@ export function useUserDashboard() {
 
             if (ok) {
               setUser(data);
-              console.log("User logged in:",data);
             }
           } else {
             console.log("No valid cookie or user not logged in.");
