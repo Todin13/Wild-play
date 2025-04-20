@@ -185,7 +185,33 @@ const deleteBooking = async (req, res) => {
     }
 };
 
+const cancelBooking = async (req, res) => {
+    const { booking_id } = req.params;
+  
+    try {
+      const booking = await Booking.findById(booking_id);
+  
+      if (!booking) {
+        return res.status(404).json({ message: "Booking not found" });
+      }
+  
+      if (booking.status === "CANCELLED") {
+        return res.status(400).json({ message: "Booking is already cancelled" });
+      }
+  
+      booking.status = "CANCELLED";
+  
+      const updatedBooking = await booking.save();
+  
+      res.status(200).json(updatedBooking);
+    } catch (err) {
+      console.error("Error cancelling booking:", err);
+      res.status(500).json({ message: "Server error while cancelling booking" });
+    }
+  };
+
 module.exports = { // export booking controllers
+    cancelBooking,
     getAllBookings,
     getBookingById,
     setBooking,
