@@ -29,6 +29,12 @@ const TopBar = () => {
           <Link to="/guide" className="topbar-button">
             Travel Guide
           </Link>
+          <Link to="/campervans" className="topbar-button">
+              Campervans
+          </Link>
+          <Link to="/deals" className="topbar-button">
+            Deals
+          </Link>
         </nav>
       </div>
 
@@ -88,6 +94,12 @@ const TopBar = () => {
             </Link>
             <Link to="/guide" className="topbar-button">
               Travel Guide
+            </Link>
+            <Link to="/campervans" className="topbar-button">
+              Campervans
+            </Link>
+            <Link to="/deals" className="topbar-button">
+              Deals
             </Link>
           </nav>
           <div className="topbar-search">

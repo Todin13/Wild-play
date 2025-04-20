@@ -14,6 +14,9 @@ import BookingDetails from "@/pages/BookingDetails";
 import NewBooking from "@/pages/NewBooking";
 import BookingsCampers from "@/pages/BookingsCampers";
 import VanDetails from "@/pages/VanDetails";
+import SearchPage from "@/pages/SearchPage";
+import Campervans from "@/pages/Campervans"; 
+import Deals from "@/pages/Deals";
 
 const AppRouter = () => (
     <Routes>
@@ -32,7 +35,12 @@ const AppRouter = () => (
       <Route path="/bookings/new" element={<NewBooking />} />
       <Route path="/bookings/campers" element={<BookingsCampers />} />
       <Route path="/bookings/campers/details/:van_id" element={<VanDetails />} /> 
+      <Route path="/search_page" element={<SearchPage />} />
+      <Route path="/campervans" element={<Campervans />}/>
+      <Route path="/deals" element={<Deals />} />
     </Routes>
 );
 
-export default AppRouter;
+    
+
+export default AppRoutes;
