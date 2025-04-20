@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
 import GuideSearchPage from "@/pages/SearchGuidePage";
 import GuideDetailPage from "@/pages/GuideDetailPage";
+import CreateTripPage from "@/pages/CreateTripPage";
 import ContactUs from "@/pages/ContactUs";
 import AboutUs from "@/pages/AboutUs";
 import Register from "@/pages/user/RegisterPage";
@@ -44,6 +45,7 @@ const AppRoutes = () => (
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/search-guides" element={<GuideSearchPage />} />
       <Route path="/guides" element={<GuideDetailPage />} />
+      <Route path="/plan-trip" element={<CreateTripPage />} />
     </Routes>
 );
 
