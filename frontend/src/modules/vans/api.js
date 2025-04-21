@@ -49,7 +49,7 @@ export const updateVan = async (id, vanData) => {
 // Delete a van (camper)
 export const deleteVan = async (id) => {
   try {
-    const response = await API.delete(`/vans/${id}`);
+    const response = await API.delete(`/campers/${id}`);
     return response.data;
   } catch (error) {
     console.error(`Failed to delete van with ID ${id}:`, error);

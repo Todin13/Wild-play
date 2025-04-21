@@ -101,3 +101,17 @@ This folder stores utility functions such as authentication helpers, theme manag
 - `.gitignore` - Lists files and directories to be ignored by Git.
 
 Using this as a template https://dev.to/noruwa/folder-structure-for-modern-web-applications-4d11
+
+## Task Repartition
+
+### Thibaut Hervet
+
+- Search Page - A page to find by a the help of keywords any information a client could search (Campervans, Deals, Trips, Guides, etc...)
+
+- Campervans Page - Show the campervans avaible for rent in little card with short information
+
+- Deals - Display discount on Campervans, Trips that we can propose
+
+### Xiang Yu Oon
+
+- User account - Login Logout gestion with possibility to manage his account (updating informations, modify password, )

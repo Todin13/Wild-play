@@ -14,8 +14,12 @@ import BookingDetails from "@/pages/BookingDetails";
 import NewBooking from "@/pages/NewBooking";
 import BookingsCampers from "@/pages/BookingsCampers";
 import VanDetails from "@/pages/VanDetails";
+import SearchPage from "@/pages/SearchPage";
+import Campervans from "@/pages/Campervans"; 
+import Deals from "@/pages/Deals";
+import AdminDashboard from "@/pages/AdminDashboard"; // Assuming you have an AdminDashboard page
 
-const AppRouter = () => (
+const AppRoutes = () => (
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/contact" element={<ContactUs />} />
@@ -32,7 +36,15 @@ const AppRouter = () => (
       <Route path="/bookings/new" element={<NewBooking />} />
       <Route path="/bookings/campers" element={<BookingsCampers />} />
       <Route path="/bookings/campers/details/:van_id" element={<VanDetails />} /> 
+      <Route path="/search_page" element={<SearchPage />} />
+      <Route path="/campervans" element={<Campervans />}/>
+      <Route path="/deals" element={<Deals />} />
+      <Route path="/admin" element={<AdminDashboard />} />
+      {/* Add more routes as needed */}
+      {/* Catch-all route for 404 */}
     </Routes>
 );
 
-export default AppRouter;
+    
+
+export default AppRoutes;

@@ -4,9 +4,10 @@ import "@/assets/styles/navbar.css";
 import { useState } from "react";
 import { useUserDashboard } from "@/hooks/UserHooks";
 
+
 const TopBar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const { isLoggedIn, user, loading } = useUserDashboard();
+  const { isLoggedIn, user,loading } = useUserDashboard();
 
   const toggleNav = () => {
     setIsNavOpen((prev) => !prev);
@@ -29,6 +30,12 @@ const TopBar = () => {
           <Link to="/guide" className="topbar-button">
             Travel Guide
           </Link>
+          <Link to="/campervans" className="topbar-button">
+              Campervans
+          </Link>
+          <Link to="/deals" className="topbar-button">
+            Deals
+          </Link>
         </nav>
       </div>
 
@@ -37,15 +44,18 @@ const TopBar = () => {
         {/* Desktop-only */}
         <div className="topbar-right desktop-only">
           <div className="topbar-search">
-            <input type="text" placeholder="Search..." className="w-40" />
-            <button className="topbar-search-button">
-              <MagnifyingGlassIcon className="h-5 w-5 text-navBarText" />
-            </button>
+            <Link to="/search_page">
+              <button className="topbar-search-button">
+                Search
+              </button>
+            </Link>
           </div>
+      
+          
           {!loading && (
             isLoggedIn ? (
               <>
-                <Link to="/profile" className="topbar-button">
+               <Link to="/profile" className="topbar-button">
                   <button>{user.detail.username}</button>
                 </Link>
               </>
@@ -80,6 +90,9 @@ const TopBar = () => {
               </Link>
             )
           )}
+
+          
+        
             <Link to="/" className="topbar-button">
               Home
             </Link>
@@ -88,6 +101,12 @@ const TopBar = () => {
             </Link>
             <Link to="/guide" className="topbar-button">
               Travel Guide
+            </Link>
+            <Link to="/campervans" className="topbar-button">
+              Campervans
+            </Link>
+            <Link to="/deals" className="topbar-button">
+              Deals
             </Link>
           </nav>
           <div className="topbar-search">
