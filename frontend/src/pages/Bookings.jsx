@@ -33,12 +33,7 @@ const Bookings = () => {
   }, []);
 
   return (
-    <MainLayout>
-      <div className="pt-10 align-self-center flex flex-col items-center text-4xl">
-        <Link to="/bookings/new" className=" bg-green-600 hover:bg-green-800 text-[#e5ebe7] font-bold p-4 px-6 rounded-full shadow-md" >
-          Book a Van
-        </Link>
-      </div>      
+    <MainLayout>     
       <section className="relative m-8 p-4 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {loading ? (
           <div className="text-center text-lg col-span-full">Loading...</div>

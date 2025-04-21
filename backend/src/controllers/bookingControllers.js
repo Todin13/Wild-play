@@ -217,7 +217,50 @@ const cancelBooking = async (req, res) => {
     }
   };
 
+    const getAvailableCampers = async (req, res) => {
+        try {
+            const { start_date, end_date } = req.query;
+
+            if (!start_date || !end_date) {
+                return res.status(400).json({ message: "Start date and end date are required." });
+            }
+
+            const startDate = new Date(start_date);
+            const endDate = new Date(end_date);
+
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                return res.status(400).json({ message: "Invalid start or end date." });
+            }
+
+            const vans = await Van.find();
+            const bookings = await Booking.find({
+                status: { $in: ['PENDING', 'CONFIRMED'] }
+            });
+
+            const availableVans = vans.filter(van => {
+                const vanIdStr = van._id.toString();
+
+                const hasOverlap = bookings.some(booking => {
+                if (booking.van_id.toString() !== vanIdStr) return false;
+
+                const bookingStart = new Date(booking.start_date);
+                const bookingEnd = new Date(booking.end_date);
+
+                return startDate <= bookingEnd && endDate >= bookingStart;
+                });
+
+                return !hasOverlap;
+            });
+
+            return res.status(200).json({ availableCampers: availableVans });
+            } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Error retrieving available campers", error });
+        }
+    };
+  
 module.exports = { // export booking controllers
+    getAvailableCampers,
     cancelBooking,
     getAllBookings,
     getBookingById,

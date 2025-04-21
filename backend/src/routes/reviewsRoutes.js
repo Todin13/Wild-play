@@ -10,7 +10,7 @@ const { authenticateUser } = require("../middlewares/authMiddlewares.js");
 
 // Van Review Routes
 router.post('/van',authenticateUser, reviewsControllers.createVanReview);
-router.get('/van/:van_id',authenticateUser, reviewsControllers.getVanReviews);
+router.get('/van/:van_id', reviewsControllers.getVanReviews);
 
 // Guide Review Routes
 router.post('/guide', reviewsControllers.createGuideReview);

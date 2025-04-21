@@ -13,7 +13,7 @@ const BookingDetails = () => {
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
-        const response = await fetch(`http://wild-play-api.vercel.app/api/bookings/${booking_id}`, {
+        const response = await fetch(`https://wild-play-api.vercel.app/api/bookings/${booking_id}`, {
           credentials: "include",
         });
 
@@ -35,7 +35,7 @@ const BookingDetails = () => {
 
   const handleCancelBooking = async () => {
     try {
-      const response = await fetch(`http://wild-play-api.vercel.app/api/bookings/${booking_id}/cancel`, {
+      const response = await fetch(`https://wild-play-api.vercel.app/api/bookings/${booking_id}/cancel`, {
         method: "PATCH",
         credentials: "include",
       });

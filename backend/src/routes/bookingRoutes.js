@@ -12,6 +12,10 @@ const { authenticateUser } = require("../middlewares/authMiddlewares");
 // get all bookings for a user
 router.get("/all", authenticateUser, controllers.getAllBookings);
 
+
+// get available campers for a given date range
+router.get("/available_campers", controllers.getAvailableCampers);
+
 // get specific booking by ID
 router.get("/:booking_id", authenticateUser, controllers.getBookingById);
 
@@ -27,6 +31,5 @@ router.patch("/:booking_id/status", authenticateUser, controllers.changeBookingS
 // route to delete a booking
 router.delete("/:booking_id", authenticateUser, controllers.deleteBooking);
 
-router.patch("/:booking_id/cancel", authenticateUser, controllers.cancelBooking);
 
 module.exports = router;
