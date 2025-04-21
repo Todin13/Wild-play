@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
 import TripDetailCard from "@/components/ui/TripDetail";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Button from "@/components/ui/Buttons"; // Import the Button component
+import { useDeleteTrip } from "@/hooks/TripHooks"; // Import the delete hook
+import useNavigationHooks from "@/hooks/NavigationHooks"; // Import the navigation hook
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -18,7 +20,9 @@ L.Icon.Default.mergeOptions({
 
 const TripDetailPage = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // Use navigate hook
   const { trip } = location.state || {};
+  const { removeTrip, deleteLoading } = useDeleteTrip(); // Destructure the delete hook
   const [selectedLocation, setSelectedLocation] = useState(null);
 
   const firstLocation = trip?.locations?.[0];
@@ -26,6 +30,25 @@ const TripDetailPage = () => {
     firstLocation?.lat && firstLocation?.lon
       ? [firstLocation.lat, firstLocation.lon]
       : [48.8566, 2.3522]; // fallback to Paris
+
+  const { goToCreateTripPage } = useNavigationHooks(); // Access custom navigation hook for trip creation
+
+  const handleDeleteTrip = async () => {
+    try {
+      await removeTrip(trip?._id); // Remove the trip using the delete hook
+      alert("Trip deleted successfully!");
+      navigate("/trips"); // Optionally redirect to the trips page
+    } catch (error) {
+      alert(
+        "Error deleting trip: " + (error?.message || "Something went wrong")
+      );
+    }
+  };
+
+  const handleUpdateTrip = () => {
+    // Navigate to the Create Trip Page and pass the trip data via state for update
+    goToCreateTripPage(trip);
+  };
 
   return (
     <MainLayout>
@@ -101,6 +124,26 @@ const TripDetailPage = () => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-center gap-6 mt-6">
+          <Button
+            variant="primary"
+            onClick={handleUpdateTrip}
+            className="text-2xl py-4 px-8 font-semibold"
+          >
+            Update Trip
+          </Button>
+
+          <Button
+            variant="danger"
+            onClick={handleDeleteTrip}
+            disabled={deleteLoading}
+            className="text-2xl py-4 px-8 font-semibold"
+          >
+            {deleteLoading ? "Deleting..." : "Delete Trip"}
+          </Button>
         </div>
       </section>
     </MainLayout>

@@ -10,6 +10,8 @@ import ReviewCarousel from "@/modules/reviews/carousel";
 import ReviewForm from "@/components/ui/ReviewForm"; // Assuming the ReviewForm component is imported
 import Button from "@/components/ui/Buttons"; // Import the Button component
 import { useCreateTripFromGuide } from "@/hooks/TripHooks";
+import useNavigationHooks from "@/hooks/NavigationHooks";
+import CreateTripFromGuideButton from "@/modules/trips/CreateTripButton";
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -40,6 +42,8 @@ const GuideDetailPage = () => {
 
   const { createFromGuide, createFromGuideLoading, createFromGuideError } =
     useCreateTripFromGuide();
+
+  const { goToTripDetail } = useNavigationHooks();
 
   return (
     <MainLayout>
@@ -143,26 +147,7 @@ const GuideDetailPage = () => {
             Add Your Review
           </Button>
 
-          <Button
-            variant="primary"
-            onClick={async () => {
-              try {
-                const createdTrip = await createFromGuide(guide?._id);
-                alert("Trip created successfully!");
-                // Optionally redirect or update UI with `createdTrip` if needed
-              } catch (error) {
-                alert(
-                  createFromGuideError?.message ||
-                    error?.message ||
-                    "Something went wrong while creating the trip."
-                );
-              }
-            }}
-            disabled={createFromGuideLoading}
-            className="text-3xl py-6 px-10 font-semibold"
-          >
-            {createFromGuideLoading ? "Creating..." : "Create Trip from Guide"}
-          </Button>
+          <CreateTripFromGuideButton guideId={guide?._id} />
         </div>
       </section>
 

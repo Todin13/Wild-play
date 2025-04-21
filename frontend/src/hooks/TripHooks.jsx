@@ -40,12 +40,16 @@ export const useCreateTripFromGuide = () => {
   const [createFromGuideLoading, setCreateFromGuideLoading] = useState(false);
   const [createFromGuideError, setCreateFromGuideError] = useState(null);
 
-  const createFromGuide = async (guideId) => {
+  const createFromGuide = async (guideId, start_date, end_date) => {
     setCreateFromGuideLoading(true);
     setCreateFromGuideError(null);
 
     try {
-      const response = await createTripFromGuide(guideId);
+      const response = await createTripFromGuide({
+        guide_id: guideId,
+        start_date: start_date,
+        end_date: end_date,
+      });
       return response;
     } catch (err) {
       setCreateFromGuideError(err);
