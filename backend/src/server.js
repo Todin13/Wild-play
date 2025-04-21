@@ -13,7 +13,7 @@ const allowedOrigins = [
   "https://wild-play.vercel.app",
   "https://wild-play-git-userpage-todin13s-projects.vercel.app",
   "https://wild-play-git-searchpage-todin13s-projects.vercel.app",
-  "https://wild-play-git-search-campervans-deals-todin13s-projects.vercel.app/"
+  "https://wild-play-git-search-campervans-deals-todin13s-projects.vercel.app"
 ];
 
 // Global error handler (ensures CORS headers even on error)
