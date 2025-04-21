@@ -35,7 +35,7 @@ const locationIcon = new L.Icon({
 });
 
 // Helper to capture map instance
-const SetMapRef = ({ setMap }) => {
+const SetGuideMapRef = ({ setMap }) => {
   const map = useMap();
   setMap(map);
   return null;
@@ -220,6 +220,13 @@ const CreateGuidePage = () => {
                   <h3 className="text-2xl font-semibold text-voga-title">
                     Locations
                   </h3>
+                  <button
+                    type="button"
+                    className="text-blue-500 underline text-sm block lg:hidden"
+                    onClick={scrollToMap}
+                  >
+                    Go to Map
+                  </button>
                 </div>
 
                 {guideData.locations.map((location, index) => (
@@ -385,7 +392,7 @@ const CreateGuidePage = () => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; OpenStreetMap contributors"
               />
-              <SetMapRef setMap={setMapInstance} />
+              <SetGuideMapRef setMap={setMapInstance} />
               <LocationPicker
                 onSelect={(latlng) => {
                   const updated = [...guideData.locations];
