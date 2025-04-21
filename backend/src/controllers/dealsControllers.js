@@ -66,6 +66,7 @@ exports.addDeal = async (req, res) => { //Add a deal
             discount: req.body.discount,
             start_date: req.body.start_date,
             end_date: req.body.end_date,
+            promocode: req.body.promocode,
         });
 
         await newDeal.save();

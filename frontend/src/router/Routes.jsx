@@ -9,6 +9,11 @@ import Update from "@/pages/user/UserUpdatePage";
 import PwUpdate from "@/pages/user/PasswordUpdatePage";
 import UserTable from "@/pages/user/UserTablePage";
 import UserDetail from "@/pages/user/UserDetailPage";
+import Bookings from "@/pages/Bookings";
+import BookingDetails from "@/pages/BookingDetails";
+import NewBooking from "@/pages/NewBooking";
+import BookingsCampers from "@/pages/BookingsCampers";
+import VanDetails from "@/pages/VanDetails";
 
 const AppRouter = () => (
     <Routes>
@@ -22,6 +27,11 @@ const AppRouter = () => (
       <Route path="/pwupd" element={<PwUpdate />} />
       <Route path="/userTable" element={<UserTable />} />
       <Route path="/userDetail" element={<UserDetail />} />
+      <Route path="/bookings" element={<Bookings />} />
+      <Route path="/bookings/:booking_id" element={<BookingDetails />} />
+      <Route path="/bookings/new" element={<NewBooking />} />
+      <Route path="/bookings/campers" element={<BookingsCampers />} />
+      <Route path="/bookings/campers/details/:van_id" element={<VanDetails />} /> 
     </Routes>
 );
 
