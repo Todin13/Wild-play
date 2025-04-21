@@ -1,6 +1,6 @@
 import API from '@/utils/api';
 
-export default async function handler(req, res) {
+export default async function handlerSearch(req, res) {
   const { keyword } = req.query;
   if (!keyword || typeof keyword !== 'string') {
     return res.status(400).json({ error: 'Missing or invalid search keyword' });

@@ -29,7 +29,7 @@ const Home = () => {
   return (
     <MainLayout>
       {/* Diagonal Split Background */}
-      <div className="desktop-only absolute top-0 right-0 w-full h-auto absolute text-deepgreen">
+      <div className="desktop-only absolute top-0 right-0 w-full h-auto text-deepgreen">
         <svg
           viewBox="0 0 1662 2437"
           xmlns="http://www.w3.org/2000/svg"

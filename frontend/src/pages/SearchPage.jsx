@@ -5,7 +5,8 @@ import ResultCard from "@/components/ui/ResultCard";
 import CampersCarousel from "@/modules/vans/CampersCarousel";
 import DealsCarousel from "@/modules/deals/carousel";
 import MainLayout from "@/layouts/MainLayout";
-import API from "@/utils/api"; // Adjust the import path as necessary
+import API from "@/utils/api"; 
+import handlerSearch from "@/modules/search/api";
 
 export default function SearchPage() {
   const [keyword, setKeyword] = useState("");
@@ -34,9 +35,7 @@ export default function SearchPage() {
           API.get('/deals'),
           API.get('/guides'),
         ]);
-        if (!vansRes.ok || !dealsRes.ok || !guidesRes.ok) {
-          throw new Error("Failed to fetch default data");
-        }
+        
         // responses from axios are under `.data`
         const vansData   = vansRes.data;
         const dealsData  = dealsRes.data;
@@ -63,25 +62,40 @@ export default function SearchPage() {
     loadDefaults();
   }, []);
 
-  const handleSearch = async () => {
+  const fetchSearch = async () => {
     if (!keyword) return;
+  
     setHasSearched(true);
     setLoading(true);
     setError(null);
     setResults(null);
-
+  
     try {
-      const res = await fetch(
-        `http://localhost:5050/api/search?keyword=${encodeURIComponent(keyword)}`
-      );
-      const data = await res.json();
-      setResults(data);
+      // simulate req and res
+      const req = { query: { keyword } };
+  
+      const res = {
+        statusCode: 200,
+        status(code) {
+          this.statusCode = code;
+          return this;
+        },
+        json(data) {
+          if (this.statusCode >= 400) {
+            throw new Error(data.error || 'Search failed');
+          }
+          setResults(data);
+        }
+      };
+  
+      await handlerSearch(req, res);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Search failed');
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <MainLayout>
@@ -93,7 +107,7 @@ export default function SearchPage() {
             <SearchBar
               keyword={keyword}
               setKeyword={setKeyword}
-              onSearch={handleSearch}
+              onSearch={fetchSearch}
             />
           </div>
 
