@@ -6,12 +6,14 @@ import {
   TruckIcon,
 } from "@heroicons/react/24/outline";
 
-const VanCard = ({ van }) => {
+const VanCard = ({ van, large= false }) => {
   const formattedPrice = `$${van.price.toLocaleString()}`;
   const formattedBaseRate = `$${van.baseRate.toLocaleString()}`;
 
   return (
-    <div className="w-72 rounded-xl shadow-md p-4 bg-voga-card border border-voga-border transition-all duration-200">
+    <div className={`${
+      large ? "w-96" : "w-72"
+    } rounded-xl shadow-md p-4 bg-voga-card border border-voga-border transition-all duration-200`}>
       <div className="space-y-4">
         <h2 className="text-xl font-bold text-voga-title">
           {van.manufacturer} {van.model}

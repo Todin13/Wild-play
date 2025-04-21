@@ -57,63 +57,67 @@ const AdminDashboard= () => {
     }
   };
 
+  // Add handlers passed to forms
+  const handleAddCamper = (newCamper) => setCampers(prev => [...prev, newCamper]);
+  const handleAddDeal = (newDeal) => setDeals(prev => [...prev, newDeal]);
+
+
   return (
-    <MainLayout> 
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+    <MainLayout>
+      <div className="p-6 space-y-8">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        
 
-      {/* Section: Add New Camper */}
-      <div className="mb-10 p-4 bg-white shadow rounded">
-        <h2 className="text-xl font-semibold mb-4">Add New Camper</h2>
-        <CamperForm 
-          onAdded={(newCamper) => setCampers([...campers, newCamper])} 
-        />
-      </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Campers Container */}
+          <div className="bg-white rounded-lg shadow p-4">
+            <h2 className="text-xl font-semibold mb-4">Campers</h2>
+            <div className="flex gap-4">
+              {/* List on left */}
+              <div className="w-1/2 overflow-y-auto max-h-96 border-r pr-2">
+                <ul className="space-y-2">
+                  {campers.map(camper => (
+                    <li key={camper._id} className="flex justify-between items-center">
+                      <span>{camper.manufacturer} {camper.model}</span>
+                      <button
+                        onClick={() => handleDeleteCamper(camper._id)}
+                        className="text-red-600 hover:underline"
+                      >Delete</button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* Form on right */}
+              <div className="w-1/2 pl-2">
+                <CamperForm onAdded={handleAddCamper} />
+              </div>
+            </div>
+          </div>
 
-      {/* Section: Existing Campers List */}
-      <div className="mb-10 p-4 bg-white shadow rounded">
-        <h2 className="text-xl font-semibold mb-4">Existing Campers</h2>
-        <ul>
-          {campers.map((camper) => (
-            <li key={camper._id} className="flex justify-between py-2 border-b">
-              <span>{camper.manufacturer} {camper.model}</span>
-              <button
-                onClick={() => handleDeleteCamper(camper._id)}
-                className="text-red-600 hover:underline"
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
+          {/* Deals Container */}
+          <div className="bg-white rounded-lg shadow p-4">
+            <h2 className="text-xl font-semibold mb-4">Deals</h2>
+            <div className="flex gap-4">
+              <div className="w-1/2 overflow-y-auto max-h-96 border-r pr-2">
+                <ul className="space-y-2">
+                  {deals.map(deal => (
+                    <li key={deal._id} className="flex justify-between items-center">
+                      <span>{deal.title} – {deal.location}</span>
+                      <button
+                        onClick={() => handleDeleteDeal(deal._id)}
+                        className="text-red-600 hover:underline"
+                      >Delete</button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="w-1/2 pl-2">
+                <DealForm onAdded={handleAddDeal} />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      {/* Section: Add New Deal */}
-      <div className="mb-10 p-4 bg-white shadow rounded">
-        <h2 className="text-xl font-semibold mb-4">Add New Deal</h2>
-        <DealForm 
-          onAdded={(newDeal) => setDeals([...deals, newDeal])} 
-        />
-      </div>
-
-      {/* Section: Existing Deals List */}
-      <div className="mb-6 p-4 bg-white shadow rounded">
-        <h2 className="text-xl font-semibold mb-4">Existing Deals</h2>
-        <ul>
-          {deals.map((deal) => (
-            <li key={deal._id} className="flex justify-between py-2 border-b">
-              <span>{deal.title} – {deal.location}</span>
-              <button
-                onClick={() => handleDeleteDeal(deal._id)}
-                className="text-red-600 hover:underline"
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
     </MainLayout>
   );
 };

@@ -11,9 +11,27 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://wild-play.vercel.app",
+  "https://wild-play-git-userpage-todin13s-projects.vercel.app",
+  "https://wild-play-git-searchpage-todin13s-projects.vercel.app",
+  "https://wild-play-git-search-campervans-deals-todin13s-projects.vercel.app/"
 ];
 
-const corsOptions = {
+// Global error handler (ensures CORS headers even on error)
+app.use((err, req, res, next) => {
+  console.error("Global Error Handler:", err.message);
+
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+  res.status(err.status || 500).json({
+    message: err.message || "Something went wrong",
+  });
+});
+
+// CORS Configuration
+app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
