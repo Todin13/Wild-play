@@ -69,7 +69,7 @@ const CreateTripPage = () => {
     van_booked: false,
   });
 
-  const { addTrip, loading, error } = useAddTrip();
+  const { addTrip, addTripLoading, addTripError } = useAddTrip();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -361,10 +361,10 @@ const CreateTripPage = () => {
               <div className="text-center">
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="px-6 py-3 text-xl font-semibold bg-voga-accent text-white rounded-lg hover:bg-voga-accent-dark"
+                  disabled={addTripLoading}
+                  className="px-6 py-3 text-xl font-semibold bg-voga-accent text-white rounded-lg hover:bg-voga-accent-dark disabled:opacity-60"
                 >
-                  {loading ? "Creating..." : "Create Trip"}
+                  {addTripLoading ? "Creating..." : "Create Trip"}
                 </button>
               </div>
 

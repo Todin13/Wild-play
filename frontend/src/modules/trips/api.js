@@ -49,3 +49,21 @@ export const deleteTrip = async (tripId) => {
     throw error.response?.data || error.message;
   }
 };
+
+// Create a new trip from a guide
+export const createTripFromGuide = async ({
+  guide_id,
+  start_date,
+  end_date,
+}) => {
+  try {
+    const response = await API.post("/trips/fromGuide", {
+      guide_id,
+      start_date,
+      end_date,
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};

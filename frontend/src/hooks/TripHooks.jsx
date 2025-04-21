@@ -1,30 +1,56 @@
 import { useState } from "react";
-import { createTrip } from "@/modules/trips/api"; // Import the createTrip function from the API
+import { createTrip, createTripFromGuide } from "@/modules/trips/api";
 
-// Custom hook to add a new trip
+/** Hook to create a regular trip */
 export const useAddTrip = () => {
-  const [loading, setLoading] = useState(false);  // To manage loading state
-  const [error, setError] = useState(null);  // To store any errors
+  const [addTripLoading, setAddTripLoading] = useState(false);
+  const [addTripError, setAddTripError] = useState(null);
 
-  // Function to create a trip
   const addTrip = async (tripData) => {
-    setLoading(true);  // Start loading
-    setError(null);  // Reset previous errors
+    setAddTripLoading(true);
+    setAddTripError(null);
 
     try {
-      const response = await createTrip(tripData);  // Call the API function
-      return response;  // Return the response if successful
+      const response = await createTrip(tripData);
+      return response;
     } catch (err) {
-      setError(err);  // Set error if the API call fails
-      throw err;  // Re-throw the error for the caller to handle
+      setAddTripError(err);
+      throw err;
     } finally {
-      setLoading(false);  // End loading
+      setAddTripLoading(false);
     }
   };
 
   return {
     addTrip,
-    loading,
-    error,
+    addTripLoading,
+    addTripError,
+  };
+};
+
+/** Hook to create a trip from a guide */
+export const useCreateTripFromGuide = () => {
+  const [createFromGuideLoading, setCreateFromGuideLoading] = useState(false);
+  const [createFromGuideError, setCreateFromGuideError] = useState(null);
+
+  const createFromGuide = async (data) => {
+    setCreateFromGuideLoading(true);
+    setCreateFromGuideError(null);
+
+    try {
+      const response = await createTripFromGuide(data);
+      return response;
+    } catch (err) {
+      setCreateFromGuideError(err);
+      throw err;
+    } finally {
+      setCreateFromGuideLoading(false);
+    }
+  };
+
+  return {
+    createFromGuide,
+    createFromGuideLoading,
+    createFromGuideError,
   };
 };
