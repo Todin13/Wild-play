@@ -42,14 +42,14 @@ export function DealCard({ deal }) {
   }
 
   const {
-    manufacturer = 'Unknown',
-    model = 'Model',
-    location = 'Location not available',
-    seats = 'N/A',
-    beds = 'N/A',
-    transmission = 'N/A',
-    price = 0,
-    _id: vanUniqueId = '',
+    manufacturer = fetchedVan.manufacturer || 'Manufacturer not available',
+    model = fetchedVan.model || 'Model not available',
+    type = fetchedVan.type || 'Type not available',  
+    location = fetchedVan.location || 'Location not available',
+    seats = fetchedVan.seats || 'N/A',
+    beds = fetchedVan.beds || 'N/A',
+    transmission = fetchedVan.transmission || 'N/A',
+    price = fetchedVan.price || 'N/A',
   } = van || {};
 
   const discount = parseFloat(deal?.discount) || 0;
@@ -68,6 +68,10 @@ export function DealCard({ deal }) {
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
           {manufacturer} {model}
         </h3>
+
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          {type}
+        </h3> 
 
         <div className="flex items-center text-sm text-gray-600 mb-2">
           <MapPinIcon className="w-5 h-5 mr-1 text-gray-500" />
@@ -95,13 +99,12 @@ export function DealCard({ deal }) {
 
         <div className="mt-auto flex space-x-2">
           <a
-            href={`/vans/${vanUniqueId}`}
+          
             className="flex-1 text-center py-2 border border-green-600 text-green-600 rounded hover:bg-green-50 transition"
           >
             More info
           </a>
           <a
-            href={`/book/${vanUniqueId}`}
             className="flex-1 text-center py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
           >
             Book now
