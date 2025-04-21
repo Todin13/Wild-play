@@ -14,7 +14,7 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://wild-play.vercel.app",
-  "https://wild-play-api-git-bookingfrontend-todin13s-projects.vercel.app",
+  "https://wild-play-git-bookingfrontend-todin13s-projects.vercel.app",
   "https://wild-play-git-searchpage-todin13s-projects.vercel.app",
 ];
 
