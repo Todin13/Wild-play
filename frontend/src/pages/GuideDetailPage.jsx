@@ -7,11 +7,11 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useReviews } from "@/hooks/ReviewsHooks";
 import ReviewCarousel from "@/modules/reviews/carousel";
-import ReviewForm from "@/components/ui/ReviewForm"; // Assuming the ReviewForm component is imported
-import Button from "@/components/ui/Buttons"; // Import the Button component
+import ReviewForm from "@/components/ui/ReviewForm";
+import Button from "@/components/ui/Buttons";
 import { useCreateTripFromGuide } from "@/hooks/TripHooks";
-import useNavigationHooks from "@/hooks/NavigationHooks";
 import CreateTripFromGuideButton from "@/modules/trips/CreateTripButton";
+import { useDeleteGuide } from "@/hooks/GuideHooks";
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -27,7 +27,7 @@ const GuideDetailPage = () => {
   const { guide } = location.state || {};
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showReviewForm, setShowReviewForm] = useState(false); // State to control the visibility of the review form modal
-
+  const { remove, deletingGuideLoading, deletingGuideError } = useDeleteGuide();
   const firstLocation = guide?.locations?.[0];
   const defaultCenter =
     firstLocation?.lat && firstLocation?.lon
@@ -40,10 +40,21 @@ const GuideDetailPage = () => {
     guide?._id
   );
 
-  const { createFromGuide, createFromGuideLoading, createFromGuideError } =
-    useCreateTripFromGuide();
-
-  const { goToTripDetail } = useNavigationHooks();
+  const handleDeleteGuide = async () => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this guide? This action cannot be undone."
+      )
+    ) {
+      try {
+        await remove(guide._id); // Delete the guide
+        alert("Guide deleted successfully.");
+        history.push("/home"); // Redirect to the guides list or another appropriate page
+      } catch (error) {
+        alert(deletingGuideError || "Failed to delete the guide.");
+      }
+    }
+  };
 
   return (
     <MainLayout>
@@ -52,6 +63,17 @@ const GuideDetailPage = () => {
           {/* Guide Card */}
           <div className="w-full lg:w-[45%] max-w-[525px]">
             <GuideDetailCard guide={guide} />
+            {/* Button to Delete Guide */}
+            <div className="flex justify-center gap-4 mt-6">
+              <Button
+                variant="primary"
+                onClick={handleDeleteGuide}
+                disabled={deletingGuideLoading}
+                className="text-3xl py-6 px-10 font-semibold"
+              >
+                {deletingGuideLoading ? "Deleting..." : "Delete Guide"}
+              </Button>
+            </div>
           </div>
 
           {/* Map */}
