@@ -42,14 +42,14 @@ export function DealCard({ deal }) {
   }
 
   const {
-    manufacturer = fetchedVan.manufacturer || 'Manufacturer not available',
-    model = fetchedVan.model || 'Model not available',
-    type = fetchedVan.type || 'Type not available',  
-    location = fetchedVan.location || 'Location not available',
-    seats = fetchedVan.seats || 'N/A',
-    beds = fetchedVan.beds || 'N/A',
-    transmission = fetchedVan.transmission || 'N/A',
-    price = fetchedVan.price || 'N/A',
+    manufacturer =  'Manufacturer not available',
+    model = 'Model not available',
+    type = 'Type not available',  
+    location = 'Location not available',
+    seats = 'N/A',
+    beds = 'N/A',
+    transmission = 'N/A',
+    price ='N/A',
   } = van || {};
 
   const discount = parseFloat(deal?.discount) || 0;
