@@ -368,9 +368,9 @@ const CreateTripPage = () => {
                 </button>
               </div>
 
-              {error && (
+              {addTripError && (
                 <div className="text-red-600 text-center font-medium">
-                  {error.message}
+                  {addTripError.message}
                 </div>
               )}
             </form>

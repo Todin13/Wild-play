@@ -9,6 +9,7 @@ import { useReviews } from "@/hooks/ReviewsHooks";
 import ReviewCarousel from "@/modules/reviews/carousel";
 import ReviewForm from "@/components/ui/ReviewForm"; // Assuming the ReviewForm component is imported
 import Button from "@/components/ui/Buttons"; // Import the Button component
+import { useCreateTripFromGuide } from "@/hooks/TripHooks";
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -36,6 +37,9 @@ const GuideDetailPage = () => {
     "guide",
     guide?._id
   );
+
+  const { createFromGuide, createFromGuideLoading, createFromGuideError } =
+    useCreateTripFromGuide();
 
   return (
     <MainLayout>
@@ -130,13 +134,34 @@ const GuideDetailPage = () => {
         </div>
 
         {/* Button to show Review Form */}
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center gap-4 mt-6">
           <Button
             variant="primary"
             onClick={() => setShowReviewForm(true)}
-            className="text-3xl py-6 px-10 font-semibold" // Bigger text, padding, and font weight
+            className="text-3xl py-6 px-10 font-semibold"
           >
             Add Your Review
+          </Button>
+
+          <Button
+            variant="primary"
+            onClick={async () => {
+              try {
+                const createdTrip = await createFromGuide(guide?._id);
+                alert("Trip created successfully!");
+                // Optionally redirect or update UI with `createdTrip` if needed
+              } catch (error) {
+                alert(
+                  createFromGuideError?.message ||
+                    error?.message ||
+                    "Something went wrong while creating the trip."
+                );
+              }
+            }}
+            disabled={createFromGuideLoading}
+            className="text-3xl py-6 px-10 font-semibold"
+          >
+            {createFromGuideLoading ? "Creating..." : "Create Trip from Guide"}
           </Button>
         </div>
       </section>

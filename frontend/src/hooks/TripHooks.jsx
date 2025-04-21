@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createTrip, createTripFromGuide } from "@/modules/trips/api";
 
 /** Hook to create a regular trip */
-export const useAddTrip = () => {
+const useAddTrip = () => {
   const [addTripLoading, setAddTripLoading] = useState(false);
   const [addTripError, setAddTripError] = useState(null);
 
@@ -29,7 +29,7 @@ export const useAddTrip = () => {
 };
 
 /** Hook to create a trip from a guide */
-export const useCreateTripFromGuide = () => {
+const useCreateTripFromGuide = () => {
   const [createFromGuideLoading, setCreateFromGuideLoading] = useState(false);
   const [createFromGuideError, setCreateFromGuideError] = useState(null);
 
@@ -54,3 +54,8 @@ export const useCreateTripFromGuide = () => {
     createFromGuideError,
   };
 };
+
+export {
+  useAddTrip,
+  useCreateTripFromGuide,
+}

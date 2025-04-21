@@ -1,5 +1,12 @@
-import { useState, useEffect } from "react";
-import { getUserGuides } from "@/modules/guides/api";
+import { useEffect, useState } from "react";
+import {
+  createGuide,
+  getUserGuides,
+  getGuideById,
+  updateGuide,
+  deleteGuide,
+  createGuideFromTrip,
+} from "@/modules/guides/api";
 
 // Hook to fetch first 10 guides (used for previews, homepage, etc.)
 const useFirstTenGuides = () => {
@@ -30,7 +37,7 @@ const useFirstTenGuides = () => {
   return { guides, loading_guides, error_guides };
 };
 
-// Hook to fetch guides with filters and support for pagination
+// Hook to fetch guides with filters and pagination
 const useGuideSearch = (filters, page = 1, limit = 24) => {
   const [guides, setGuides] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -40,9 +47,8 @@ const useGuideSearch = (filters, page = 1, limit = 24) => {
     setLoading(true);
     setError(null);
     try {
-      // Clean up filters by removing any keys with empty values
       const cleanedFilters = Object.fromEntries(
-        Object.entries(filters).filter(([key, value]) => value !== "")
+        Object.entries(filters).filter(([_, value]) => value !== "")
       );
 
       const paginatedFilters = {
@@ -68,5 +74,122 @@ const useGuideSearch = (filters, page = 1, limit = 24) => {
   return { guides, loading, error, refetch: fetchGuides };
 };
 
+// Hook to create a new guide
+const useAddGuide = () => {
+  const [creatingGuideLoading, setLoading] = useState(false);
+  const [creatingGuideError, setError] = useState(null);
 
-export { useFirstTenGuides, useGuideSearch };
+  const addGuide = async (guideData) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const guide = await createGuide(guideData);
+      return guide;
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { addGuide, creatingGuideLoading, creatingGuideError };
+};
+
+// Hook to get a guide by ID
+const useGuideById = (id) => {
+  const [guide, setGuide] = useState(null);
+  const [loadingGuide, setLoading] = useState(true);
+  const [errorGuide, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchGuide = async () => {
+      try {
+        setLoading(true);
+        const result = await getGuideById(id);
+        setGuide(result);
+      } catch (error) {
+        setError("Error fetching guide.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) fetchGuide();
+  }, [id]);
+
+  return { guide, loadingGuide, errorGuide };
+};
+
+// Hook to update a guide
+const useUpdateGuide = () => {
+  const [updatingGuideLoading, setLoading] = useState(false);
+  const [updatingGuideError, setError] = useState(null);
+
+  const update = async (id, data) => {
+    setLoading(true);
+    setError(null);
+    try {
+      return await updateGuide(id, data);
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { update, updatingGuideLoading, updatingGuideError };
+};
+
+// Hook to delete a guide
+const useDeleteGuide = () => {
+  const [deletingGuideLoading, setLoading] = useState(false);
+  const [deletingGuideError, setError] = useState(null);
+
+  const remove = async (id) => {
+    setLoading(true);
+    setError(null);
+    try {
+      return await deleteGuide(id);
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { remove, deletingGuideLoading, deletingGuideError };
+};
+
+// Hook to create a guide from a trip
+const useCreateGuideFromTrip = () => {
+  const [creatingFromTripLoading, setLoading] = useState(false);
+  const [creatingFromTripError, setError] = useState(null);
+
+  const createFromTrip = async (tripId) => {
+    setLoading(true);
+    setError(null);
+    try {
+      return await createGuideFromTrip(tripId);
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { createFromTrip, creatingFromTripLoading, creatingFromTripError };
+};
+
+export {
+  useFirstTenGuides,
+  useGuideSearch,
+  useAddGuide,
+  useGuideById,
+  useUpdateGuide,
+  useDeleteGuide,
+  useCreateGuideFromTrip,
+};
