@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import API from "@/utils/api";
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 
@@ -12,36 +13,37 @@ const VanDetails = () => {
 
   const [reviews, setReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const response = await fetch(`https://wild-play-api.vercel.app/api/reviews/van/${van._id}`);
-        if (!response.ok) throw new Error("Failed to fetch reviews");
+  const fetchReviews = useCallback(async () => {
+    if (!van?._id) return;
 
-        const data = await response.json();
-        setReviews(data);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      } finally {
-        setLoadingReviews(false);
-      }
-    };
+    setLoadingReviews(true);
+    setError("");
 
-    if (van) {
-      fetchReviews();
+    try {
+      const response = await API.get(`/reviews/van/${van._id}`);
+      setReviews(response.data || []);
+    } catch (err) {
+      console.error("Error fetching reviews:", err);
+      setError("Failed to load reviews.");
+    } finally {
+      setLoadingReviews(false);
     }
   }, [van]);
 
+  useEffect(() => {
+    fetchReviews();
+  }, [fetchReviews]);
+
   const handleBookingClick = () => {
     navigate("/bookings/new", {
-      state: { van, startDate, endDate }
+      state: { van, startDate, endDate },
     });
   };
 
   const getReviewBackgroundColor = (rating) => {
-    if (rating < 3) return "bg-red-100";  // Red for ratings below 3
-    return "bg-green-100";  // Green for ratings 3 and above
+    return rating < 3 ? "bg-red-100" : "bg-green-100";
   };
 
   return (
@@ -89,11 +91,10 @@ const VanDetails = () => {
               )}
             </div>
 
-            {/* "Book" button */}
             <div className="mt-6 text-center">
-                <button onClick={handleBookingClick} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full text-xl" >
-                    Book this Van
-                </button>
+              <button onClick={handleBookingClick} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full text-xl" >
+                Book this Van
+              </button>
             </div>
           </div>
         )}
@@ -104,12 +105,21 @@ const VanDetails = () => {
 
           {loadingReviews ? (
             <div className="text-center text-lg">Loading reviews...</div>
+          ) : error ? (
+            <div className="text-center text-red-500">{error}</div>
           ) : reviews.length > 0 ? (
             reviews.map((review) => (
-              <div key={review._id} className={`${getReviewBackgroundColor(review.rating)} shadow-md rounded-2xl p-4 mb-4`}>
+              <div
+                key={review._id}
+                className={`${getReviewBackgroundColor(review.rating)} shadow-md rounded-2xl p-4 mb-4`}
+              >
                 <div className="flex justify-between">
-                  <span className="font-semibold text-gray-700">{review.user_id.username}</span>
-                  <span className="text-gray-500">{new Date(review.date).toLocaleDateString()}</span>
+                  <span className="font-semibold text-gray-700">
+                    {review.user_id?.username || "Anonymous"}
+                  </span>
+                  <span className="text-gray-500">
+                    {new Date(review.date).toLocaleDateString()}
+                  </span>
                 </div>
                 <div className="mt-2">
                   <span className="font-bold text-yellow-500">Rating:</span> {review.rating} / 5

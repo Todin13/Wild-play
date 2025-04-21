@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
+import API from "@/utils/api";
 
 const BookingDetails = () => {
   const { booking_id } = useParams();
@@ -10,42 +11,22 @@ const BookingDetails = () => {
   const [loading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  useEffect(() => {
-    const fetchBookingDetails = async () => {
-      try {
-        const response = await fetch(`https://wild-play-api.vercel.app/api/bookings/${booking_id}`, {
-          credentials: "true",
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch booking details");
-        }
-
-        const data = await response.json();
-        setBooking(data);
-      } catch (error) {
-        console.error("Error fetching booking details:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBookingDetails();
+  const fetchBookingDetails = useCallback(async () => {
+    try {
+      const response = await API.get(`/bookings/${booking_id}`);
+      setBooking(response.data);
+    } catch (error) {
+      console.error("Error fetching booking details:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [booking_id]);
 
   const handleCancelBooking = async () => {
     try {
-      const response = await fetch(`https://wild-play-api.vercel.app/api/bookings/${booking_id}/cancel`, {
-        method: "PATCH",
-        credentials: "true",
-      });
+      const response = await API.patch(`/bookings/${booking_id}/cancel`);
 
-      if (!response.ok) {
-        throw new Error("Failed to cancel booking");
-      }
-
-      const updatedBooking = await response.json();
-      setBooking(updatedBooking);
+      setBooking(response.data);
       setShowConfirm(false);
 
       setTimeout(() => {
@@ -56,6 +37,10 @@ const BookingDetails = () => {
       alert("Failed to cancel booking.");
     }
   };
+
+  useEffect(() => {
+    fetchBookingDetails();
+  }, [fetchBookingDetails]);
 
   const formatDate = (dateStr) => dateStr ? new Date(dateStr).toLocaleDateString() : null;
 

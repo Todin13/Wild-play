@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 import { CalendarDaysIcon } from "@heroicons/react/24/outline";
+import API from "@/utils/api";
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -11,18 +12,7 @@ const Bookings = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch(
-          "http://wild-play-api.vercel.app/api/bookings/all",
-          {
-            credentials: "true",
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch bookings");
-        }
-
-        const data = await response.json();
+        const { data } = await API.get("/bookings/all");
         setBookings(data);
       } catch (error) {
         console.error("Error fetching bookings:", error);

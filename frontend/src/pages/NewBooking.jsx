@@ -1,11 +1,14 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
+import API from "@/utils/api";
+import "@/assets/styles/index.css";
 
 const NewBooking = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const { van, startDate, endDate } = state || {};
+
   const [formData, setFormData] = useState({
     van_id: van?._id || "",
     start_date: startDate || "",
@@ -41,17 +44,10 @@ const NewBooking = () => {
     setFinalAmount(amount - (amount * discount) / 100);
   }, [amount, discount]);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-
-    if (name === "promocode") {
-      validatePromocode(value);
+  useEffect(() => { if (formData.promocode) {
+      validatePromocode(formData.promocode);
     }
-  };
+  }, [formData.promocode]);
 
   const validatePromocode = async (code) => {
     if (!code.trim()) {
@@ -61,21 +57,18 @@ const NewBooking = () => {
     }
 
     try {
-      const response = await fetch(
-        "https://wild-play-api.vercel.app/api/deals/",
-        {
-          credentials: "true",
-        }
+      const response = await API.get("/deals/");
+
+      const deal = response.data.deals.find(
+        (deal) => deal.promocode === code.trim()
       );
-      const data = await response.json();
-      const deal = data.deals.find((deal) => deal.promocode === code.trim());
 
       if (deal) {
         const now = new Date();
-        const startDate = new Date(deal.start_date);
-        const endDate = new Date(deal.end_date);
+        const start = new Date(deal.start_date);
+        const end = new Date(deal.end_date);
 
-        if (now >= startDate && now <= endDate) {
+        if (now >= start && now <= end) {
           setDiscount(deal.discount);
           setPromoError("");
         } else {
@@ -90,6 +83,14 @@ const NewBooking = () => {
       console.error("Failed to validate promocode:", error);
       setPromoError("Error validating promocode.");
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleRadioChange = (e) => {
@@ -109,8 +110,12 @@ const NewBooking = () => {
     }
 
     try {
-      const { promocode, pick_up_location, delivery_location, ...otherFields } =
-        formData;
+      const {
+        promocode,
+        pick_up_location,
+        delivery_location,
+        ...otherFields
+      } = formData;
 
       const bookingData = {
         ...otherFields,
@@ -127,27 +132,15 @@ const NewBooking = () => {
             }),
       };
 
-      const response = await fetch(
-        "https://wild-play-api.vercel.app/api/bookings",
-        {
-          method: "POST",
-          credentials: "true",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(bookingData),
-        }
-      );
+      const response = await API.post("/bookings", bookingData);
 
-      if (!response.ok) throw new Error("Failed to create booking");
-
-      const newBooking = await response.json();
+      const newBooking = response.data;
       navigate(`/bookings/${newBooking._id}`);
     } catch (error) {
       console.error("Error creating booking:", error);
       alert("Failed to create booking");
     }
   };
-
-  const today = new Date().toISOString().split("T")[0];
 
   return (
     <MainLayout>

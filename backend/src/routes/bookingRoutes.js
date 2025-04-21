@@ -12,7 +12,6 @@ const { authenticateUser } = require("../middlewares/authMiddlewares");
 // get all bookings for a user
 router.get("/all", authenticateUser, controllers.getAllBookings);
 
-
 // get available campers for a given date range
 router.get("/available_campers", controllers.getAvailableCampers);
 
