@@ -131,8 +131,12 @@ const CreateTripPage = () => {
     try {
       await addTrip(tripData);
       alert("Trip created successfully!");
-    } catch (err) {
-      alert("Failed to create trip.");
+    } catch (error) {
+      alert(
+        addTripError?.message ||
+          error?.message ||
+          "Something went wrong while creating the trip."
+      );
     }
   };
 
@@ -367,12 +371,6 @@ const CreateTripPage = () => {
                   {addTripLoading ? "Creating..." : "Create Trip"}
                 </button>
               </div>
-
-              {addTripError && (
-                <div className="text-red-600 text-center font-medium">
-                  {addTripError.message}
-                </div>
-              )}
             </form>
           </div>
 
