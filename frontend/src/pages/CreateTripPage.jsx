@@ -2,8 +2,16 @@ import { useState, useRef } from "react";
 import MainLayout from "@/layouts/MainLayout";
 import { useAddTrip } from "@/hooks/TripHooks";
 import "@/assets/styles/index.css";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  Tooltip,
+  useMap,
+} from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
@@ -16,6 +24,23 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
+const searchIcon = new L.Icon({
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png", // Search result icon (green)
+  shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+// Helper to capture map instance
+const SetMapRef = ({ setMap }) => {
+  const map = useMap();
+  setMap(map);
+  return null;
+};
+
 const LocationPicker = ({ onSelect }) => {
   useMapEvents({
     click(e) {
@@ -26,7 +51,13 @@ const LocationPicker = ({ onSelect }) => {
 };
 
 const CreateTripPage = () => {
-  const mapRef = useRef(null);
+  const mapDivRef = useRef(null);
+  const [mapInstance, setMapInstance] = useState(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(true);
+  const [searchMarkers, setSearchMarkers] = useState([]);
 
   const [tripData, setTripData] = useState({
     title: "",
@@ -106,7 +137,53 @@ const CreateTripPage = () => {
   };
 
   const scrollToMap = () => {
-    mapRef.current?.scrollIntoView({ behavior: "smooth" });
+    mapDivRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handlePlaceSearch = async () => {
+    if (!searchQuery.trim() || !mapInstance) {
+      setSearchResults([]);
+      setSearchMarkers([]);
+      return;
+    }
+
+    const bounds = mapInstance.getBounds();
+    const viewbox = `${bounds.getSouthWest().lng},${
+      bounds.getSouthWest().lat
+    },${bounds.getNorthEast().lng},${bounds.getNorthEast().lat}`;
+
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+          searchQuery
+        )}&format=json&limit=20&viewbox=${viewbox}&bounded=1`
+      );
+      const data = await res.json();
+      setSearchResults(data);
+      setSearchMarkers(
+        data.map((place) => ({
+          lat: parseFloat(place.lat),
+          lon: parseFloat(place.lon),
+          display_name: place.display_name,
+        }))
+      );
+    } catch (err) {
+      console.error("Search failed:", err);
+    }
+  };
+
+  const selectPlaceFromSearch = (place) => {
+    const updated = [...tripData.locations];
+    const lastIndex = updated.length - 1;
+    updated[lastIndex] = {
+      ...updated[lastIndex],
+      name: place.display_name,
+      lat: parseFloat(place.lat),
+      lon: parseFloat(place.lon),
+    };
+    setTripData((prev) => ({ ...prev, locations: updated }));
+    setSearchQuery("");
+    setSearchResults([]);
   };
 
   return (
@@ -300,12 +377,54 @@ const CreateTripPage = () => {
           </div>
 
           {/* Map Section */}
-          <div className="w-full lg:w-[60%] h-[500px] lg:h-full rounded-3xl overflow-hidden border shadow-md relative z-0">
+          <div
+            ref={mapDivRef}
+            className="w-full lg:w-[60%] h-[500px] lg:h-full rounded-3xl overflow-hidden border shadow-md relative z-0"
+          >
+            <div className="absolute top-4 right-4 z-[1000] w-[90%] max-w-md bg-white rounded-lg shadow-lg p-4">
+              <div className="flex items-center relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handlePlaceSearch()}
+                  placeholder="Search places like 'parking', 'restaurant'..."
+                  className="w-full p-2 border rounded pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowSearchResults((prev) => !prev)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-black"
+                >
+                  {showSearchResults ? (
+                    <EyeSlashIcon className="h-5 w-5" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+
+              {showSearchResults && searchResults.length > 0 && (
+                <ul className="mt-2 max-h-40 overflow-y-auto border rounded">
+                  {searchResults.map((place, idx) => (
+                    <li
+                      key={idx}
+                      onClick={() => selectPlaceFromSearch(place)}
+                      className="cursor-pointer p-2 hover:bg-gray-100"
+                    >
+                      {place.display_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
             <MapContainer center={[20, 0]} zoom={2} className="w-full h-full">
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution="&copy; OpenStreetMap contributors"
               />
+              <SetMapRef setMap={setMapInstance} />
               <LocationPicker
                 onSelect={(latlng) => {
                   const updated = [...tripData.locations];
@@ -332,6 +451,24 @@ const CreateTripPage = () => {
                   />
                 ) : null
               )}
+              {searchMarkers.map((place, idx) => (
+                <Marker
+                  key={`search-${idx}`}
+                  position={[place.lat, place.lon]}
+                  icon={searchIcon} // Use searchIcon for search result markers
+                  eventHandlers={{
+                    click: () => {
+                      selectPlaceFromSearch({
+                        display_name: place.display_name,
+                        lat: place.lat,
+                        lon: place.lon,
+                      });
+                    },
+                  }}
+                >
+                  <Tooltip>{place.display_name}</Tooltip>
+                </Marker>
+              ))}
             </MapContainer>
           </div>
         </div>
