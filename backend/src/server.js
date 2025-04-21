@@ -40,15 +40,8 @@ app.use(cors({
     }
   },
   credentials: true,
-};
-
-// ✅ Apply CORS early
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
-    } 
-  },
-  credentials: true,
-}));
+}
+));
 
 
 // Middleware
