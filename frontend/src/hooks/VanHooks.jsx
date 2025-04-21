@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getAllVans } from "@/modules/vans/apis.js";
+import { getAllVans } from "@/modules/vans/api.js";
 
 // Custom hook to get the first 10 distinct types of vans
 const useTypesVans = () => {

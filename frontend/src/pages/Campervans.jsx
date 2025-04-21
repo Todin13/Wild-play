@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MainLayout from '@/layouts/MainLayout';
 import { CircularProgress } from '@heroui/react';
-import { getAllVans } from '@/modules/vans/apis';
+import { getAllVans } from '@/modules/vans/api';
 import CampersCarousel from '@/modules/vans/CampersCarousel';
 import BannerImage from '@/components/ui/BannerImage';
 

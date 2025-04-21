@@ -41,6 +41,23 @@ exports.getAllCampers = async (req, res) => { //get all campers
     }
 };
 
+// Get a single camper by ID
+exports.getCamperById = async (req, res) => {
+    try {
+        const camperId = req.params.id; // Get camper ID from URL parameters
+        const camper = await Van.findById(camperId).lean(); // Find camper by ID
+
+        if (!camper) {
+            return res.status(404).json({ error: "Camper not found" }); // If camper not found
+        }
+
+        res.json({ camper }); // Return the camper details
+    } catch (error) {
+        console.error("❌ Error fetching camper:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
 exports.addCamper = async (req, res) => {
     try {
         if (req.user.user_type !== 'ADMIN') {

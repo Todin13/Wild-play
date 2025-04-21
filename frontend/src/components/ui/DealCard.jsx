@@ -1,32 +1,79 @@
-import React from 'react';
-import { CurrencyDollarIcon, MapPinIcon, TruckIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect } from 'react';
+import { MapPinIcon, TruckIcon } from '@heroicons/react/24/outline';
+import { getVanById } from '@/modules/vans/api.js'; // Assuming the correct import path
 
-/**
- * DealCard renders a single deal card with image, title, specs, price, and CTAs.
- * Props:
- * - deal: object with fields { id, title, imageUrl, location, price, baseRate, specs: [], linkInfo, linkBook }
- */
 export function DealCard({ deal }) {
-  const specs = Array.isArray(deal.specs) ? deal.specs : [];
+  const [van, setVan] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  const dealVanId = deal?.van_id || '';
+
+  useEffect(() => {
+    const fetchVan = async () => {
+      if (!dealVanId) return; // Early exit if there's no van_id
+
+      try {
+        const fetchedVan = await getVanById(dealVanId);
+        setVan(fetchedVan);  // Store fetched van details
+      } catch (err) {
+        setError('Failed to fetch van details');
+        console.error('Error fetching van details:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVan();
+  }, [dealVanId]); // Fetch when vanId changes
+
+  // If van is not loaded yet, show loading spinner
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-4 text-center">Loading...</div>
+    );
+  }
+
+  // If there was an error fetching van details, show error message
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg shadow-md p-4 text-center text-red-500">{error}</div>
+    );
+  }
+
+  const {
+    manufacturer = 'Unknown',
+    model = 'Model',
+    location = 'Location not available',
+    seats = 'N/A',
+    beds = 'N/A',
+    transmission = 'N/A',
+    price = 0,
+    _id: vanUniqueId = '',
+  } = van || {};
+
+  const discount = parseFloat(deal?.discount) || 0;
+  const originalPrice = parseFloat(price) || 0;
+  const discountedPrice = (originalPrice * (1 - discount / 100)).toFixed(2);
+
+  const specs = [
+    `Seats: ${seats}`,
+    `Beds: ${beds}`,
+    `Transmission: ${transmission}`,
+  ];
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
-      {/* Deal image */}
-      <img src={deal.imageUrl} alt={deal.title} className="w-full h-40 object-cover" />
-
-      {/* Content */}
       <div className="p-4 flex-1 flex flex-col">
-        {/* Title */}
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">{deal.title}</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          {manufacturer} {model}
+        </h3>
 
-        {/* Location */}
         <div className="flex items-center text-sm text-gray-600 mb-2">
           <MapPinIcon className="w-5 h-5 mr-1 text-gray-500" />
-          {deal.location}
+          {location}
         </div>
 
-        {/* Specs list */}
         <ul className="flex-1 space-y-1 text-sm text-gray-700 mb-4">
           {specs.map((spec, i) => (
             <li key={i} className="flex items-center">
@@ -36,26 +83,25 @@ export function DealCard({ deal }) {
           ))}
         </ul>
 
-
-        {/* Pricing */}
         <div className="mb-4">
           <div className="flex items-baseline space-x-2">
-            <span className="text-xl font-bold text-green-600">€{deal.price}</span>
-            <span className="text-sm line-through text-gray-400">€{deal.baseRate}</span>
+            <span className="text-xl font-bold text-green-600">€{discountedPrice}</span>
+            {discount > 0 && (
+              <span className="text-sm line-through text-gray-400">€{originalPrice.toFixed(2)}</span>
+            )}
           </div>
           <span className="text-xs text-gray-500">/ day</span>
         </div>
 
-        {/* CTAs */}
         <div className="mt-auto flex space-x-2">
           <a
-            href={deal.linkInfo}
+            href={`/vans/${vanUniqueId}`}
             className="flex-1 text-center py-2 border border-green-600 text-green-600 rounded hover:bg-green-50 transition"
           >
             More info
           </a>
           <a
-            href={deal.linkBook}
+            href={`/book/${vanUniqueId}`}
             className="flex-1 text-center py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
           >
             Book now

@@ -1,19 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DealCard } from '@/components/ui/DealCard';
+import { useDeals } from '@/hooks/DealsHooks';
 
 /**
  * DealsCarousel displays a sliding carousel of deal cards,
  * showing 4 cards per view and sliding one card at a time.
- * Props:
- * - deals: array of deal objects
  */
-export default function DealsCarousel({ deals = [] }) {
+export default function DealsCarousel() {
   const visibleCount = 4;
-  const total = deals.length;
-  const maxIndex = Math.max(0, total - visibleCount);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const carouselRef = useRef(null);
   const [gap, setGap] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const { deals, loading, error } = useDeals();
+  const total = deals.length;
+  const maxIndex = Math.max(0, total - visibleCount);
 
   // Read the CSS gap property once
   useEffect(() => {
@@ -25,12 +26,12 @@ export default function DealsCarousel({ deals = [] }) {
 
   // Update transform when index or gap change
   useEffect(() => {
-    if (!carouselRef.current) return;
+    if (!carouselRef.current || deals.length === 0) return;
     const card = carouselRef.current.children[currentIndex];
     if (!card) return;
     const shift = card.offsetWidth * currentIndex + gap * currentIndex;
     carouselRef.current.style.transform = `translateX(-${shift}px)`;
-  }, [currentIndex, gap]);
+  }, [currentIndex, gap, deals.length]);
 
   const handlePrev = () => {
     setCurrentIndex(i => (i <= 0 ? maxIndex : i - 1));
@@ -40,6 +41,9 @@ export default function DealsCarousel({ deals = [] }) {
     setCurrentIndex(i => (i >= maxIndex ? 0 : i + 1));
   };
 
+  if (loading) return <div>Loading deals...</div>;
+  if (error) return <div className="text-red-500">Error: {error}</div>;
+
   return (
     <div className="relative w-full overflow-hidden">
       {/* Carousel track */}
@@ -47,10 +51,8 @@ export default function DealsCarousel({ deals = [] }) {
         ref={carouselRef}
         className="flex gap-4 transition-transform duration-500 ease-in-out"
       >
-        {deals.map(deal => (
-          <div key={deal.id || deal._id} className="flex-none w-1/4">
-            <DealCard deal={deal} />
-          </div>
+        {deals.map((deal) => (
+          <DealCard key={deal._id} deal={deal} />
         ))}
       </div>
 

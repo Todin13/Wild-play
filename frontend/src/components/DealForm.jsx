@@ -1,168 +1,125 @@
-// src/components/DealForm.jsx
-import React, { useState } from "react";
-import API from "../utils/api";
+import React, { useState, useEffect } from 'react';
+import { addDeal } from '@/modules/deals/api';
+import API from '@/utils/api';
 
-const DealForm = ({ onAdded }) => {
-  const [formData, setFormData] = useState({
-    title: "",
-    price: "",
-    baseRate: "",
-    location: "",
-    imageUrl: "",
-    specs: "",
-    linkInfo: "",
-    linkBook: "",
+export default function DealForm({ onSuccess }) {
+  const [vans, setVans] = useState([]);
+  const [form, setForm] = useState({
+    van_id: '',
+    discount: '',
+    start_date: '',
+    end_date: '',
   });
-  const [successMsg, setSuccessMsg] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
+
+  // Fetch vans list on mount
+  useEffect(() => {
+    async function loadVans() {
+      try {
+        const res = await API.get('/campers');
+        setVans(res.data?.campers || []);
+      } catch (err) {
+        console.error('Failed to load vans', err);
+      }
+    }
+    loadVans();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccessMsg("");
-    setErrorMsg("");
-    // Prepare payload with proper types
-    const payload = {
-      ...formData,
-      price: Number(formData.price),
-      baseRate: Number(formData.baseRate),
-      // Split comma-separated specs into an array
-      specs: formData.specs 
-        ? formData.specs.split(",").map((s) => s.trim()) 
-        : [],
-    };
+    setError(null);
+    setSuccessMsg(null);
+    setLoading(true);
+
     try {
-      const response = await API.post("/deals", payload);
-      setSuccessMsg("Deal added successfully!");
-      if (onAdded && response.data) {
-        onAdded(response.data);
-      }
-      // Reset form fields on success
-      setFormData({
-        title: "",
-        price: "",
-        baseRate: "",
-        location: "",
-        imageUrl: "",
-        specs: "",
-        linkInfo: "",
-        linkBook: "",
-      });
+      await addDeal(form);
+      setSuccessMsg('Deal successfully added!');
+      setForm({ van_id: '', discount: '', start_date: '', end_date: '' });
+      onSuccess?.(); // Notify parent if needed
     } catch (err) {
-      console.error("Add deal error:", err);
-      setErrorMsg("Failed to add deal. Please try again.");
+      setError(err.response?.data?.error || 'Failed to create deal');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-white rounded shadow-md max-w-xl">
+      <h2 className="text-xl font-semibold">Create a New Deal</h2>
+
+      <div>
+        <label className="block mb-1 font-medium">Van</label>
+        <select
+          name="van_id"
+          value={form.van_id}
+          onChange={handleChange}
+          required
+          className="w-full border p-2 rounded"
+        >
+          <option value="">Select a van</option>
+          {vans.map((van) => (
+            <option key={van._id} value={van._id}>
+              {van.manufacturer} {van.model}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className="block mb-1 font-medium">Discount (%)</label>
+        <input
+          type="number"
+          name="discount"
+          value={form.discount}
+          onChange={handleChange}
+          required
+          min={1}
+          max={100}
+          className="w-full border p-2 rounded"
+        />
+      </div>
+
+      <div>
+        <label className="block mb-1 font-medium">Start Date</label>
+        <input
+          type="date"
+          name="start_date"
+          value={form.start_date}
+          onChange={handleChange}
+          required
+          className="w-full border p-2 rounded"
+        />
+      </div>
+
+      <div>
+        <label className="block mb-1 font-medium">End Date</label>
+        <input
+          type="date"
+          name="end_date"
+          value={form.end_date}
+          onChange={handleChange}
+          required
+          className="w-full border p-2 rounded"
+        />
+      </div>
+
+      {error && <p className="text-red-500">{error}</p>}
       {successMsg && <p className="text-green-600">{successMsg}</p>}
-      {errorMsg && <p className="text-red-600">{errorMsg}</p>}
 
-      <div>
-        <label className="block font-medium">Title:</label>
-        <input 
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          className="border rounded p-2 w-full"
-          type="text"
-          required 
-        />
-      </div>
-      <div>
-        <label className="block font-medium">Price (discounted):</label>
-        <input 
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-          className="border rounded p-2 w-full"
-          type="number"
-          required 
-        />
-      </div>
-      <div>
-        <label className="block font-medium">Base Rate (original):</label>
-        <input 
-          name="baseRate"
-          value={formData.baseRate}
-          onChange={handleChange}
-          className="border rounded p-2 w-full"
-          type="number"
-          required 
-        />
-      </div>
-      <div>
-        <label className="block font-medium">Location:</label>
-        <input 
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-          className="border rounded p-2 w-full"
-          type="text"
-          required 
-        />
-      </div>
-      <div>
-        <label className="block font-medium">Image URL:</label>
-        <input 
-          name="imageUrl"
-          value={formData.imageUrl}
-          onChange={handleChange}
-          className="border rounded p-2 w-full"
-          type="url"
-          placeholder="https://example.com/deal.jpg" 
-        />
-      </div>
-      <div>
-        <label className="block font-medium">Specs (comma separated):</label>
-        <input 
-          name="specs"
-          value={formData.specs}
-          onChange={handleChange}
-          className="border rounded p-2 w-full"
-          type="text"
-          placeholder="e.g. 20% off, Limited time" 
-        />
-      </div>
-      <div>
-        <label className="block font-medium">Info Link (URL):</label>
-        <input 
-          name="linkInfo"
-          value={formData.linkInfo}
-          onChange={handleChange}
-          className="border rounded p-2 w-full"
-          type="url"
-          placeholder="https://example.com/details" 
-        />
-      </div>
-      <div>
-        <label className="block font-medium">Booking Link (URL):</label>
-        <input 
-          name="linkBook"
-          value={formData.linkBook}
-          onChange={handleChange}
-          className="border rounded p-2 w-full"
-          type="url"
-          placeholder="https://example.com/book-now" 
-        />
-      </div>
-
-      <button 
-        type="submit" 
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      <button
+        type="submit"
+        disabled={loading}
+        className="bg-deepgreen text-white py-2 px-4 rounded hover:bg-green-700 transition"
       >
-        Add Deal
+        {loading ? 'Saving...' : 'Add Deal'}
       </button>
     </form>
   );
-};
-
-export default DealForm;
+}
