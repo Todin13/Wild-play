@@ -10,7 +10,7 @@ function useNavigationHooks() {
    * Navigate to the generic search page
    */
   const goToSearch = () => {
-    navigate("/search");
+    navigate("/search_page");
   };
 
   /**

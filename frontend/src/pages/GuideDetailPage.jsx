@@ -9,8 +9,8 @@ import { useReviews } from "@/hooks/ReviewsHooks";
 import ReviewCarousel from "@/modules/reviews/carousel";
 import ReviewForm from "@/components/ui/ReviewForm";
 import Button from "@/components/ui/Buttons";
-import { useCreateTripFromGuide } from "@/hooks/TripHooks";
 import CreateTripFromGuideButton from "@/modules/trips/CreateTripButton";
+import { useUserDashboard } from "@/hooks/UserHooks";
 import { useDeleteGuide } from "@/hooks/GuideHooks";
 
 // Fix for default marker icons in Leaflet
@@ -39,6 +39,7 @@ const GuideDetailPage = () => {
     "guide",
     guide?._id
   );
+  const { isLoggedIn, user } = useUserDashboard();
 
   const handleDeleteGuide = async () => {
     if (
@@ -64,16 +65,18 @@ const GuideDetailPage = () => {
           <div className="w-full lg:w-[45%] max-w-[525px]">
             <GuideDetailCard guide={guide} />
             {/* Button to Delete Guide */}
-            <div className="flex justify-center gap-4 mt-6">
-              <Button
-                variant="primary"
-                onClick={handleDeleteGuide}
-                disabled={deletingGuideLoading}
-                className="text-3xl py-6 px-10 font-semibold"
-              >
-                {deletingGuideLoading ? "Deleting..." : "Delete Guide"}
-              </Button>
-            </div>
+            {isLoggedIn && guide?.user_id === user.id && (
+              <div className="flex justify-center gap-4 mt-6">
+                <Button
+                  variant="primary"
+                  onClick={handleDeleteGuide}
+                  disabled={deletingGuideLoading}
+                  className="text-3xl py-6 px-10 font-semibold"
+                >
+                  {deletingGuideLoading ? "Deleting..." : "Delete Guide"}
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Map */}
@@ -160,17 +163,19 @@ const GuideDetailPage = () => {
         </div>
 
         {/* Button to show Review Form */}
-        <div className="flex justify-center gap-4 mt-6">
-          <Button
-            variant="primary"
-            onClick={() => setShowReviewForm(true)}
-            className="text-3xl py-6 px-10 font-semibold"
-          >
-            Add Your Review
-          </Button>
+        {isLoggedIn && (
+          <div className="flex justify-center gap-4 mt-6">
+            <Button
+              variant="primary"
+              onClick={() => setShowReviewForm(true)}
+              className="text-3xl py-6 px-10 font-semibold"
+            >
+              Add Your Review
+            </Button>
 
-          <CreateTripFromGuideButton guideId={guide?._id} />
-        </div>
+            <CreateTripFromGuideButton guideId={guide?._id} />
+          </div>
+        )}
       </section>
 
       {/* Pop-up Review Form Modal */}
