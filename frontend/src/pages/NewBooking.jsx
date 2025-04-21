@@ -28,7 +28,9 @@ const NewBooking = () => {
 
   useEffect(() => {
     if (van) {
-      const days = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
+      const days = Math.ceil(
+        (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24)
+      );
       const calculatedAmount = days * van.price;
       setAmount(calculatedAmount);
       setSelectedVan(van);
@@ -59,9 +61,12 @@ const NewBooking = () => {
     }
 
     try {
-      const response = await fetch("https://wild-play-api.vercel.app/api/deals/", {
-        credentials: "include",
-      });
+      const response = await fetch(
+        "https://wild-play-api.vercel.app/api/deals/",
+        {
+          credentials: "true",
+        }
+      );
       const data = await response.json();
       const deal = data.deals.find((deal) => deal.promocode === code.trim());
 
@@ -104,23 +109,33 @@ const NewBooking = () => {
     }
 
     try {
-      const { promocode, pick_up_location, delivery_location, ...otherFields } = formData;
+      const { promocode, pick_up_location, delivery_location, ...otherFields } =
+        formData;
 
       const bookingData = {
         ...otherFields,
         amount: finalAmount,
         ...(promocode.trim() && { promocode: promocode.trim() }),
         ...(formData.deliveryRequired
-          ? { delivery_location: delivery_location.trim(), pick_up_location: "" }
-          : { pick_up_location: pick_up_location.trim(), delivery_location: "" }),
+          ? {
+              delivery_location: delivery_location.trim(),
+              pick_up_location: "",
+            }
+          : {
+              pick_up_location: pick_up_location.trim(),
+              delivery_location: "",
+            }),
       };
 
-      const response = await fetch("https://wild-play-api.vercel.app/api/bookings", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(bookingData),
-      });
+      const response = await fetch(
+        "https://wild-play-api.vercel.app/api/bookings",
+        {
+          method: "POST",
+          credentials: "true",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(bookingData),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to create booking");
 
@@ -137,11 +152,15 @@ const NewBooking = () => {
   return (
     <MainLayout>
       <div className="p-4 m-8">
-        <form onSubmit={handleSubmit} className="bg-[#dcf2eb] shadow-md rounded-2xl p-6 max-w-4xl mx-auto space-y-4 text-left">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-[#dcf2eb] shadow-md rounded-2xl p-6 max-w-4xl mx-auto space-y-4 text-left"
+        >
           <h1 className="text-2xl font-bold mb-4">Create a Booking</h1>
 
           <div className="text-gray-700 font-medium mb-2">
-            <strong>Van:</strong> {selectedVan?.manufacturer} {selectedVan?.model}
+            <strong>Van:</strong> {selectedVan?.manufacturer}{" "}
+            {selectedVan?.model}
           </div>
 
           <div className="text-gray-700 font-medium mb-2">
@@ -217,26 +236,41 @@ const NewBooking = () => {
             placeholder="Promocode (optional)"
             value={formData.promocode}
             onChange={handleChange}
-            className={`w-full p-2 border rounded ${formData.promocode ? (promoError ? "bg-red-300" : "bg-green-300") : ""}`}
+            className={`w-full p-2 border rounded ${
+              formData.promocode
+                ? promoError
+                  ? "bg-red-300"
+                  : "bg-green-300"
+                : ""
+            }`}
           />
 
           <div className="text-lg font-semibold text-gray-700">
             Total Amount:{" "}
             {discount > 0 ? (
               <>
-                <span className="text-red-600 line-through text-xl">${amount}</span>{" "}
-                <span className="text-green-700 font-bold text-2xl ml-2">${finalAmount}</span>
+                <span className="text-red-600 line-through text-xl">
+                  ${amount}
+                </span>{" "}
+                <span className="text-green-700 font-bold text-2xl ml-2">
+                  ${finalAmount}
+                </span>
               </>
             ) : (
-              <span className="text-green-700 font-bold text-2xl">${amount}</span>
+              <span className="text-green-700 font-bold text-2xl">
+                ${amount}
+              </span>
             )}
           </div>
 
-            <div className="flex justify-center">
-                <button type="submit" className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full text-xl">
-                    Book Now
-                </button>
-            </div>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full text-xl"
+            >
+              Book Now
+            </button>
+          </div>
         </form>
       </div>
     </MainLayout>

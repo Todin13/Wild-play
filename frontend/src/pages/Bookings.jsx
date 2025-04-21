@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; 
-import MainLayout from "@/layouts/MainLayout"; 
-import "@/assets/styles/index.css"; 
+import { Link } from "react-router-dom";
+import MainLayout from "@/layouts/MainLayout";
+import "@/assets/styles/index.css";
 import { CalendarDaysIcon } from "@heroicons/react/24/outline";
-
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -12,9 +11,12 @@ const Bookings = () => {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await fetch("http://wild-play-api.vercel.app/api/bookings/all", {
-          credentials: "include",
-        });
+        const response = await fetch(
+          "http://wild-play-api.vercel.app/api/bookings/all",
+          {
+            credentials: "true",
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Failed to fetch bookings");
@@ -33,23 +35,26 @@ const Bookings = () => {
   }, []);
 
   return (
-    <MainLayout>     
+    <MainLayout>
       <section className="relative m-8 p-4 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {loading ? (
           <div className="text-center text-lg col-span-full">Loading...</div>
         ) : bookings.length === 0 ? (
-          <div className="text-center text-lg col-span-full">No bookings found.</div>
+          <div className="text-center text-lg col-span-full">
+            No bookings found.
+          </div>
         ) : (
           bookings.map((booking) => (
             <Link
               key={booking._id}
-              to={`/bookings/${booking._id}`} 
-              className="bg-[#dcf2eb] text-center shadow-md rounded-2xl p-4 flex flex-col h-full hover:bg-[#bde0d1]" 
+              to={`/bookings/${booking._id}`}
+              className="bg-[#dcf2eb] text-center shadow-md rounded-2xl p-4 flex flex-col h-full hover:bg-[#bde0d1]"
             >
               <div className="flex justify-between mb-4">
                 <h2 className="text-xl font-bold text-gray-800">
-                  {booking?.van_id?.color} {booking?.van_id?.manufacturer} {booking?.van_id?.model}
-                </h2>            
+                  {booking?.van_id?.color} {booking?.van_id?.manufacturer}{" "}
+                  {booking?.van_id?.model}
+                </h2>
                 <div className="text-gray-500 flex items-center justify-end gap-1">
                   <CalendarDaysIcon className="h-5 w-5 text-gray-500" />
                   <span className="font-bold text-gray-600">
@@ -60,7 +65,6 @@ const Bookings = () => {
                     {new Date(booking?.end_date).toLocaleDateString()}
                   </span>
                 </div>
-                
               </div>
 
               <div className="space-y-2">
@@ -106,7 +110,7 @@ const Bookings = () => {
                 )}
               </div>
 
-              <div className="flex justify-between mt-auto">                
+              <div className="flex justify-between mt-auto">
                 <div
                   className={`inline-block px-4 py-2 rounded-full font-bold text-white ${
                     booking?.status === "PENDING"
