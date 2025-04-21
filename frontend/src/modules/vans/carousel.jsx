@@ -12,14 +12,6 @@ const VanCarousel = ({ vans = [] }) => {
   const handlePrev = () => setIndex(prev);
   const handleNext = () => setIndex(next);
 
-  useLayoutEffect(() => {
-      const vp = viewportRef.current;
-      if (!vp) return;
-      const card = vp.querySelector(".van-card");  // each VanCard wrapper
-      const gap = parseInt(getComputedStyle(vp).gap, 10) || 0;
-      const shift = (card.offsetWidth + gap) * index;
-      vp.style.transform = `translateX(-${shift}px)`;
-    }, [index]);
 
   return (
     <div ref={viewportRef} className="hidden lg:flex justify-center items-center gap-6 h-full">
