@@ -22,7 +22,7 @@ import VanDetails from "@/pages/VanDetails";
 import SearchPage from "@/pages/SearchPage";
 import Campervans from "@/pages/Campervans"; 
 import Deals from "@/pages/Deals";
-import AdminDashboard from "@/pages/AdminDashboard"; // Assuming you have an AdminDashboard page
+import AdminDashboard from "@/pages/AdminDashboard";
 
 const AppRoutes = () => (
     <Routes>
