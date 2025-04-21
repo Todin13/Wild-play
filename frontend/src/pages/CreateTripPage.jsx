@@ -24,7 +24,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const searchIcon = new L.Icon({
+const locationIcon = new L.Icon({
   iconUrl:
     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png", // Search result icon (green)
   shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
@@ -444,6 +444,7 @@ const CreateTripPage = () => {
                   <Marker
                     key={idx}
                     position={[loc.lat, loc.lon]}
+                    icon={locationIcon} // Use searchIcon for search result markers
                     draggable={true}
                     eventHandlers={{
                       dragend: (e) => handleMarkerDragEnd(idx, e),
@@ -455,7 +456,6 @@ const CreateTripPage = () => {
                 <Marker
                   key={`search-${idx}`}
                   position={[place.lat, place.lon]}
-                  icon={searchIcon} // Use searchIcon for search result markers
                   eventHandlers={{
                     click: () => {
                       selectPlaceFromSearch({
