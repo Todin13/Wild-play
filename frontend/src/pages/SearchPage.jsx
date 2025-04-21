@@ -5,6 +5,7 @@ import ResultCard from "@/components/ui/ResultCard";
 import CampersCarousel from "@/modules/vans/CampersCarousel";
 import DealsCarousel from "@/modules/deals/carousel";
 import MainLayout from "@/layouts/MainLayout";
+import API from "@/utils/api"; // Adjust the import path as necessary
 
 export default function SearchPage() {
   const [keyword, setKeyword] = useState("");

@@ -45,6 +45,11 @@ app.use(cors({
 // ✅ Apply CORS early
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
+    } 
+  },
+  credentials: true,
+}));
+
 
 // Middleware
 app.use(express.json());

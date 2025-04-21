@@ -7,8 +7,7 @@ import { useUserDashboard } from "@/hooks/UserHooks";
 
 const TopBar = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const { isLoggedIn, user, userType, loading } = useUserDashboard();
-  const isAdmin = isLoggedIn && userType === 'ADMIN';
+  const { isLoggedIn, user,loading } = useUserDashboard();
 
   const toggleNav = () => {
     setIsNavOpen((prev) => !prev);
@@ -47,17 +46,11 @@ const TopBar = () => {
           <div className="topbar-search">
             <Link to="/search_page">
               <button className="topbar-search-button">
-                <MagnifyingGlassIcon className="h-5 w-5 text-navBarText" />
                 Search
               </button>
             </Link>
           </div>
-          {/* Admin dashboard link, shown only to admins */}
-          {isAdmin && (
-            <Link to="/admin" className="topbar-button">
-              Admin Dashboard
-            </Link>
-          )}
+      
           
           {!loading && (
             isLoggedIn ? (
@@ -98,12 +91,7 @@ const TopBar = () => {
             )
           )}
 
-          {/* Admin dashboard link, shown only to admins */}
-          {isAdmin && (
-            <Link to="/admin" className="ml-4 px-2 py-1 bg-white text-green-800 rounded hover:bg-gray-100">
-              Admin Dashboard
-            </Link>
-          )}
+          
         
             <Link to="/" className="topbar-button">
               Home
