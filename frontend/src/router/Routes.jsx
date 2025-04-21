@@ -4,6 +4,7 @@ import GuideSearchPage from "@/pages/SearchGuidePage";
 import GuideDetailPage from "@/pages/GuideDetailPage";
 import TripDetailPage from "@/pages/TripDetailPage";
 import CreateTripPage from "@/pages/CreateTripPage";
+import CreateGuidePage from "@/pages/CreateGuidePage";
 import ContactUs from "@/pages/ContactUs";
 import AboutUs from "@/pages/AboutUs";
 import Register from "@/pages/user/RegisterPage";
@@ -48,6 +49,7 @@ const AppRoutes = () => (
       <Route path="/guides" element={<GuideDetailPage />} />
       <Route path="/trips" element={<TripDetailPage />} />
       <Route path="/plan-trip" element={<CreateTripPage />} />
+      <Route path="/create-guide" element={<CreateGuidePage />} />
     </Routes>
 );
 
