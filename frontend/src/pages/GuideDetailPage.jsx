@@ -39,7 +39,7 @@ const GuideDetailPage = () => {
     "guide",
     guide?._id
   );
-  const { isLoggedIn, user } = useUserDashboard();
+  const { user } = useUserDashboard();
 
   const handleDeleteGuide = async () => {
     if (
@@ -50,7 +50,6 @@ const GuideDetailPage = () => {
       try {
         await remove(guide._id); // Delete the guide
         alert("Guide deleted successfully.");
-        history.push("/home"); // Redirect to the guides list or another appropriate page
       } catch (error) {
         alert(deletingGuideError || "Failed to delete the guide.");
       }
@@ -65,7 +64,7 @@ const GuideDetailPage = () => {
           <div className="w-full lg:w-[45%] max-w-[525px]">
             <GuideDetailCard guide={guide} />
             {/* Button to Delete Guide */}
-            {isLoggedIn && guide?.user_id === user.id && (
+            {user && guide?.user_id === user.id && (
               <div className="flex justify-center gap-4 mt-6">
                 <Button
                   variant="primary"
@@ -163,7 +162,7 @@ const GuideDetailPage = () => {
         </div>
 
         {/* Button to show Review Form */}
-        {isLoggedIn && (
+        {user && (
           <div className="flex justify-center gap-4 mt-6">
             <Button
               variant="primary"

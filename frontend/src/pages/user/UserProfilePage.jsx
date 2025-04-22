@@ -23,6 +23,7 @@ import {
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const { user, error } = useProfile();
@@ -39,6 +40,7 @@ export default function Profile() {
   const [size, setSize] = useState(null);
 
   const { trips, fetchTrips, tripsLoading, tripsError } = useUserTrips();
+  const navigate = useNavigate(); // Use navigate hook
 
   return (
     <MainLayout>
@@ -223,11 +225,9 @@ export default function Profile() {
             </div>
           )}
           <div className="flex justify-end mb-4">
-            <Link to="/plan-trip">
-              <Button variant="primary">
-                Create New Trip
-              </Button>
-            </Link>
+            <Button onClickCapture={navigate("/plan-trip")} variant="primary">
+              Create New Trip
+            </Button>
           </div>
         </div>
       )}
