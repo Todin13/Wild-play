@@ -223,7 +223,7 @@ export default function Profile() {
             </div>
           )}
           <div className="flex justify-end mb-4">
-            <Link to="/plan_trip">
+            <Link to="/plan-trip">
               <Button variant="primary">
                 Create New Trip
               </Button>

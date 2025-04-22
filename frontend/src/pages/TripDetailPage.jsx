@@ -7,7 +7,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Button from "@/components/ui/Buttons"; // Import the Button component
 import { useDeleteTrip } from "@/hooks/TripHooks"; // Import the delete hook
-import useNavigationHooks from "@/hooks/NavigationHooks"; // Import the navigation hook
+import useNavigationHooks from "@/hooks/NavigationHooks";
+import { useCreateGuideFromTrip } from "@/hooks/GuideHooks";
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -33,11 +34,24 @@ const TripDetailPage = () => {
 
   const { goToCreateTripPage } = useNavigationHooks(); // Access custom navigation hook for trip creation
 
+  const { createFromTrip, creatingFromTripLoading, creatingFromTripError } =
+    useCreateGuideFromTrip();
+
   const handleDeleteTrip = async () => {
     try {
       await removeTrip(trip?._id); // Remove the trip using the delete hook
       alert("Trip deleted successfully!");
-      navigate("/trips"); // Optionally redirect to the trips page
+      navigate("/"); // Optionally redirect to the trips page
+    } catch (error) {
+      alert(
+        "Error deleting trip: " + (error?.message || "Something went wrong")
+      );
+    }
+  };
+
+  const handleCreatGuide = async () => {
+    try {
+      await createFromTrip(trip?._id);
     } catch (error) {
       alert(
         "Error deleting trip: " + (error?.message || "Something went wrong")
@@ -46,7 +60,6 @@ const TripDetailPage = () => {
   };
 
   const handleUpdateTrip = () => {
-    // Navigate to the Create Trip Page and pass the trip data via state for update
     goToCreateTripPage(trip);
   };
 
@@ -134,6 +147,14 @@ const TripDetailPage = () => {
             className="text-2xl py-4 px-8 font-semibold"
           >
             Update Trip
+          </Button>
+
+          <Button
+            variant="primary"
+            onClick={handleCreatGuide}
+            className="text-2xl py-4 px-8 font-semibold"
+          >
+            Create Guide from Trip
           </Button>
 
           <Button
