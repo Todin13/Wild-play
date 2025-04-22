@@ -32,7 +32,7 @@ export default function Profile() {
       fetchTrips();
     }
   }, [user]);
-  
+
   const handleLogout = useUserLogout();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [modalType, setModalType] = useState(null);
@@ -222,6 +222,13 @@ export default function Profile() {
               ))}
             </div>
           )}
+          <div className="flex justify-end mb-4">
+            <Link to="/plan_trip">
+              <Button variant="primary">
+                Create New Trip
+              </Button>
+            </Link>
+          </div>
         </div>
       )}
     </MainLayout>
