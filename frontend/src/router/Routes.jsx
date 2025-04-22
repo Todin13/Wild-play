@@ -1,5 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "@/pages/Home";
+import GuideSearchPage from "@/pages/SearchGuidePage";
+import GuideDetailPage from "@/pages/GuideDetailPage";
+import TripDetailPage from "@/pages/TripDetailPage";
+import CreateTripPage from "@/pages/CreateTripPage";
+import CreateGuidePage from "@/pages/CreateGuidePage";
 import ContactUs from "@/pages/ContactUs";
 import AboutUs from "@/pages/AboutUs";
 import Register from "@/pages/user/RegisterPage";
@@ -17,7 +22,7 @@ import VanDetails from "@/pages/VanDetails";
 import SearchPage from "@/pages/SearchPage";
 import Campervans from "@/pages/Campervans"; 
 import Deals from "@/pages/Deals";
-import AdminDashboard from "@/pages/AdminDashboard"; // Assuming you have an AdminDashboard page
+import AdminDashboard from "@/pages/AdminDashboard";
 
 const AppRoutes = () => (
     <Routes>
@@ -40,8 +45,11 @@ const AppRoutes = () => (
       <Route path="/campervans" element={<Campervans />}/>
       <Route path="/deals" element={<Deals />} />
       <Route path="/admin" element={<AdminDashboard />} />
-      {/* Add more routes as needed */}
-      {/* Catch-all route for 404 */}
+      <Route path="/search-guides" element={<GuideSearchPage />} />
+      <Route path="/guides" element={<GuideDetailPage />} />
+      <Route path="/trips" element={<TripDetailPage />} />
+      <Route path="/plan-trip" element={<CreateTripPage />} />
+      <Route path="/create-guide" element={<CreateGuidePage />} />
     </Routes>
 );
 

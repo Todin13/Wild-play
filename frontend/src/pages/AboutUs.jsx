@@ -5,8 +5,7 @@ import Button from "@/components/ui/Buttons";
 import useNavigationHooks from "@/hooks/NavigationHooks";
 
 const AboutUs = () => {
-    const { goToContactUs } = useNavigationHooks();
-    
+  const { goToContactUs } = useNavigationHooks();
 
   return (
     <MainLayout>
@@ -60,23 +59,23 @@ const AboutUs = () => {
             {[
               {
                 name: "Thomas ODIN",
-                role: "Project Lead & Full Stack Developer",
-                image: "/images/alice.jpg", // Replace with actual image path
+                role: "Project Deployment & Dev",
+                image: "/images/thomas.jpg", // Replace with actual image path
               },
               {
                 name: "Thibaut HERVET",
-                role: "Backend Developer & Database Management",
-                image: "/images/bob.jpg", // Replace with actual image path
+                role: "Developer",
+                image: "/images/thibaut.jpg", // Replace with actual image path
               },
               {
                 name: "Xiang Yu Oon",
-                role: "Frontend Developer & UX/UI Designer",
-                image: "/images/charlie.jpg", // Replace with actual image path
+                role: "Developer",
+                image: "/images/oscar.jpg", // Replace with actual image path
               },
               {
                 name: "Kirill Smirnov",
-                role: "API Developer & System Integration",
-                image: "/images/charlie.jpg", // Replace with actual image path
+                role: "Developper",
+                image: "/images/kiril.png", // Replace with actual image path
               },
             ].map((member) => (
               <div
@@ -88,9 +87,7 @@ const AboutUs = () => {
                   alt={member.name}
                   className="w-24 h-24 mx-auto rounded-full mb-4 object-cover"
                 />
-                <h3 className="text-lg font-bold">
-                  {member.name}
-                </h3>
+                <h3 className="text-lg font-bold">{member.name}</h3>
                 <p className="uted">{member.role}</p>
               </div>
             ))}
