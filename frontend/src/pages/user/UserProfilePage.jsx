@@ -225,7 +225,7 @@ export default function Profile() {
             </div>
           )}
           <div className="flex justify-end mb-4">
-            <Button onClickCapture={navigate("/plan-trip")} variant="primary">
+            <Button onPress={() => navigate("/plan-trip")} color="primary">
               Create New Trip
             </Button>
           </div>
