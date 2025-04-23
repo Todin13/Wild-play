@@ -79,6 +79,7 @@ exports.createGuideReview = async (req, res) => {
       .status(201)
       .json({ message: "Guide review added successfully", review: newReview });
   } catch (error) {
+    console.log(req.user, error)
     res
       .status(500)
       .json({ message: "Error creating guide review", error: error.message });
