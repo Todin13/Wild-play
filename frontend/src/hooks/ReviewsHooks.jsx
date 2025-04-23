@@ -43,16 +43,16 @@ const useCreateReview = () => {
   const [createReviewError, setCreateReviewError] = useState(null); // Renamed to createReviewError
   const [createReviewSuccess, setCreateReviewSuccess] = useState(false); // Renamed to createReviewSuccess
 
-  const createReview = async (type, id, rating, review) => {
+  const createReview = async (type,rating, review) => {
     setCreateReviewLoading(true); // Use the renamed state
     setCreateReviewError(null); // Reset the error state
     setCreateReviewSuccess(false); // Reset the success state
 
     try {
       if (type === "van") {
-        await createVanReview(id, rating, review);
+        await createVanReview(rating, review);
       } else if (type === "guide") {
-        await createGuideReview(id, rating, review);
+        await createGuideReview(rating, review);
       }
 
       setCreateReviewSuccess(true); // If review creation is successful
