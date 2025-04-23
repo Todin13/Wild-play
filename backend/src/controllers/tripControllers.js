@@ -24,10 +24,6 @@ const createTrip = async (req, res) => {
         .json({ message: "Start date must be in the future" });
     }
 
-    if (van_booked == false){
-        van_id = null;
-    }
-
     const newTrip = new Trip({
       user_id: req.user.id,
       title,
@@ -35,7 +31,7 @@ const createTrip = async (req, res) => {
       end_date,
       locations,
       notes,
-      van_id,
+      van_id: van_booked ? van_id : null,
       van_booked,
     });
 
@@ -184,7 +180,9 @@ const createTripFromGuide = async (req, res) => {
       .status(201)
       .json({ message: "Trip created from guide successfully", trip: newTrip });
   } catch (error) {
-    res.status(500).json({ message: "Error creating trip from guide", error });
+    res
+      .status(500)
+      .json({ message: "Error creating trip from guide", error: error });
   }
 };
 
