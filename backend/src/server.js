@@ -12,7 +12,6 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://wild-play.vercel.app",
   "https://wild-play-todin13s-projects.vercel.app",
-  "https://wild-play-git-fix-backend-todin13s-projects.vercel.app",
 ];
 
 // Global error handler (ensures CORS headers even on error)
