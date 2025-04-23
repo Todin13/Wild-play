@@ -66,7 +66,7 @@ exports.createGuideReview = async (req, res) => {
     }
 
     const newReview = new GuideReview({
-      user_id: req.user.id,
+      user_id: req.user.id.toString(),
       guide_id,
       rating,
       review,
