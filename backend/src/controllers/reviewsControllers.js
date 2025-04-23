@@ -59,7 +59,6 @@ exports.getVanReviews = async (req, res) => {
 // Create a new guide review
 exports.createGuideReview = async (req, res) => {
   try {
-    const { id } = req.user;
     const { guide_id, rating, review } = req.body;
 
     if (!user_id || !guide_id || !rating || !review) {
@@ -67,7 +66,7 @@ exports.createGuideReview = async (req, res) => {
     }
 
     const newReview = new GuideReview({
-      user_id: id,
+      user_id: req.user.id,
       guide_id,
       rating,
       review,
@@ -79,7 +78,7 @@ exports.createGuideReview = async (req, res) => {
       .status(201)
       .json({ message: "Guide review added successfully", review: newReview });
   } catch (error) {
-    console.log(req.user, id, error)
+    console.log(req.user, req.user.id, error)
     res
       .status(500)
       .json({ message: "Error creating guide review", error: error.message });
