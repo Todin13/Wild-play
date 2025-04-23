@@ -162,11 +162,9 @@ const changeBookingStatus = async (req, res) => {
     if (user_type === "ADMIN" || booking.user_id.toString() === id.toString()) {
       booking.status = new_status;
     } else {
-      return res
-        .status(403)
-        .json({
-          message: "You are not authorized to change this booking status",
-        });
+      return res.status(403).json({
+        message: "You are not authorized to change this booking status",
+      });
     }
 
     const updatedBooking = await booking.save(); // save updated booking

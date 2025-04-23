@@ -11,7 +11,7 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://wild-play.vercel.app",
-  "https://wild-play-git-userpage-todin13s-projects.vercel.app",
+  "https://wild-play-todin13s-projects.vercel.app",
 ];
 
 // Global error handler (ensures CORS headers even on error)
@@ -92,5 +92,5 @@ app.use((err, req, res, next) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
