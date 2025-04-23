@@ -24,6 +24,10 @@ const createTrip = async (req, res) => {
         .json({ message: "Start date must be in the future" });
     }
 
+    if (van_booked == false){
+        van_id = null;
+    }
+
     const newTrip = new Trip({
       user_id: req.user.id,
       title,
