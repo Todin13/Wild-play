@@ -35,6 +35,7 @@ const AppRoutes = () => (
       <Route path="/bookings" element={<Bookings />} />
       <Route path="/bookings/:booking_id" element={<BookingDetails />} />
       <Route path="/bookings/new" element={<NewBooking />} />
+      <Route path="/bookings/campers" element={<BookingsCampers />} />
       <Route path="/campervans/:van_id" element={<VanDetails />} /> 
       <Route path="/search_page" element={<SearchPage />} />
       <Route path="/campervans" element={<Campervans />}/>
