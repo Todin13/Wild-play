@@ -15,7 +15,6 @@ import UserDetail from "@/modules/users/UserDetailPage";
 import Bookings from "@/pages/Bookings";
 import BookingDetails from "@/pages/BookingDetails";
 import NewBooking from "@/pages/NewBooking";
-import BookingsCampers from "@/pages/BookingsCampers";
 import VanDetails from "@/pages/VanDetails";
 import SearchPage from "@/pages/SearchPage";
 import Campervans from "@/pages/Campervans"; 
@@ -35,7 +34,6 @@ const AppRoutes = () => (
       <Route path="/bookings" element={<Bookings />} />
       <Route path="/bookings/:booking_id" element={<BookingDetails />} />
       <Route path="/bookings/new" element={<NewBooking />} />
-      <Route path="/bookings/campers" element={<BookingsCampers />} />
       <Route path="/bookings/campers/details/:van_id" element={<VanDetails />} /> 
       <Route path="/search_page" element={<SearchPage />} />
       <Route path="/campervans" element={<Campervans />}/>
