@@ -55,7 +55,8 @@ export const DealCard = ({ deal }) => {
   
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+    <div className="w-72 rounded-xl shadow-md p-4  border bg-white/80
+                backdrop-blur-md transition-all duration-200">
       <div className="p-4 flex-1 flex flex-col">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
           {van.manufacturer} {van.model}

@@ -7,6 +7,7 @@ import DealsCarousel from "@/modules/deals/carousel";
 import MainLayout from "@/layouts/MainLayout";
 import API from "@/utils/api"; 
 import handlerSearch from "@/modules/search/api";
+import MountainSVG from "@/assets/images/mountain-svg";
 
 export default function SearchPage() {
   const [keyword, setKeyword] = useState("");
@@ -99,8 +100,12 @@ export default function SearchPage() {
 
   return (
     <MainLayout>
+     {/* Fixed Mountain Background at Bottom */}
+        <div className="fixed bottom-0 left-0 w-full z-[-1] pointer-events-none transform xl:translate-y-[30%]">
+        <MountainSVG className="w-full h-auto object-cover text-mountain-deepgreen" />
+      </div>
       {/* Outer wrapper */}
-      <div className="relative min-h-screen bg-gray-50 overflow-hidden">
+      <div className="relative min-h-screen overflow-hidden">
         {/* Search Bar */}
         <main className="pt-10">
           <div className="w-1/2 mx-auto mb-8">

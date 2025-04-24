@@ -2,7 +2,7 @@ import React from 'react';
 import MainLayout from '@/layouts/MainLayout';
 import DealsCarousel from '@/modules/deals/carousel';
 import { CircularProgress } from '@heroui/react';
-import BannerImage from '@/components/ui/BannerImage';
+import MountainSVG from '@/assets/images/mountain-svg';
 import { useDeals } from '@/hooks/DealsHooks';
 
 export default function Deals() {
@@ -26,8 +26,10 @@ export default function Deals() {
 
   return (
     <MainLayout>
-      {/* Hero Banner */}
-      <BannerImage />
+      {/* Fixed Mountain Background at Bottom */}
+      <div className="fixed bottom-0 left-0 w-full z-[-1] pointer-events-none transform xl:translate-y-[30%]">
+          <MountainSVG className="w-full h-auto object-cover text-mountain-deepgreen" />
+        </div>
 
       {/* Deals Carousel Section */}
       <div className="max-w-7xl mx-auto px-4 py-8">
