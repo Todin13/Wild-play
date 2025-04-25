@@ -41,14 +41,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleDeleteDeal = async (id) => {
-    try {
-      await API.delete(`/deals/${id}`);
-      setDeals((prev) => prev.filter((d) => d._id !== id));
-    } catch (err) {
-      console.error("Delete deal failed:", err);
-    }
-  };
 
   const handleAddCamper = (newCamper) => setCampers((prev) => [...prev, newCamper]);
   const handleAddDeal = (newDeal) => setDeals((prev) => [...prev, newDeal]);
@@ -64,9 +56,7 @@ const AdminDashboard = () => {
         <Content
           section={section}
           campers={campers}
-          deals={deals}
           onDeleteCamper={handleDeleteCamper}
-          onDeleteDeal={handleDeleteDeal}
           onAddCamper={handleAddCamper}
           onAddDeal={handleAddDeal}
         />

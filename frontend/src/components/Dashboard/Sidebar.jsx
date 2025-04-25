@@ -1,8 +1,7 @@
-// Sidebar.jsx
-import { Link } from "react-router-dom";
+
 
 const Sidebar = ({ onSelect }) => {
-  const menuItems = ["UserTable", "Campers", "Deals", "Trips", "Guides"];
+  const menuItems = ["UserTable", "Campers", "Deals", "Guides"];
 
   return (
     <aside className="w-64 shadow-md p-4  border bg-white/80 backdrop-blur-md ">

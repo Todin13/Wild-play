@@ -1,6 +1,9 @@
 import UserTable from "@/pages/user/UserTablePage";
+import Title from "@/components/ui/Titles";
+import DealsTable from "@/components/Dashboard/DealsTable";
+import CampersTable from "@/components/Dashboard/CampersTable";
 
-const Content = ({ section, campers, deals, onDeleteCamper, onDeleteDeal }) => {
+const Content = ({ section}) => {
     const renderContent = () => {
       switch (section) {
         case "Dashboard":
@@ -8,35 +11,9 @@ const Content = ({ section, campers, deals, onDeleteCamper, onDeleteDeal }) => {
         case "UserTable":
           return <UserTable />;
         case "Campers":
-          return (
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Manage Campervans</h3>
-              <ul className="space-y-3">
-                {campers.map((c) => (
-                  <li key={c._id} className="flex justify-between items-center bg-gray-100 p-4 rounded">
-                    <span>{c.name} — {c.type}</span>
-                    <button onClick={() => onDeleteCamper(c._id)} className="text-red-500 hover:underline">Delete</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
+          return <CampersTable/>;
         case "Deals":
-          return (
-            <div>
-              <h3 className="text-xl font-semibold mb-4">Manage Deals</h3>
-              <ul className="space-y-3">
-                {deals.map((d) => (
-                  <li key={d._id} className="flex justify-between items-center bg-gray-100 p-4 rounded">
-                    <span>{d.title} — {d.discount}%</span>
-                    <button onClick={() => onDeleteDeal(d._id)} className="text-red-500 hover:underline">Delete</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        case "Trips":
-          return <p className="text-gray-600">Trips management coming soon!</p>;
+          return <DealsTable/>;
         case "Guides":
           return <p className="text-gray-600">Guides management coming soon!</p>;
         default:
@@ -46,7 +23,10 @@ const Content = ({ section, campers, deals, onDeleteCamper, onDeleteDeal }) => {
   
     return (
       <div className="flex-1 p-6 bg-white overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-6">{section}</h2>
+        <Title
+            variant="section"
+            className="text-center mb-6 flex items-center justify-center gap-4 bg-white/80 backdrop-blur-md rounded-xl shadow-lg hover:shadow-xl p-3 text-deepgreen"
+          >Manage {section}</Title>
         {renderContent()}
       </div>
     );
