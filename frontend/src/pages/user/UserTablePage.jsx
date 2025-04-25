@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { useUserTable } from "@/hooks/UserHooks";
 import { Input, Button, Select, SelectItem, Checkbox, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@heroui/react";
 import "@/assets/styles/index.css";
+import Sidebar from "@/components/Dashboard/Sidebar";
 
 function UserTable() {
   const {
