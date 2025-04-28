@@ -63,7 +63,7 @@ const GuideDetailPage = () => {
   return (
     <MainLayout>
       <section className="px-4 lg:px-12 py-12 mx-auto min-w-[95vw]">
-        <div className="flex flex-col items-center gap-6 lg:flex-row lg:gap-20 lg:justify-center">
+        <div className="flex flex-col gap-6 lg:flex-row lg:gap-20 lg:justify-center">
           {/* Guide Card */}
           <div className="w-full lg:w-[45%] max-w-[525px]">
             <GuideDetailCard guide={guide} />
@@ -84,7 +84,7 @@ const GuideDetailPage = () => {
 
           {/* Map */}
           {guide.locations && guide.locations.length > 0 && (
-            <div className="w-full lg:w-[50%] sticky top-24 h-[50vh] lg:h-[80vh] relative">
+            <div className="w-full lg:w-[50%] sticky top-36 h-[50vh] lg:h-[80vh] relative">
               <div className="w-full h-full rounded-3xl overflow-hidden shadow-lg border border-voga-border relative">
                 <MapContainer
                   center={defaultCenter}

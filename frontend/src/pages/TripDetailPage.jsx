@@ -32,16 +32,16 @@ const TripDetailPage = () => {
       ? [firstLocation.lat, firstLocation.lon]
       : [48.8566, 2.3522]; // fallback to Paris
 
-  const { goToCreateTripPage } = useNavigationHooks(); // Access custom navigation hook for trip creation
+  const { goToCreateTripPage } = useNavigationHooks();
 
   const { createFromTrip, creatingFromTripLoading, creatingFromTripError } =
     useCreateGuideFromTrip();
 
   const handleDeleteTrip = async () => {
     try {
-      await removeTrip(trip?._id); // Remove the trip using the delete hook
+      await removeTrip(trip?._id);
       alert("Trip deleted successfully!");
-      navigate(-1); // Optionally redirect to the trips page
+      navigate(-1);
     } catch (error) {
       alert(
         "Error deleting trip: " + (error?.message || "Something went wrong")
@@ -67,21 +67,21 @@ const TripDetailPage = () => {
   return (
     <MainLayout>
       <section className="px-4 lg:px-12 py-12 mx-auto min-w-[95vw]">
-        <div className="flex flex-col items-center gap-6 lg:flex-row lg:gap-20 lg:justify-center">
+        <div className="flex flex-col gap-6 lg:flex-row lg:gap-20 lg:justify-center relative">
           {/* Trip Card */}
-          <div className="w-full lg:w-[45%] max-w-[525px]">
+          <div className="w-full lg:w-[45%] max-w-[600px]">
             <TripDetailCard trip={trip} />
           </div>
 
           {/* Map */}
           {trip.locations && trip.locations.length > 0 && (
-            <div className="w-full lg:w-[50%] sticky top-24 h-[50vh] lg:h-[80vh] relative">
-              <div className="w-full h-full rounded-3xl overflow-hidden shadow-lg border border-voga-border relative">
+            <div className="w-full lg:w-[50%] sticky top-36 h-[50vh] lg:h-[80vh]">
+              <div className="w-full h-full rounded-3xl overflow-hidden shadow-lg border border-voga-border">
                 <MapContainer
                   center={defaultCenter}
                   zoom={6}
                   scrollWheelZoom
-                  className="h-full w-full z-0"
+                  className="h-full w-full"
                 >
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
