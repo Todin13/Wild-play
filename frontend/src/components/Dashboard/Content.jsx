@@ -22,7 +22,7 @@ const Content = ({ section}) => {
     };
   
     return (
-      <div className="flex-1 p-6 bg-white overflow-y-auto">
+      <div className="flex-1 p-6 bg-white overflow-y-auto h-screen">
         <Title
             variant="section"
             className="text-center mb-6 flex items-center justify-center gap-4 bg-white/80 backdrop-blur-md rounded-xl shadow-lg hover:shadow-xl p-3 text-deepgreen"

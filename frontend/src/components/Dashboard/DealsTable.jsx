@@ -31,7 +31,7 @@ function DealsTable() {
         </div>
       }
       removeWrapper
-      className="mt-4 mb-4 gap-4"
+      className="mt-4 mb-4 ml-10 mr-20 gap-4"
       color="primary"
       selectionMode="single"
     >

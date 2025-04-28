@@ -2,9 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { useUserTable } from "@/hooks/UserHooks";
 import { Input, Button, Select, SelectItem, Checkbox, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@heroui/react";
-import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
-import Sidebar from "@/components/Dashboard/Sidebar";
 
 function UserTable() {
   const {
@@ -68,7 +66,27 @@ function UserTable() {
         <Button color="success" size="lg" variant="ghost" onPress={handleSearch}>Search</Button>
       </div>
 
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4 max-w-4xl mx-auto">
+      <div className="flex w-full md:flex-nowrap mt-4 mb-4 gap-4 max-w-4xl mx-auto">
+        <Checkbox
+          color="success"
+          size="lg"
+          checked={isChecked}
+          onChange={handleBirthdateChecked}
+        >
+        </Checkbox>
+        <Input 
+          label="Date of Birth" 
+          size='sm' 
+          variant="underlined"
+          type="date"
+          className="max-w-xs"
+          disabled={!isChecked}
+          value={birthdate}
+          onChange={handleBirthdate}
+        />
+      </div>
+
+      <div>
         <Table 
           bottomContent={
             <div className="flex w-full justify-center">

@@ -1,0 +1,25 @@
+/* Sidebar Styling */
+.sidebar {
+    @apply flex flex-col justify-start
+           fixed top-0 left-0 h-screen w-64 z-40
+           bg-navBarBg text-white shadow-lg p-6 pt-32;
+    /* p-6 for left/right/bottom, pt-16 for top! */
+  }
+  
+  /* Sidebar Title */
+  .sidebar-title {
+    @apply text-2xl font-bold mb-10 tracking-wide ml-2;
+  }
+  
+  /* Sidebar Menu */
+  .sidebar-menu {
+    @apply flex flex-col gap-8 ml-2; /* More gap and move buttons a bit to right */
+  }
+  
+  /* Sidebar Menu Item */
+  .sidebar-menu-item {
+    @apply text-lg font-semibold text-white 
+           hover:text-green-300 transition-all duration-200 ease-in-out
+           text-left w-full;
+  }
+  

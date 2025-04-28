@@ -1,25 +1,34 @@
-
+import "@/assets/styles/sidebar.css"; 
 
 const Sidebar = ({ onSelect }) => {
   const menuItems = ["UserTable", "Campers", "Deals", "Guides"];
 
   return (
-    <aside className="w-64 shadow-md p-4  border bg-white/80 backdrop-blur-md ">
+    <aside className="sidebar">
       
-      <nav>
-        <ul className="space-y-4">
-          {menuItems.map((item) => (
-            <li key={item}>
-              <button
-                onClick={() => onSelect(item)}
-                className="text-left w-full text-gray-700 hover:text-green-600 font-medium transition"
-              >
-                {item}
-              </button>
-            </li>
-          ))}
-        </ul>
+      {/* Title */}
+      <div className="sidebar-title">
+        Dashboard
+      </div>
+
+      {/* Menu */}
+      <nav className="sidebar-menu">
+        {menuItems.map((item) => (
+          <button
+            key={item}
+            onClick={() => onSelect(item)}
+            className="sidebar-menu-item"
+          >
+            {item}
+          </button>
+        ))}
       </nav>
+
+      {/* Footer if needed */}
+      <div className="sidebar-footer">
+        {/* Example: Settings, logout, or version */}
+      </div>
+      
     </aside>
   );
 };
