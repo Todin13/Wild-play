@@ -24,7 +24,7 @@ function useNavigationHooks() {
    * Navigate to the trip detail page with the trip object passed in state
    */
   const goToTripDetail = (trip) => {
-    navigate("/trips", { state: { trip: { trip } } });
+    navigate("/trips", { state: { trip } });
   };
 
   /**

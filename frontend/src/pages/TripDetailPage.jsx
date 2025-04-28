@@ -41,7 +41,7 @@ const TripDetailPage = () => {
     try {
       await removeTrip(trip?._id); // Remove the trip using the delete hook
       alert("Trip deleted successfully!");
-      navigate("/"); // Optionally redirect to the trips page
+      navigate(-1); // Optionally redirect to the trips page
     } catch (error) {
       alert(
         "Error deleting trip: " + (error?.message || "Something went wrong")
@@ -52,6 +52,7 @@ const TripDetailPage = () => {
   const handleCreatGuide = async () => {
     try {
       await createFromTrip(trip?._id);
+      alert("Guide created successfully from this trip!");
     } catch (error) {
       alert(
         "Error deleting trip: " + (error?.message || "Something went wrong")
@@ -158,7 +159,7 @@ const TripDetailPage = () => {
           </Button>
 
           <Button
-            variant="danger"
+            variant="primary"
             onClick={handleDeleteTrip}
             disabled={deleteLoading}
             className="text-2xl py-4 px-8 font-semibold"

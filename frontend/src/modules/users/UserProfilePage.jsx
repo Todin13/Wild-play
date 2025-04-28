@@ -221,7 +221,18 @@ export default function Profile() {
       {/* User Trips */}
       {user && user.detail && (
         <div className="mt-12 max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Your Trips</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold">Your Trips</h2>
+            <Button
+              onPress={() => navigate("/plan-trip")}
+              className="bg-buttonBg text-buttonText"
+              size="lg"
+              radius="full"
+            >
+              Create New Trip
+            </Button>
+          </div>
+          <hr className="border-t-2 border-voga-border mb-6" />
           {tripsLoading ? (
             <p>Loading trips...</p>
           ) : tripsError ? (
@@ -231,17 +242,12 @@ export default function Profile() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {trips.map((trip) => (
-                <Link to="/guides" state={{ trip: trip }} key={trip._id}>
-                  <TripCard key={trip._id} trip={trip} />
+                <Link to="/trips" state={{ trip: trip }} key={trip._id}>
+                  <TripCard key={trip._id} trip={trip}/>
                 </Link>
               ))}
             </div>
           )}
-          <div className="flex justify-end mb-4">
-            <Button onPress={() => navigate("/plan-trip")} color="primary">
-              Create New Trip
-            </Button>
-          </div>
         </div>
       )}
 

@@ -12,6 +12,7 @@ import Button from "@/components/ui/Buttons";
 import CreateTripFromGuideButton from "@/modules/trips/CreateTripButton";
 import { useUserDashboard } from "@/hooks/UserHooks";
 import { useDeleteGuide } from "@/hooks/GuideHooks";
+import { useNavigate } from "react-router-dom"; // Add this import at the top
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -34,6 +35,8 @@ const GuideDetailPage = () => {
       ? [firstLocation.lat, firstLocation.lon]
       : [48.8566, 2.3522]; // fallback to Paris
 
+  const navigate = useNavigate();
+
   // Fetch reviews using the custom hook
   const { reviews, reviewsLoading, reviewsError } = useReviews(
     "guide",
@@ -50,6 +53,7 @@ const GuideDetailPage = () => {
       try {
         await remove(guide._id); // Delete the guide
         alert("Guide deleted successfully.");
+        navigate(-1);
       } catch (error) {
         alert(deletingGuideError || "Failed to delete the guide.");
       }
@@ -64,7 +68,7 @@ const GuideDetailPage = () => {
           <div className="w-full lg:w-[45%] max-w-[525px]">
             <GuideDetailCard guide={guide} />
             {/* Button to Delete Guide */}
-            {user && guide?.user_id === user.id && (
+            {user && guide?.user_id && guide?.user_id.__id === user.id && (
               <div className="flex justify-center gap-4 mt-6">
                 <Button
                   variant="primary"

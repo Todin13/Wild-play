@@ -1,8 +1,10 @@
 import { useState, useRef } from "react";
 import MainLayout from "@/layouts/MainLayout";
-import { useAddTrip } from "@/hooks/TripHooks";
+import { useAddTrip, useUpdateTrip } from "@/hooks/TripHooks";
 import "@/assets/styles/index.css";
+import { useLocation } from "react-router-dom";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import useNavigationHooks from "@/hooks/NavigationHooks";
 
 import {
   MapContainer,
@@ -51,6 +53,12 @@ const LocationPicker = ({ onSelect }) => {
 };
 
 const CreateTripPage = () => {
+  const location = useLocation();
+  const { trip } = location.state || {};
+  const isEditing = trip && Object.keys(trip).length > 0;
+
+  const { goToTripDetail } = useNavigationHooks();
+
   const mapDivRef = useRef(null);
   const [mapInstance, setMapInstance] = useState(null);
 
@@ -60,16 +68,20 @@ const CreateTripPage = () => {
   const [searchMarkers, setSearchMarkers] = useState([]);
 
   const [tripData, setTripData] = useState({
-    title: "",
-    start_date: "",
-    end_date: "",
-    locations: [{ name: "", section: "", lat: 0, lon: 0, info: "" }],
-    notes: [],
-    van_id: "",
-    van_booked: false,
+    title: isEditing ? trip.title : "",
+    start_date:
+      isEditing && trip.start_date ? trip.start_date.slice(0, 10) : "",
+    end_date: isEditing && trip.end_date ? trip.end_date.slice(0, 10) : "",
+    locations: isEditing
+      ? [...trip.locations, { name: "", section: "", lat: 0, lon: 0, info: "" }]
+      : [{ name: "", section: "", lat: 0, lon: 0, info: "" }],
+    notes: isEditing ? trip.notes : [],
+    van_id: isEditing ? trip.van_id : "",
+    van_booked: isEditing ? trip.van_booked : false,
   });
 
   const { addTrip, addTripLoading, addTripError } = useAddTrip();
+  const { updateTrip, updateLoading, updateError } = useUpdateTrip();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -129,14 +141,25 @@ const CreateTripPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await addTrip(tripData);
-      alert("Trip created successfully!");
+      if (isEditing) {
+        const response = await updateTrip(trip._id, tripData);
+        alert("Trip updated successfully!");
+        goToTripDetail(response.trip);
+      } else {
+        const response = await addTrip(tripData);
+        alert("Trip created successfully!");
+        goToTripDetail(response.trip);
+      }
     } catch (error) {
-      alert(
+      const message =
         addTripError?.message ||
-          error?.message ||
-          "Something went wrong while creating the trip."
-      );
+        updateError?.message ||
+        error?.message ||
+        "Something went wrong.";
+      console.log(addTripError?.message);
+      console.log(updateError?.message);
+      console.log(error?.message);
+      alert(message);
     }
   };
 
@@ -200,7 +223,7 @@ const CreateTripPage = () => {
             style={{ maxHeight: "100%" }}
           >
             <h2 className="text-3xl font-bold text-center text-voga-title">
-              Create New Trip
+              {isEditing ? "Update Trip" : "Create New Trip"}
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-8">
@@ -365,10 +388,16 @@ const CreateTripPage = () => {
               <div className="text-center">
                 <button
                   type="submit"
-                  disabled={addTripLoading}
+                  disabled={addTripLoading || updateLoading}
                   className="px-6 py-3 text-xl font-semibold bg-voga-accent text-white rounded-lg hover:bg-voga-accent-dark disabled:opacity-60"
                 >
-                  {addTripLoading ? "Creating..." : "Create Trip"}
+                  {addTripLoading || updateLoading
+                    ? isEditing
+                      ? "Updating..."
+                      : "Creating..."
+                    : isEditing
+                    ? "Update Trip"
+                    : "Create Trip"}
                 </button>
               </div>
             </form>
