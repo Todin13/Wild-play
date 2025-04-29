@@ -62,7 +62,7 @@ const GuideDetailPage = () => {
 
   return (
     <MainLayout>
-      <section className="px-4 lg:px-12 py-12 mx-auto min-w-[95vw]">
+      <section className="px-4 lg:px-12 py-16 mx-auto min-w-[95vw]">
         <div className="flex flex-col gap-6 lg:flex-row lg:gap-20 lg:justify-center">
           {/* Guide Card */}
           <div className="w-full lg:w-[45%] max-w-[525px]">

@@ -20,6 +20,21 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
   iconUrl: markerIcon,
@@ -51,6 +66,186 @@ const LocationPicker = ({ onSelect }) => {
   });
   return null;
 };
+const SortableLocationItem = ({
+  id,
+  index,
+  location,
+  handleLocationChange,
+  removeLocation,
+  sectionLocationCount,
+}) => {
+  const { attributes, listeners, setNodeRef, transform } = useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition: undefined,
+    pointerEvents: transform ? "none" : "auto",
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+      className="relative space-y-2 border p-4 rounded-lg bg-gray-50 cursor-move"
+    >
+      <div className="flex justify-between items-center">
+        <input
+          name="name"
+          value={location.name}
+          onChange={(e) => handleLocationChange(e, index)}
+          placeholder="Name"
+          className="w-full p-3 border rounded"
+          required
+        />
+
+        {sectionLocationCount > 1 && (
+          <button
+            type="button"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={() => {
+              removeLocation(index);
+            }}
+            className="text-red-500 font-bold cursor-pointer text-xl ml-4"
+          >
+            ×
+          </button>
+        )}
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <input
+          type="number"
+          name="lat"
+          value={location.lat}
+          onChange={(e) => handleLocationChange(e, index)}
+          placeholder="Latitude"
+          className="p-3 border rounded"
+          required
+        />
+        <input
+          type="number"
+          name="lon"
+          value={location.lon}
+          onChange={(e) => handleLocationChange(e, index)}
+          placeholder="Longitude"
+          className="p-3 border rounded"
+          required
+        />
+      </div>
+
+      <input
+        name="info"
+        value={location.info}
+        onChange={(e) => handleLocationChange(e, index)}
+        placeholder="Optional Info"
+        className="w-full p-3 border rounded"
+      />
+    </div>
+  );
+};
+
+const SectionGroup = ({
+  sectionName,
+  group,
+  setTripData,
+  handleLocationChange,
+  totalLocations,
+}) => {
+  const [tempSectionName, setTempSectionName] = useState(sectionName);
+
+  const commitSectionNameChange = () => {
+    setTripData((prev) => {
+      const updatedLocations = [...prev.locations];
+      group.forEach(({ index }) => {
+        updatedLocations[index] = {
+          ...updatedLocations[index],
+          section: tempSectionName,
+        };
+      });
+      return { ...prev, locations: updatedLocations };
+    });
+  };
+
+  const deleteSection = () => {
+    setTripData((prev) => ({
+      ...prev,
+      locations: prev.locations.filter((loc) => loc.section !== sectionName),
+    }));
+  };
+
+  const removeLocation = (indexToRemove) => {
+    setTripData((prev) => ({
+      ...prev,
+      locations: prev.locations.filter((_, index) => index !== indexToRemove),
+    }));
+  };
+
+  const addLocationToSection = () => {
+    setTripData((prev) => ({
+      ...prev,
+      locations: [
+        ...prev.locations,
+        {
+          section: tempSectionName,
+          name: "",
+          lat: "",
+          lon: "",
+          info: "",
+        },
+      ],
+    }));
+  };
+
+  return (
+    <div className="mb-6 border-b pb-4">
+      <div className="flex justify-between items-center mb-2">
+        <input
+          type="text"
+          value={tempSectionName}
+          onChange={(e) => setTempSectionName(e.target.value)}
+          onBlur={commitSectionNameChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              commitSectionNameChange();
+              e.target.blur();
+            }
+          }}
+          className="text-xl font-bold text-gray-700 bg-transparent border-b focus:outline-none"
+          placeholder="Section Name"
+        />
+        <button
+          onClick={deleteSection}
+          className="text-red-500 hover:text-red-700 text-sm font-semibold"
+        >
+          Delete Section
+        </button>
+      </div>
+
+      {group.map(({ location, index }) => (
+        <SortableLocationItem
+          key={index}
+          id={index.toString()}
+          index={index}
+          location={location}
+          handleLocationChange={handleLocationChange}
+          removeLocation={removeLocation}
+          sectionLocationCount={group.length} // section-specific count
+        />
+      ))}
+
+      <button
+        type="button"
+        onClick={addLocationToSection}
+        className="mt-2 text-sm text-blue-600 hover:text-blue-800"
+      >
+        + Add Location
+      </button>
+    </div>
+  );
+};
 
 const CreateTripPage = () => {
   const location = useLocation();
@@ -73,8 +268,11 @@ const CreateTripPage = () => {
       isEditing && trip.start_date ? trip.start_date.slice(0, 10) : "",
     end_date: isEditing && trip.end_date ? trip.end_date.slice(0, 10) : "",
     locations: isEditing
-      ? [...trip.locations, { name: "", section: "", lat: 0, lon: 0, info: "" }]
-      : [{ name: "", section: "", lat: 0, lon: 0, info: "" }],
+      ? [
+          ...trip.locations,
+          { name: "", section: "", lat: "", lon: "", info: "" },
+        ]
+      : [{ name: "", section: "", lat: "", lon: "", info: "" }],
     notes: isEditing ? trip.notes : [],
     van_id: isEditing ? trip.van_id : "",
     van_booked: isEditing ? trip.van_booked : false,
@@ -93,24 +291,6 @@ const CreateTripPage = () => {
     const updated = [...tripData.locations];
     updated[index][name] = value;
     setTripData((prev) => ({ ...prev, locations: updated }));
-  };
-
-  const addLocation = () => {
-    setTripData((prev) => ({
-      ...prev,
-      locations: [
-        ...prev.locations,
-        { name: "", section: "", lat: 0, lon: 0, info: "" },
-      ],
-    }));
-  };
-
-  const removeLocation = (index) => {
-    if (tripData.locations.length > 1) {
-      const updated = [...tripData.locations];
-      updated.splice(index, 1);
-      setTripData((prev) => ({ ...prev, locations: updated }));
-    }
   };
 
   const handleMarkerDragEnd = (idx, e) => {
@@ -213,29 +393,57 @@ const CreateTripPage = () => {
     setSearchResults([]);
   };
 
+  const addSection = () => {
+    setTripData((prev) => {
+      const existingSections = new Set(
+        prev.locations.map((loc) => loc.section)
+      );
+      let sectionName = "New Section";
+      let count = 1;
+
+      while (existingSections.has(sectionName)) {
+        sectionName = `New Section ${count++}`;
+      }
+
+      return {
+        ...prev,
+        locations: [
+          ...prev.locations,
+          {
+            section: sectionName,
+            name: "",
+            lat: "",
+            lon: "",
+            info: "",
+          },
+        ],
+      };
+    });
+  };
+
   return (
     <MainLayout>
-      <div className="w-full min-w-[95%] p-8">
-        <div className="flex flex-col lg:flex-row gap-8 lg:h-[calc(100vh-4rem)]">
+      <div className="w-full px-4 lg:px-12 py-16 mx-auto min-w-[95vw]">
+        {/* <h2 className="text-3xl font-bold text-center text-voga-title lg:px-12">
+          {isEditing ? "Update Trip" : "Create New Trip"}
+        </h2> */}
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Form Section */}
-          <div
-            className="w-full lg:w-[45%] bg-white p-8 rounded-3xl shadow-xl border border-gray-300 space-y-8 overflow-y-auto"
-            style={{ maxHeight: "100%" }}
-          >
-            <h2 className="text-3xl font-bold text-center text-voga-title">
-              {isEditing ? "Update Trip" : "Create New Trip"}
-            </h2>
-
+          <div className="w-full lg:w-[45%] bg-white p-8 rounded-3xl shadow-xl border border-gray-300 space-y-8 overflow-y-auto">
             <form onSubmit={handleSubmit} className="space-y-8">
-              <input
-                name="title"
-                value={tripData.title}
-                onChange={handleInputChange}
-                placeholder="Trip Title"
-                className="w-full p-4 border rounded-lg"
-                required
-              />
+              {/* Trip Title as inline input */}
+              <div className="text-3xl font-bold text-voga-title text-center">
+                <input
+                  name="title"
+                  value={tripData.title}
+                  onChange={handleInputChange}
+                  placeholder="Trip Title"
+                  className="bg-transparent border-b border-gray-400 focus:outline-none focus:border-voga-accent text-3xl font-bold w-full text-center"
+                  required
+                />
+              </div>
 
+              {/* Start & End Dates */}
               <div className="grid grid-cols-2 gap-6">
                 <input
                   type="date"
@@ -255,6 +463,7 @@ const CreateTripPage = () => {
                 />
               </div>
 
+              {/* Van Booked */}
               <label className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -267,7 +476,7 @@ const CreateTripPage = () => {
                 Van Booked
               </label>
 
-              {/* Locations */}
+              {/* Locations Section */}
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h3 className="text-2xl font-semibold text-voga-title">
@@ -282,71 +491,60 @@ const CreateTripPage = () => {
                   </button>
                 </div>
 
-                {tripData.locations.map((location, index) => (
-                  <div key={index} className="flex gap-4 items-center relative">
-                    <div className="flex-1 border p-4 rounded-lg space-y-4 bg-gray-50">
-                      <div className="grid grid-cols-2 gap-4">
-                        <input
-                          name="name"
-                          value={location.name}
-                          onChange={(e) => handleLocationChange(e, index)}
-                          placeholder="Name"
-                          className="p-3 border rounded"
-                          required
-                        />
-                        <input
-                          name="section"
-                          value={location.section}
-                          onChange={(e) => handleLocationChange(e, index)}
-                          placeholder="Section"
-                          className="p-3 border rounded"
-                          required
-                        />
-                        <input
-                          type="number"
-                          name="lat"
-                          value={location.lat}
-                          onChange={(e) => handleLocationChange(e, index)}
-                          placeholder="Latitude"
-                          className="p-3 border rounded"
-                          required
-                        />
-                        <input
-                          type="number"
-                          name="lon"
-                          value={location.lon}
-                          onChange={(e) => handleLocationChange(e, index)}
-                          placeholder="Longitude"
-                          className="p-3 border rounded"
-                          required
-                        />
-                      </div>
-                      <input
-                        name="info"
-                        value={location.info}
-                        onChange={(e) => handleLocationChange(e, index)}
-                        placeholder="Optional Info"
-                        className="w-full p-3 border rounded"
-                      />
-                    </div>
-
-                    {/* Close button (X) on the right */}
-                    {tripData.locations.length > 1 && (
-                      <div
-                        onClick={() => removeLocation(index)}
-                        className="absolute top-0 right-0 text-red-500 font-bold cursor-pointer text-xl"
-                      >
-                        ×
-                      </div>
+                <DndContext
+                  sensors={useSensors(useSensor(PointerSensor))}
+                  collisionDetection={closestCenter}
+                  onDragEnd={({ active, over }) => {
+                    if (active.id !== over?.id) {
+                      const oldIndex = tripData.locations.findIndex(
+                        (_, idx) => idx.toString() === active.id
+                      );
+                      const newIndex = tripData.locations.findIndex(
+                        (_, idx) => idx.toString() === over?.id
+                      );
+                      setTripData((prev) => ({
+                        ...prev,
+                        locations: arrayMove(
+                          prev.locations,
+                          oldIndex,
+                          newIndex
+                        ),
+                      }));
+                    }
+                  }}
+                >
+                  <SortableContext
+                    items={tripData.locations.map((_, index) =>
+                      index.toString()
                     )}
-                  </div>
-                ))}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {Object.entries(
+                      tripData.locations.reduce((groups, loc, idx) => {
+                        const section = loc.section;
+                        if (!groups[section]) groups[section] = [];
+                        groups[section].push({ location: loc, index: idx });
+                        return groups;
+                      }, {})
+                    ).map(([sectionName, group]) => (
+                      <SectionGroup
+                        key={sectionName}
+                        sectionName={sectionName}
+                        group={group}
+                        setTripData={setTripData}
+                        handleLocationChange={handleLocationChange}
+                        totalLocations={tripData.locations.length}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
+
                 <button
                   type="button"
-                  onClick={addLocation}
+                  onClick={addSection}
                   className="px-4 py-2 bg-voga-accent text-white rounded hover:bg-voga-accent-dark"
                 >
-                  Add Location
+                  Add Section
                 </button>
               </div>
 
@@ -356,10 +554,7 @@ const CreateTripPage = () => {
                   Notes
                 </h3>
                 {tripData.notes.map((note, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-4 justify-center relative"
-                  >
+                  <div key={index} className="relative">
                     <textarea
                       value={note}
                       onChange={(e) => handleNoteChange(e, index)}
@@ -374,17 +569,16 @@ const CreateTripPage = () => {
                     </div>
                   </div>
                 ))}
-                <div>
-                  <button
-                    type="button"
-                    onClick={addNote}
-                    className="px-4 py-2 bg-voga-accent text-white rounded hover:bg-voga-accent-dark"
-                  >
-                    Add Note
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={addNote}
+                  className="px-4 py-2 bg-voga-accent text-white rounded hover:bg-voga-accent-dark"
+                >
+                  Add Note
+                </button>
               </div>
 
+              {/* Submit Button */}
               <div className="text-center">
                 <button
                   type="submit"
@@ -406,7 +600,7 @@ const CreateTripPage = () => {
           {/* Map Section */}
           <div
             ref={mapDivRef}
-            className="w-full lg:w-[60%] h-[500px] lg:h-full rounded-3xl overflow-hidden border shadow-md relative z-0"
+            className="w-full lg:w-[60%] sticky top-36 h-[50vh] lg:h-[80vh] rounded-3xl overflow-hidden border shadow-md relative z-0"
           >
             <div className="absolute top-4 right-4 z-[1000] w-[90%] max-w-md bg-white rounded-lg shadow-lg p-4">
               <div className="flex items-center relative">
@@ -415,7 +609,7 @@ const CreateTripPage = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handlePlaceSearch()}
-                  placeholder="Search places like 'parking', 'restaurant'..."
+                  placeholder="Search places like 'camping', 'restaurant'..."
                   className="w-full p-2 border rounded pr-10"
                 />
                 <button
