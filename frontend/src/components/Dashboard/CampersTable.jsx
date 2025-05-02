@@ -7,76 +7,130 @@ import {
   TableCell,
   Pagination,
   Button,
+  Input,
+  Select,
+  SelectItem,
 } from "@heroui/react";
 import { useState } from "react";
 import { useVans } from "@/hooks/VanHooks";
 
 const CampersTable = () => {
-  const { vans, count, loading, removeVan } = useVans(); // ✅ Corrected here
+  const [filters, setFilters] = useState({
+    manufacturer: "",
+    transmission: "",
+    type: "",
+  });
+
+  const { vans, count, loading, removeVan } = useVans(filters);
+
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
-
   const pages = Math.ceil(count / rowsPerPage);
   const items = vans.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-  if (loading) return <p className="text-center">Loading vans...</p>; // ✅ Loading state
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+    setPage(1); // Reset to page 1 on filter change
+  };
 
   return (
-    <Table
-      removeWrapper
-      className="mt-4 mb-4 gap-4"
-      color="primary"
-      selectionMode="single"
-      bottomContent={
-        <div className="flex w-full justify-center">
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="success"
-            page={page}
-            total={pages}
-            onChange={(page) => setPage(page)}
-          />
-        </div>
-      }
-    >
-      <TableHeader>
-        <TableColumn>#</TableColumn>
-        <TableColumn>Manufacturer</TableColumn>
-        <TableColumn>Type</TableColumn>
-        <TableColumn>Price</TableColumn>
-        <TableColumn>Delete</TableColumn>
-      </TableHeader>
-      <TableBody>
-        {items.length > 0 ? (
-          items.map((van, index) => (
-            <TableRow key={van._id}>
-              <TableCell>{index + 1 + (page - 1) * rowsPerPage}</TableCell>
-              <TableCell>{van.manufacturer}</TableCell>
-              <TableCell>{van.type}</TableCell>
-              <TableCell>{van.price} €</TableCell>
-              <TableCell>
-                <Button
-                  color="danger"
-                  size="lg"
-                  variant="shadow"
-                  onPress={() => removeVan(van._id)}
-                >
-                  Delete
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={5} className="text-center">
-              No vans available.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <div className="space-y-4">
+      {/* Filter Section */}
+      <div className="flex gap-4">
+        <Input
+          label="Manufacturer"
+          name="manufacturer"
+          value={filters.manufacturer}
+          onChange={handleChange}
+          placeholder="e.g. Ford"
+        />
+        <Select
+          label="Transmission"
+          name="transmission"
+          onChange={handleChange}
+          selectedKeys={[filters.transmission]}
+        >
+          <SelectItem key="">All</SelectItem>
+          <SelectItem key="Manual">Manual</SelectItem>
+          <SelectItem key="Automatic">Automatic</SelectItem>
+        </Select>
+        <Select
+          label="Type"
+          name="type"
+          onChange={handleChange}
+          selectedKeys={[filters.type]}
+        >
+          <SelectItem key="">All</SelectItem>
+          <SelectItem key="Camper">Camper</SelectItem>
+          <SelectItem key="Van">Van</SelectItem>
+          <SelectItem key="RV">RV</SelectItem>
+        </Select>
+      </div>
+
+      {/* Table Section */}
+      {loading ? (
+        <p className="text-center">Loading vans...</p>
+      ) : (
+        <Table
+          removeWrapper
+          className="mt-4 mb-4 gap-4"
+          color="primary"
+          selectionMode="single"
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="success"
+                page={page}
+                total={pages}
+                onChange={(p) => setPage(p)}
+              />
+            </div>
+          }
+        >
+          <TableHeader>
+            <TableColumn>#</TableColumn>
+            <TableColumn>Manufacturer</TableColumn>
+            <TableColumn>Type</TableColumn>
+            <TableColumn>Transmission</TableColumn>
+            <TableColumn>Price</TableColumn>
+            <TableColumn>Delete</TableColumn>
+          </TableHeader>
+          <TableBody>
+            {items.length > 0 ? (
+              items.map((van, index) => (
+                <TableRow key={van._id}>
+                  <TableCell>{index + 1 + (page - 1) * rowsPerPage}</TableCell>
+                  <TableCell>{van.manufacturer}</TableCell>
+                  <TableCell>{van.type}</TableCell>
+                  <TableCell>{van.transmission}</TableCell>
+                  <TableCell>{van.price} €</TableCell>
+                  <TableCell>
+                    <Button
+                      color="danger"
+                      size="lg"
+                      variant="shadow"
+                      onPress={() => removeVan(van._id)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center">
+                  No vans match the filters.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      )}
+    </div>
   );
 };
 

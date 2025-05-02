@@ -1,9 +1,15 @@
+import { useState } from "react";
 import UserTable from "@/pages/user/UserTablePage";
 import Title from "@/components/ui/Titles";
 import DealsTable from "@/components/Dashboard/DealsTable";
 import CampersTable from "@/components/Dashboard/CampersTable";
+import CamperForm from "@/components/CamperForm";
+import DealForm from "@/components/DealForm";
 
 const Content = ({ section}) => {
+  const [showCamperForm, setShowCamperForm] = useState(false);
+  
+
     const renderContent = () => {
       switch (section) {
         case "Dashboard":
@@ -11,9 +17,26 @@ const Content = ({ section}) => {
         case "UserTable":
           return <UserTable />;
         case "Campers":
-          return <CampersTable/>;
+          return (
+            <div className="flex gap-6">
+              <div className="w-1/2">
+                <CampersTable />
+              </div>
+              <div className="w-1/2">
+                <CamperForm />
+              </div>
+            </div>
+          );
         case "Deals":
-          return <DealsTable/>;
+          return(
+          <div className="flex gap-6">
+            <div className="w-1/2">
+              <DealsTable />
+            </div>
+            <div className="w-1/2">
+              <DealForm />
+            </div>
+          </div>)
         case "Guides":
           return <p className="text-gray-600">Guides management coming soon!</p>;
         default:
