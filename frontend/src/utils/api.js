@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  // baseURL: "http://localhost:5019/api/api",
+  // baseURL: "/api",
   baseURL: "https://wild-play-api.vercel.app/api",
   withCredentials: true,
 });

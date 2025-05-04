@@ -24,7 +24,6 @@ import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Btn from "@/components/ui/Buttons";
 
 export default function Profile() {
   const { user, error } = useProfile();
@@ -45,10 +44,10 @@ export default function Profile() {
 
   return (
     <MainLayout>
-      <div className="mt-8 max-w-4xl mx-auto">
-        <Btn variant="primary" onClick={() => navigate("/bookings")}>
+      <div className="flex flex-col flex-wrap md:flex-nowrap gap-4 mt-8 max-w-4xl mx-auto ">
+        <Link to="/bookings" className="topbar-button">
           Bookings
-        </Btn>
+        </Link>
       </div>
 
       <div className="flex flex-col flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-3 max-w-4xl mx-auto custom-font-input bg-intro-card p-8 space-y-6 rounded-lg shadow-card mt-8">
