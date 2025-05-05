@@ -5,6 +5,20 @@ All methods for the van access an view
 */
 const { Van } = require('../models');
 
+
+exports.getFilterOptions = async (req, res) => {
+    try {
+        const manufacturers = await Van.distinct('manufacturer');
+        const types = await Van.distinct('type');
+
+        res.json({ manufacturers, types });
+    } catch (error) {
+        console.error("❌ Error fetching filter options:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+
 exports.getAllCampers = async (req, res) => { //get all campers
     try {
         let filters = {}; // Initialize filters object
@@ -33,7 +47,7 @@ exports.getAllCampers = async (req, res) => { //get all campers
         }
 
 
-        const campers = await Van.find().lean(); // Fetch all vans
+        const campers = await Van.find(filters).lean(); // Fetch all vans
         res.json({ campers, count: campers.length }); //show the number of campers
     } catch (error) {
         console.error("❌ Error fetching campers:", error);

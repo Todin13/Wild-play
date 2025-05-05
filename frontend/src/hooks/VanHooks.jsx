@@ -5,6 +5,7 @@ import {
   getVanById,
   updateVan,
   deleteVan,
+  getVanFilters,
 } from '@/modules/vans/api';
 
 export function useVans(filters = {}) {
@@ -120,4 +121,30 @@ export const useTypesVans = () => {
   }, []);
 
   return { vans, loading, error };
+};
+
+export const useVanFilters = () => {
+  const [manufacturers, setManufacturers] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+        const data = await getVanFilters();
+        setManufacturers(data.manufacturers || []);
+        setTypes(data.types || []);
+      } catch (err) {
+        console.error('Error fetching van filters:', err);
+        setError('Failed to load filter options');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFilters();
+  }, []);
+
+  return { manufacturers, types, loading, error };
 };

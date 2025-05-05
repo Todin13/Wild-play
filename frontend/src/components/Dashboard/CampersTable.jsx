@@ -7,12 +7,11 @@ import {
   TableCell,
   Pagination,
   Button,
-  Input,
   Select,
   SelectItem,
 } from "@heroui/react";
 import { useState } from "react";
-import { useVans } from "@/hooks/VanHooks";
+import { useVans, useVanFilters } from "@/hooks/VanHooks";
 
 const CampersTable = () => {
   const [filters, setFilters] = useState({
@@ -22,6 +21,7 @@ const CampersTable = () => {
   });
 
   const { vans, count, loading, removeVan } = useVans(filters);
+  const { manufacturers, types, loading: loadingFilters } = useVanFilters();
 
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
@@ -38,13 +38,19 @@ const CampersTable = () => {
     <div className="space-y-4">
       {/* Filter Section */}
       <div className="flex gap-4">
-        <Input
+        <Select
           label="Manufacturer"
           name="manufacturer"
-          value={filters.manufacturer}
           onChange={handleChange}
-          placeholder="e.g. Ford"
-        />
+          selectedKeys={[filters.manufacturer]}
+          isDisabled={loadingFilters}
+        >
+          <SelectItem key="">All</SelectItem>
+          {manufacturers.map((mfr) => (
+            <SelectItem key={mfr}>{mfr}</SelectItem>
+          ))}
+        </Select>
+
         <Select
           label="Transmission"
           name="transmission"
@@ -55,16 +61,18 @@ const CampersTable = () => {
           <SelectItem key="Manual">Manual</SelectItem>
           <SelectItem key="Automatic">Automatic</SelectItem>
         </Select>
+
         <Select
           label="Type"
           name="type"
           onChange={handleChange}
           selectedKeys={[filters.type]}
+          isDisabled={loadingFilters}
         >
           <SelectItem key="">All</SelectItem>
-          <SelectItem key="Camper">Camper</SelectItem>
-          <SelectItem key="Van">Van</SelectItem>
-          <SelectItem key="RV">RV</SelectItem>
+          {types.map((type) => (
+            <SelectItem key={type}>{type}</SelectItem>
+          ))}
         </Select>
       </div>
 

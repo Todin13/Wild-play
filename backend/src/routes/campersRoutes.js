@@ -11,6 +11,9 @@ const { authenticateUser, isAdmin } = require('../middlewares/authMiddlewares');
 
 router.get('/', campersController.getAllCampers); // Route to fetch all campers
 
+router.get('/filters', campersController.getFilterOptions);
+
+
 // Route to get a specific camper by ID
 router.get('/:id', campersController.getCamperById);
 
