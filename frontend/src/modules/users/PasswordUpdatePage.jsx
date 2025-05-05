@@ -73,9 +73,9 @@ function PasswordUpdate() {
   const toggleVisibility1 = () => setIsVisible1(!isVisible1);
   const toggleVisibility2 = () => setIsVisible2(!isVisible2);
   
-
   return (
     <>
+    <form onSubmit={handleSubmit}>
       <div className="flex flex-col flex-wrap justify-center items-center max-w-4xl mx-auto md:flex-nowrap gap-4 mb-5 mt-5 custom-font-input">
         {error &&
           <div key="danger" className="w-full flex items-center my-3 max-w-4xl">
@@ -140,8 +140,9 @@ function PasswordUpdate() {
       </div>
 
       <div className="flex w-full flex-wrap justify-center md:flex-nowrap gap-4 mt-5 mb-5">
-        <Button color="success" size='lg' variant="ghost" onPress={handleSubmit}>Update Password</Button>
+        <Button color="success" size='lg' variant="ghost" type="submit">Update Password</Button>
       </div>
+      </form>
     </>
   );
 }

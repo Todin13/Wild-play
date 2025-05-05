@@ -3,8 +3,8 @@ import { useUserTrips } from "@/hooks/TripHooks";
 import { useProfile, useUserLogout } from "@/hooks/UserHooks";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import Update from "@/pages/user/UserUpdatePage";
-import PwUpdate from "@/pages/user/PasswordUpdatePage";
+import Update from "@/modules/users/UserUpdatePage";
+import PwUpdate from "@/modules/users/PasswordUpdatePage";
 import {
   Table,
   TableHeader,

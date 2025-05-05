@@ -6,6 +6,7 @@ import {
   updateGuide,
   deleteGuide,
   createGuideFromTrip,
+  getGuideByUserId,
 } from "@/modules/guides/api";
 
 // Hook to fetch first 10 guides (used for previews, homepage, etc.)

@@ -67,3 +67,14 @@ export const createGuideFromTrip = async (tripId) => {
     throw error;
   }
 };
+
+// Get guide for specfic user
+export const getGuideByUserId = async () => {
+  try {
+    const response = await API.get('/guides/userGuides');
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create guide from trip:', error);
+    throw error;
+  }
+};

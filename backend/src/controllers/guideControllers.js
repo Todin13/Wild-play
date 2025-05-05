@@ -130,11 +130,31 @@ const createGuideFromTrip = async (req, res) => {
     }
 };
 
+// Get guide for a specific user
+const getGuideByUserId = async (req, res) => {
+  try {
+    const { id } = req.user;
+
+    const detail = await Guide.find({ user_id: id });
+
+    if (!detail || detail.length === 0) {
+        return res.status(404).json({ message: "No guides found for this user." });
+    }
+
+    res.json( detail );
+    
+  }catch(error){
+    res.status(500).json({ error: error.message }); // Handle server errors
+    console.log(error);
+  };
+}
+
 module.exports = {
     createGuide,
     getUserGuides,
     getGuideById,
     updateGuide,
     deleteGuide,
-    createGuideFromTrip
+    createGuideFromTrip,
+    getGuideByUserId
 };
