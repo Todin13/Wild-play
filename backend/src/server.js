@@ -59,6 +59,7 @@ app.use("/api/search", require("./routes/searchRoutes.js"));
 app.use("/api/campers", require("./routes/campersRoutes.js"));
 app.use("/api/deals", require("./routes/dealsRoutes.js"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
+app.use('/api/payment', require('./routes/paymentRoutes'));
 app.use("/api/trips", require("./routes/tripRoutes"));
 app.use("/api/guides", require("./routes/guideRoutes"));
 app.use("/api/reviews", require("./routes/reviewsRoutes.js"));

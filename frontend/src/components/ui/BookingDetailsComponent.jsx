@@ -9,6 +9,7 @@ const BookingDetailsComponent = ({
   onCancelBooking,
   showConfirm,
   setShowConfirm,
+  onPay
 }) => {
   const formatDate = (dateStr) =>
     dateStr ? new Date(dateStr).toLocaleDateString() : null;
@@ -156,9 +157,17 @@ const BookingDetailsComponent = ({
             </div>
             )}
 
+            {!booking.paid && booking.status !== "CANCELLED" && (
+                <div className="pt-4 text-center">
+                    <Button variant="primary" onClick={onPay}>
+                        Pay Now
+                    </Button>
+                </div>
+            )}
+
             {/* Cancel Button */}
             {booking.status !== "CANCELLED" && (
-            <div className="pt-4 text-center">
+            <div className="pt-1 text-center">
                 <Button variant="primary" onClick={() => setShowConfirm(true)} >
                     Cancel Booking
                 </Button>
