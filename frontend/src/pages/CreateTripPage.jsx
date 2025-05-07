@@ -21,6 +21,7 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 import {
+  DragOverlay,
   DndContext,
   closestCenter,
   PointerSensor,
@@ -28,7 +29,6 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
@@ -66,6 +66,7 @@ const LocationPicker = ({ onSelect }) => {
   });
   return null;
 };
+
 const SortableLocationItem = ({
   id,
   index,
@@ -224,17 +225,22 @@ const SectionGroup = ({
         </button>
       </div>
 
-      {group.map(({ location, index }) => (
-        <SortableLocationItem
-          key={index}
-          id={index.toString()}
-          index={index}
-          location={location}
-          handleLocationChange={handleLocationChange}
-          removeLocation={removeLocation}
-          sectionLocationCount={group.length} // section-specific count
-        />
-      ))}
+      <SortableContext
+        items={group.map(({ index }) => `${sectionName}-${index}`)}
+        strategy={verticalListSortingStrategy}
+      >
+        {group.map(({ location, index }) => (
+          <SortableLocationItem
+            key={`${sectionName}-${index}`}
+            id={`${sectionName}-${index}`}
+            index={index}
+            location={location}
+            handleLocationChange={handleLocationChange}
+            removeLocation={removeLocation}
+            sectionLocationCount={group.length}
+          />
+        ))}
+      </SortableContext>
 
       <button
         type="button"
@@ -421,6 +427,9 @@ const CreateTripPage = () => {
     });
   };
 
+  const [activeId, setActiveId] = useState(null);
+  const [activeLocation, setActiveLocation] = useState(null);
+
   return (
     <MainLayout>
       <div className="w-full px-4 lg:px-12 py-16 mx-auto min-w-[95vw]">
@@ -494,23 +503,39 @@ const CreateTripPage = () => {
                 <DndContext
                   sensors={useSensors(useSensor(PointerSensor))}
                   collisionDetection={closestCenter}
+                  onDragStart={({ active }) => {
+                    setActiveId(active.id);
+
+                    const [, indexStr] = active.id.split("-");
+                    const index = parseInt(indexStr, 10);
+
+                    setActiveLocation(tripData.locations[index]);
+                  }}
+                  onDragCancel={() => {
+                    setActiveId(null);
+                    setActiveLocation(null);
+                  }}
                   onDragEnd={({ active, over }) => {
-                    if (active.id !== over?.id) {
-                      const oldIndex = tripData.locations.findIndex(
-                        (_, idx) => idx.toString() === active.id
-                      );
-                      const newIndex = tripData.locations.findIndex(
-                        (_, idx) => idx.toString() === over?.id
-                      );
-                      setTripData((prev) => ({
-                        ...prev,
-                        locations: arrayMove(
-                          prev.locations,
-                          oldIndex,
-                          newIndex
-                        ),
-                      }));
-                    }
+                    setActiveId(null);
+                    setActiveLocation(null);
+
+                    if (!over || active.id === over.id) return;
+
+                    const [fromSection, fromIndexStr] = active.id.split("-");
+                    const [toSection, toIndexStr] = over.id.split("-");
+                    const fromIndex = parseInt(fromIndexStr, 10);
+                    const toIndex = parseInt(toIndexStr, 10);
+
+                    setTripData((prev) => {
+                      const itemToMove = { ...prev.locations[fromIndex] };
+                      const updated = [...prev.locations];
+                      updated.splice(fromIndex, 1); // remove from old spot
+
+                      itemToMove.section = toSection;
+                      updated.splice(toIndex, 0, itemToMove); // insert into new section/position
+
+                      return { ...prev, locations: updated };
+                    });
                   }}
                 >
                   <SortableContext
@@ -537,6 +562,59 @@ const CreateTripPage = () => {
                       />
                     ))}
                   </SortableContext>
+                  <DragOverlay>
+                    {activeLocation ? (
+                      <div className="relative space-y-2 border p-4 rounded-lg bg-gray-50 cursor-move">
+                        <div className="flex justify-between items-center">
+                          <input
+                            name="name"
+                            value={activeLocation.name || ""}
+                            onChange={(e) =>
+                              handleLocationChange(e, activeLocation.index)
+                            }
+                            placeholder="Name"
+                            className="w-full p-3 border rounded"
+                            required
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <input
+                            type="number"
+                            name="lat"
+                            value={activeLocation.lat || ""}
+                            onChange={(e) =>
+                              handleLocationChange(e, activeLocation.index)
+                            }
+                            placeholder="Latitude"
+                            className="p-3 border rounded"
+                            required
+                          />
+                          <input
+                            type="number"
+                            name="lon"
+                            value={activeLocation.lon || ""}
+                            onChange={(e) =>
+                              handleLocationChange(e, activeLocation.index)
+                            }
+                            placeholder="Longitude"
+                            className="p-3 border rounded"
+                            required
+                          />
+                        </div>
+
+                        <input
+                          name="info"
+                          value={activeLocation.info || ""}
+                          onChange={(e) =>
+                            handleLocationChange(e, activeLocation.index)
+                          }
+                          placeholder="Optional Info"
+                          className="w-full p-3 border rounded"
+                        />
+                      </div>
+                    ) : null}
+                  </DragOverlay>
                 </DndContext>
 
                 <button
