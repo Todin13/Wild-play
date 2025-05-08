@@ -185,6 +185,31 @@ const useCreateGuideFromTrip = () => {
   return { createFromTrip, creatingFromTripLoading, creatingFromTripError };
 };
 
+const useGuideByUserId = () => {
+  const [guideData, setGuideData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchGuide = async () => {
+      try {
+        setLoading(true); 
+        const data = await getGuideByUserId();
+        setGuideData(data); 
+      } catch (error) {
+        setError(error); 
+      } finally {
+        setLoading(false); 
+      }
+    };
+
+    fetchGuide();
+
+  }, []);
+
+  return { guideData, loading, error };
+};
+
 export {
   useFirstTenGuides,
   useGuideSearch,
@@ -193,4 +218,5 @@ export {
   useUpdateGuide,
   useDeleteGuide,
   useCreateGuideFromTrip,
+  useGuideByUserId,
 };

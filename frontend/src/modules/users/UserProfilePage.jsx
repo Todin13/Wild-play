@@ -1,6 +1,7 @@
 import TripCard from "@/components/ui/TripCard";
 import { useUserTrips } from "@/hooks/TripHooks";
-import { useProfile, useUserLogout } from "@/hooks/UserHooks";
+import { useProfile, useUserLogout, useUser } from "@/hooks/UserHooks";
+import { useGuideByUserId } from '@/hooks/GuideHooks';
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Update from "@/modules/users/UserUpdatePage";
@@ -41,7 +42,12 @@ export default function Profile() {
   const [size, setSize] = useState(null);
 
   const { trips, fetchTrips, tripsLoading, tripsError } = useUserTrips();
+  const { guideData, guideLoading } = useGuideByUserId();
   const navigate = useNavigate(); // Use navigate hook
+
+  const goToCreateGuidePage = () => {
+    navigate('/create-guide'); // Change '/about' to your target route
+  };
 
   return (
     <MainLayout>
@@ -49,6 +55,10 @@ export default function Profile() {
         <Btn variant="primary" onClick={() => navigate("/bookings")}>
           Bookings
         </Btn>
+      </div>
+
+      <div className="flex flex-col flex-wrap md:flex-nowrap gap-4 mt-8 max-w-4xl mx-auto ">
+        
       </div>
 
       <div className="flex flex-col flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-3 max-w-4xl mx-auto custom-font-input bg-intro-card p-8 space-y-6 rounded-lg shadow-card mt-8">
@@ -180,6 +190,7 @@ export default function Profile() {
               >
                 Update Password
               </Button>
+
               {user.detail.user_type === "ADMIN" && (
                 <Button color="primary" size="sm" variant="light">
                   <Link to="/userTable">User Table</Link>
@@ -232,6 +243,30 @@ export default function Profile() {
           </div>
         </div>
       )}
+
+      {/* User Guides */}
+      {user && user.detail && (
+        <div className="mt-12 max-w-5xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4">Your Guides</h2>
+          {guideLoading ? (
+            <p>Loading guides...</p>
+          ) : !guideData || guideData.length === 0 ? (
+            <p>No guide found.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {guideData.map((guide) => (
+                  <TripCard key={guide._id} trip={guide} />
+              ))}
+            </div>
+          )}
+          <div className="flex justify-end mb-4">
+            <Button onPress={goToCreateGuidePage} color="primary">
+              Create New Guide
+            </Button>
+          </div>
+        </div>
+      )}
+
     </MainLayout>
   );
 }

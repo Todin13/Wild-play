@@ -19,7 +19,7 @@ router.post("/fromTrip", authenticateUser, createGuideFromTrip);
 router.get("/", getUserGuides);
 
 // Get a single guide by ID
-router.get("/:id", authenticateUser, getGuideById);
+//router.get("/:id", authenticateUser, getGuideById);
 
 // Update a guide
 router.put("/:id", authenticateUser, updateGuide);
