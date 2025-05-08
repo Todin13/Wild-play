@@ -153,6 +153,7 @@ const SectionGroup = ({
   setTripData,
   handleLocationChange,
   totalLocations,
+  moveSection,
 }) => {
   const [tempSectionName, setTempSectionName] = useState(sectionName);
 
@@ -199,6 +200,8 @@ const SectionGroup = ({
     }));
   };
 
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
     <div className="mb-6 border-b pb-4">
       <div className="flex justify-between items-center mb-2">
@@ -217,38 +220,69 @@ const SectionGroup = ({
           className="text-xl font-bold text-gray-700 bg-transparent border-b focus:outline-none"
           placeholder="Section Name"
         />
-        <button
-          onClick={deleteSection}
-          className="text-red-500 hover:text-red-700 text-sm font-semibold"
-        >
-          Delete Section
-        </button>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsCollapsed((prev) => !prev)}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            {isCollapsed ? "▶ Expand" : "▼ Collapse"}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => moveSection(sectionName, "up")}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            ↑ Move Up
+          </button>
+          <button
+            type="button"
+            onClick={() => moveSection(sectionName, "down")}
+            className="text-sm text-gray-500 hover:text-gray-700"
+          >
+            ↓ Move Down
+          </button>
+
+          <button
+            type="button"
+            onClick={deleteSection}
+            className="text-red-500 hover:text-red-700 text-sm font-semibold"
+          >
+            Delete Section
+          </button>
+        </div>
       </div>
 
-      <SortableContext
-        items={group.map(({ index }) => `${sectionName}-${index}`)}
-        strategy={verticalListSortingStrategy}
-      >
-        {group.map(({ location, index }) => (
-          <SortableLocationItem
-            key={`${sectionName}-${index}`}
-            id={`${sectionName}-${index}`}
-            index={index}
-            location={location}
-            handleLocationChange={handleLocationChange}
-            removeLocation={removeLocation}
-            sectionLocationCount={group.length}
-          />
-        ))}
-      </SortableContext>
+      {!isCollapsed && (
+        <>
+          <SortableContext
+            items={group.map(({ index }) => `${sectionName}-${index}`)}
+            strategy={verticalListSortingStrategy}
+          >
+            {group.map(({ location, index }) => (
+              <SortableLocationItem
+                key={`${sectionName}-${index}`}
+                id={`${sectionName}-${index}`}
+                index={index}
+                location={location}
+                handleLocationChange={handleLocationChange}
+                removeLocation={removeLocation}
+                sectionLocationCount={group.length}
+              />
+            ))}
+          </SortableContext>
 
-      <button
-        type="button"
-        onClick={addLocationToSection}
-        className="mt-2 text-sm text-blue-600 hover:text-blue-800"
-      >
-        + Add Location
-      </button>
+          <button
+            type="button"
+            onClick={addLocationToSection}
+            className="mt-2 text-sm text-blue-600 hover:text-blue-800"
+          >
+            + Add Location
+          </button>
+        </>
+      )}
     </div>
   );
 };
@@ -430,6 +464,41 @@ const CreateTripPage = () => {
   const [activeId, setActiveId] = useState(null);
   const [activeLocation, setActiveLocation] = useState(null);
 
+  const moveSection = (sectionName, direction) => {
+    setTripData((prev) => {
+      const locations = [...prev.locations];
+
+      // Group locations by section
+      const sections = [];
+      let currentSection = null;
+      locations.forEach((loc, idx) => {
+        if (!currentSection || currentSection.name !== loc.section) {
+          currentSection = { name: loc.section, start: idx, items: [] };
+          sections.push(currentSection);
+        }
+        currentSection.items.push(loc);
+      });
+
+      const index = sections.findIndex((s) => s.name === sectionName);
+      if (
+        (direction === "up" && index === 0) ||
+        (direction === "down" && index === sections.length - 1)
+      ) {
+        return prev; // Already at boundary
+      }
+
+      const newSections = [...sections];
+      const swapWith = direction === "up" ? index - 1 : index + 1;
+      [newSections[index], newSections[swapWith]] = [
+        newSections[swapWith],
+        newSections[index],
+      ];
+
+      const newLocations = newSections.flatMap((s) => s.items);
+      return { ...prev, locations: newLocations };
+    });
+  };
+
   return (
     <MainLayout>
       <div className="w-full px-4 lg:px-12 py-16 mx-auto min-w-[95vw]">
@@ -559,6 +628,7 @@ const CreateTripPage = () => {
                         setTripData={setTripData}
                         handleLocationChange={handleLocationChange}
                         totalLocations={tripData.locations.length}
+                        moveSection={moveSection}
                       />
                     ))}
                   </SortableContext>
