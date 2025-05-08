@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CalendarIcon,
   MapPinIcon,
@@ -10,8 +11,15 @@ const VanCard = ({ van, large= false }) => {
   const formattedPrice = `$${van.price.toLocaleString()}`;
   const formattedBaseRate = `$${van.baseRate.toLocaleString()}`;
 
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/campervans/${van._id}`);
+  };
+
   return (
-    <div className={`${
+    <div 
+    onClick={handleClick}
+    className={`${
       large ? "w-96" : "w-64"
     } rounded-xl shadow-md p-4  border bg-white/80
                 backdrop-blur-md transition-all duration-200`}>
