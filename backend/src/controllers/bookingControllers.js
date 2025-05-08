@@ -1,6 +1,7 @@
 /*
 
-All methods for the booking
+All methods for the booking 
+Author: Kirill Smirnov
 
 */
 const { Booking, Van } = require("../models/index");

@@ -1,3 +1,10 @@
+/*
+
+style component for bookings
+Author: Kirill Smirnov
+
+*/
+
 import React from "react";
 import { Link } from "react-router-dom";
 import {CalendarDaysIcon, TruckIcon, MapPinIcon, CurrencyDollarIcon, GiftIcon} from "@heroicons/react/24/outline";

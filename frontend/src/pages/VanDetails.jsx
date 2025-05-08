@@ -1,3 +1,10 @@
+/*
+
+Page with van details and reviews
+Author: Kirill Smirnov
+
+*/
+
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import API from "@/utils/api";
@@ -18,6 +25,7 @@ const VanDetails = () => {
   const [loadingReviews, setLoadingReviews] = useState(true);
   const [reviewsError, setReviewsError] = useState("");
   
+  // fetching revies for the chosen van
   const fetchReviews = useCallback(async () => {
     if (!van?._id) return;
 
@@ -45,6 +53,7 @@ const VanDetails = () => {
     });
   };
 
+  // Render the component
   return (
     <MainLayout>
       <section className="m-8 p-4 max-w-6xl mx-auto">

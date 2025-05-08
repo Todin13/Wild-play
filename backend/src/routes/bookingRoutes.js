@@ -1,6 +1,7 @@
 /*
 
 All booking routes
+Author: Kirill Smirnov
 
 */
 const express = require("express");

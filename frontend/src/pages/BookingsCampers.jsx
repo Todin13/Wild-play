@@ -1,3 +1,9 @@
+/*
+
+
+
+*/
+
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
@@ -22,7 +28,7 @@ const BookingsCampers = () => {
   const fetchAvailableCampers = useCallback(async () => {
     if (startDate && endDate && endDate > startDate) {
       try {
-        const { data } = await API.get("/bookings/available_campers", {
+        const { data } = await API.get("/bookings/available_campers", { //endpoint call to fetch available campers
           params: {
             start_date: startDate,
             end_date: endDate,
@@ -90,7 +96,7 @@ const BookingsCampers = () => {
               <div 
                 key={camper._id}
                 onClick={() =>
-                  navigate(`/bookings/campers/details/${camper._id}`, {
+                  navigate(`/bookings/campers/details/${camper._id}`, { // navigate to camper details page
                     state: { van: camper, startDate, endDate },
                   })
                 }

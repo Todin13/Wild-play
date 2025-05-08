@@ -1,3 +1,10 @@
+/*
+
+Booking details page
+Author: Kirill Smirnov
+
+*/
+
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
@@ -13,16 +20,18 @@ const BookingDetails = () => {
   const [loading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
 
-  const stripePubKey = import.meta.env.VITE_STRIPE_PUB;
+  const stripePubKey = import.meta.env.VITE_STRIPE_PUB; //payment system public key
   //console.log("stripe key:", stripePubKey); 
   const stripePromise = loadStripe(stripePubKey);
 
+  //payment handler
   const handlePay = async () => {
     try {
       const stripe = await stripePromise;
-      const response = await API.post("/payment/create-session", {
+      const response = await API.post("/payment/create-session", { //stripe payment session creating 
         bookingId: booking._id,
         amount: booking.amount,
+        //van data
         van: {
           manufacturer: booking.van_id.manufacturer,
           model: booking.van_id.model,
@@ -42,20 +51,22 @@ const BookingDetails = () => {
     }
   };
 
+  //fetching booking details
   const fetchBookingDetails = useCallback(async () => {
     try {
-      const response = await API.get(`/bookings/${booking_id}`);
+      const response = await API.get(`/bookings/${booking_id}`); //endpoint call to fetch booking details
       setBooking(response.data);
     } catch (error) {
-      console.error("Error fetching booking details:", error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
   }, [booking_id]);
 
+  //cancel booking handler
   const handleCancelBooking = async () => {
   try {
-    const response = await API.patch(`/bookings/${booking_id}/status`, {new_status: "CANCELLED" });
+    const response = await API.patch(`/bookings/${booking_id}/status`, {new_status: "CANCELLED" }); //endpoint call to cancel booking
     setBooking(response.data);
     setShowConfirm(false);
     setTimeout(() => navigate("/bookings"), 500);
@@ -65,10 +76,12 @@ const BookingDetails = () => {
   }
 };
 
+  //fetching booking details when the component mounts
   useEffect(() => {
     fetchBookingDetails();
   }, [fetchBookingDetails]);
 
+  // Render the component
   return (
     <MainLayout>
       <section className="m-8 p-4 max-w-4xl mx-auto">

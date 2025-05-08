@@ -1,9 +1,16 @@
+/*
+
+Style component to display detailed information about a van
+Author: Kirill Smirnov
+
+*/
+
 import React from "react";
 import {CalendarIcon, MapPinIcon, CurrencyDollarIcon, TruckIcon, UserIcon, CubeIcon, InformationCircleIcon, StarIcon} from "@heroicons/react/24/outline";
 import Button from "@/components/ui/Buttons";
 import Title from "@/components/ui/Titles";
 
-// VanCardDetailed component to display detailed information about a van and its reviews
+// VanCardDetailed component to display detailed information about a van
 const VanCardDetailed = ({ van, onBookNow }) => {
   const formattedPrice = `$${van.price?.toLocaleString()}`;
   const formattedBaseRate = `$${van.baseRate?.toLocaleString()}`;

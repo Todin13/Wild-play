@@ -1,3 +1,10 @@
+/*
+
+Page for creating a new booking
+Author: Kirill Smirnov
+
+*/
+
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";
@@ -85,7 +92,7 @@ const NewBooking = () => {
         setPromoError("Invalid promocode.");
       }
     } catch (error) {
-      console.error("Failed to validate promocode:", error);
+      //console.error("Failed to validate promocode:", error);
       setPromoError("Error validating promocode");
     }
   };

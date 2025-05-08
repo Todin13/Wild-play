@@ -1,3 +1,10 @@
+/*
+
+style component for the booking form
+Author: Kirill Smirnov
+
+*/
+
 import React from "react";
 import {CalendarIcon, MapPinIcon, CurrencyDollarIcon, TruckIcon, GiftIcon} from "@heroicons/react/24/outline";
 import Button from "@/components/ui/Buttons";
@@ -23,7 +30,8 @@ const NewBookingComponent = ({
     // Booking form
     return (
         <div className="w-full rounded-2xl shadow-lg p-6 bg-voga-card border border-voga-border">
-            <div className="space-y-6">
+          <div className="space-y-6">
+
         {/* Title Section */}
         <Title variant="section" className="text-center">Create Booking</Title>
 
@@ -181,12 +189,14 @@ const NewBookingComponent = ({
               <span className="text-sm text-voga-text">Subtotal:</span>
               <span className="text-sm font-semibold text-voga-title"> ${amount} </span>
             </div>
+
             {discount > 0 && (
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-voga-text">Discount:</span>
                 <span className="text-sm font-semibold text-green-600"> -${amount - finalAmount} ({discount}%) </span>
               </div>
             )}
+            
             <div className="flex justify-between items-center">
               <span className="text-lg font-bold text-voga-text">Total:</span>
               <span className="text-xl font-bold text-green-600"> ${finalAmount} </span>

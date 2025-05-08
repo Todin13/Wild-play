@@ -1,3 +1,10 @@
+/*
+
+Bookings Page
+Author: Kirill Smirnov
+
+*/
+
 import { useEffect, useState } from "react";
 import MainLayout from "@/layouts/MainLayout";
 import BookingsComponent from "@/components/ui/BookingsComponent";
@@ -8,10 +15,11 @@ const Bookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch all bookings
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const { data } = await API.get("/bookings/all");
+        const { data } = await API.get("/bookings/all"); //endpoint call to fetch all bookings
         setBookings(data);
       } catch (error) {
         console.error("Error fetching bookings:", error);
@@ -23,6 +31,7 @@ const Bookings = () => {
     fetchBookings();
   }, []);
 
+  // Render the component
   return (
     <MainLayout>
       <section className="m-8 p-4">

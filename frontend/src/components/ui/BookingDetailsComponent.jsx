@@ -1,3 +1,10 @@
+/*
+
+style component for the booking details with van info
+Author: Kirill Smirnov
+
+*/
+
 import React from "react";
 import {CalendarIcon, MapPinIcon, CurrencyDollarIcon, TruckIcon, CubeIcon, UserIcon, InformationCircleIcon, XCircleIcon, CheckCircleIcon, GiftIcon} from "@heroicons/react/24/outline";
 import { PaintBrushIcon } from "@heroicons/react/24/outline";
