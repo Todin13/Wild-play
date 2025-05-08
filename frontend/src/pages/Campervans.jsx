@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import MainLayout from "@/layouts/MainLayout";
 import { CircularProgress } from "@heroui/react";
-import BannerImage from "@/components/ui/BannerImage";
 import CampersCarousel from "@/modules/vans/CampersCarousel";
 import CamperSidebar from "@/components/CamperSidebar";
 import MountainSVG from "@/assets/images/mountain-svg";
@@ -12,27 +11,65 @@ export default function Campervans() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchCampers = useCallback(async (filters = null) => {
+  const [filters, setFilters] = useState({
+    manufacturer: "",
+    transmission: "",
+    type: "",
+    startDate: null,
+    endDate: null,
+  });
+
+  const handleChange = (name, value) => {
+    setFilters((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  
+
+  const handleDateRange = ({ startDate, endDate }) => {
+    setFilters((prev) => ({ ...prev, startDate, endDate }));
+  };
+
+  const handleReset = () => {
+    setFilters({
+      manufacturer: "",
+      transmission: "",
+      type: "",
+      startDate: null,
+      endDate: null,
+    });
+    fetchCampers(); // Reset campers too
+  };
+
+  const fetchCampers = useCallback(async (optionalFilters = filters) => {
     setLoading(true);
     try {
-      const response = filters
-        ? await API.get("/bookings/available_campers", {
-            params: {
-              start_date: filters.startDate,
-              end_date: filters.endDate,
-            },
-          })
-        : await API.get("/campers");
-
-      const items = response.data.availableCampers || response.data.campers || [];
-
+      const params = {};
+  
+      if (optionalFilters.startDate && optionalFilters.endDate) {
+        params.start_date = optionalFilters.startDate;
+        params.end_date = optionalFilters.endDate;
+      }
+  
+      if (optionalFilters.manufacturer) params.manufacturer = optionalFilters.manufacturer;
+      if (optionalFilters.transmission) params.transmission = optionalFilters.transmission;
+      if (optionalFilters.type) params.type = optionalFilters.type;
+  
+      const response = optionalFilters.startDate && optionalFilters.endDate
+        ? await API.get("/bookings/available_campers", { params })
+        : await API.get("/campers", { params });
+  
+      const items =
+        response.data.availableCampers || response.data.campers || [];
+  
       const grouped = items.reduce((acc, van) => {
         const type = van.type || "other";
         if (!acc[type]) acc[type] = [];
         acc[type].push(van);
         return acc;
       }, {});
-
+  
       setVansByType(grouped);
       setError(null);
     } catch (err) {
@@ -42,25 +79,30 @@ export default function Campervans() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [filters]);
+  
 
   useEffect(() => {
-    fetchCampers(); // Load all vans on first render
+    fetchCampers();
   }, [fetchCampers]);
 
   return (
     <MainLayout>
-       {/* Fixed Mountain Background at Bottom */}
-        <div className="fixed bottom-0 left-0 w-full z-[-1] pointer-events-none transform xl:translate-y-[30%]">
-          <MountainSVG className="w-full h-auto object-cover text-mountain-deepgreen" />
-        </div>
-     
+      <div className="fixed bottom-0 left-0 w-full z-[-1] pointer-events-none transform xl:translate-y-[30%]">
+        <MountainSVG className="w-full h-auto object-cover text-mountain-deepgreen" />
+      </div>
+
       <section className="relative z-10 px-4 lg:px-12 py-12 flex flex-col xl:flex-row gap-12 mx-auto xl:min-w-[90vw] max-w-screen-xl">
-        {/* Sidebar for filters */}
         <aside className="w-full xl:w-1/4 top-24 self-start xl:block">
-        <CamperSidebar onApply={fetchCampers} />
-      </aside>
-        {/* Vans display */}
+          <CamperSidebar
+            filters={filters}
+            onChange={handleChange}
+            onSearch={() => fetchCampers()}
+            onReset={handleReset}
+            onDateRange={handleDateRange}
+          />
+        </aside>
+
         <div className="w-full xl:w-3/4">
           {loading ? (
             <div className="flex justify-center items-center h-40">
