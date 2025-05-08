@@ -31,6 +31,6 @@ router.patch("/:booking_id/status", authenticateUser, controllers.changeBookingS
 router.delete("/:booking_id", authenticateUser, controllers.deleteBooking);
 
 //route for paid booking
-router.patch('/:booking_id/paid', authenticateUser, controllers.paidBooking);
+router.patch('/:booking_id/paid', controllers.paidBooking);
 
 module.exports = router;
