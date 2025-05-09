@@ -6,7 +6,7 @@ Author: Kirill Smirnov
 */
 
 import { useEffect, useState, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParamss } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import MainLayout from "@/layouts/MainLayout";
 import BookingDetailsComponent from "@/components/ui/BookingDetailsComponent";
@@ -19,6 +19,7 @@ const BookingDetails = () => {
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [searchParams] = useSearchParams();
 
   const stripePubKey = import.meta.env.VITE_STRIPE_PUB; //payment system public key
   //console.log("stripe key:", stripePubKey); 
@@ -41,22 +42,23 @@ const BookingDetails = () => {
       console.log("Sending payload:", payload);
       const response = await API.post("/payment/create-session", payload);
       
-      if (!response.data?.sessionId) {        
-        if (response.data?.url) {
-          window.location.href = response.data.url;
-          return;
-        }
-        throw new Error("Payment unavailable - please try again later");
+      if (response.data?.url) {
+        //Stripe checkout
+        window.location.href = response.data.url;
+        return;
       }
 
-      console.log("Redirecting to Stripe checkout...");
-      const stripe = await stripePromise;
-      const { error } = await stripe.redirectToCheckout({
-        sessionId: response.data.sessionId
-      });
+      if (response.data?.sessionId) {
+        const stripe = await stripePromise;
+        const { error } = await stripe.redirectToCheckout({
+          sessionId: response.data.sessionId
+        });
 
-      if (error) {
-        window.location.href = `https://checkout.stripe.com/pay/${response.data.sessionId}`;
+        if (error) {
+          throw error;
+        }
+      } else {
+        throw new Error("Payment unavailable - please try again later");
       }
 
     } catch (error) {
@@ -99,6 +101,22 @@ const BookingDetails = () => {
   useEffect(() => {
     fetchBookingDetails();
   }, [fetchBookingDetails]);
+
+
+  useEffect(() => {
+    const sessionId = searchParams.get('session_id');
+    const status = window.location.pathname;
+
+    if (status.includes('/payment-success') && sessionId) {
+      //successful payment
+      const bookingId = searchParams.get('booking_id');
+      navigate(`/bookings/${bookingId}`, { state: { paymentSuccess: true } });
+    } else if (status.includes('/payment-cancelled')) {
+      //cancelled payment
+      const bookingId = searchParams.get('booking_id');
+      navigate(`/bookings/${bookingId}`, { state: { paymentCancelled: true } });
+    }
+  }, [navigate, searchParams]);
 
 
   // Render the component
