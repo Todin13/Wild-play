@@ -26,9 +26,7 @@ const BookingDetails = () => {
 
   //payment handler
   const handlePay = async () => {
-    try {
-      console.log("Initiating payment........");
-      
+    try {     
       const payload = {
         bookingId: booking._id,
         amount: booking.amount,
@@ -38,7 +36,7 @@ const BookingDetails = () => {
         } : null
       };
 
-      console.log("Sending payload:", payload);
+      console.log("payload:", payload);
       const response = await API.post("/payment/create-session", payload);
       
       if (!response.data?.sessionId) {        
@@ -60,7 +58,7 @@ const BookingDetails = () => {
       }
 
     } catch (error) {
-      console.error("Payment error:", {
+      console.error("error:", {
         message: error.message,
         response: error.response?.data,
       });
