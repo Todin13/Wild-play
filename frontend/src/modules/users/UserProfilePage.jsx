@@ -1,6 +1,7 @@
 import TripCard from "@/components/ui/TripCard";
+import GuideCard from "@/components/ui/GuideCard";
 import { useUserTrips } from "@/hooks/TripHooks";
-import { useProfile, useUserLogout, useUser } from "@/hooks/UserHooks";
+import { useProfile, useUserLogout } from "@/hooks/UserHooks";
 import { useGuideByUserId } from '@/hooks/GuideHooks';
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -255,7 +256,7 @@ export default function Profile() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {guideData.map((guide) => (
-                  <TripCard key={guide._id} trip={guide} />
+                  <GuideCard key={guide._id} guide={guide} />
               ))}
             </div>
           )}
