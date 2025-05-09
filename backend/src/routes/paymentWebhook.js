@@ -15,7 +15,7 @@ router.post('/webhook', async (req, res) => {
     let event;
 
     try {
-        event = stripe.webhooks.constructEvent(req.rawBody, sig, "whsec_lCKWsYFW1BmdHGjOn7taPiwhIenEqnlI");   //process.env.STRIPE_WEBHOOK_SECRET     
+        event = stripe.webhooks.constructEvent(req.rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);   //process.env.STRIPE_WEBHOOK_SECRET     
     } catch (err) {        
         return res.status(400).send(`Webhook Error: ${err.message}`);
     }
@@ -38,7 +38,7 @@ router.post('/webhook', async (req, res) => {
             //console.log(`booking ${bookingId} as paid`);
 
             //api endpoint for stripe webhook to mark booking as paid and confirmed
-            const response = await fetch(`https://wild-play-api.vercel.app/api/bookings/${bookingId}/paid`, { //http://localhost:${process.env.PORT}/api/
+            const response = await fetch(`https://wild-play-api-git-bookingsfix-todin13s-projects.vercel.app/api/bookings/${bookingId}/paid`, { //http://localhost:${process.env.PORT}/api/
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' }
             });

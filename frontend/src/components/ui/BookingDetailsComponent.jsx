@@ -167,7 +167,7 @@ const BookingDetailsComponent = ({
             {!booking.paid && booking.status !== "CANCELLED" && (
                 <div className="pt-4 text-center">
                     <Button variant="primary" onClick={onPay}>
-                        Pay
+                        Pay Now
                     </Button>
                 </div>
             )}
