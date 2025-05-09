@@ -26,30 +26,53 @@ const BookingDetails = () => {
 
   //payment handler
   const handlePay = async () => {
-    try {
-      const stripe = await stripePromise;
-      const response = await API.post("/payment/create-session", { //stripe payment session creating 
-        bookingId: booking._id,
-        amount: booking.amount,
-        //van data
-        van: {
-          manufacturer: booking.van_id.manufacturer,
-          model: booking.van_id.model,
-        },
-      });
-  
-      const { sessionId } = response.data;
-      const { error } = await stripe.redirectToCheckout({ sessionId });
-      
-      if (error) {
-        //console.error("Stripe redir:", error);
-        alert(error.message);
-      }
-    } catch (error) {
-      //console.error("Payment:", error.response?.data || error.message);
-      alert(`Payment failed, Try again later.`);
+  try {
+    console.log("Starting payment process....");
+    const stripe = await stripePromise;
+    console.log("Stripe initialized");
+
+    const payload = {
+      bookingId: booking._id,
+      amount: booking.amount,
+      van: {
+        manufacturer: booking.van_id.manufacturer,
+        model: booking.van_id.model,
+      },
+    };
+    console.log("Sending payload:", payload);
+
+    const response = await API.post("/payment/create-session", payload);
+    console.log("Backend response:", response.data);
+
+    if (!response.data?.sessionId) {
+      throw new Error("No sessionId received from backend");
     }
-  };
+
+    const { error } = await stripe.redirectToCheckout({
+      sessionId: response.data.sessionId
+    });
+    
+    if (error) {
+      console.error("Stripe redirect error:", error);
+      alert(`payment redirect failed: ${error.message}`);
+      return;
+    }
+  } catch (error) {
+    console.error("full payment error:", {
+      message: error.message,
+      response: error.response?.data,
+      stack: error.stack
+    });
+    
+    if (error.response) {
+      alert(`backend error: ${error.response.data?.error || error.response.statusText}`);
+    } else if (error.message.includes("failed to fetch")) {
+      alert("check connection");
+    } else {
+      alert(`payment failed: ${error.message}`);
+    }
+  }
+};
 
   //fetching booking details
   const fetchBookingDetails = useCallback(async () => {
