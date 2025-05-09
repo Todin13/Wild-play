@@ -38,7 +38,7 @@ router.post('/webhook', async (req, res) => {
             //console.log(`booking ${bookingId} as paid`);
 
             //api endpoint for stripe webhook to mark booking as paid and confirmed
-            const response = await fetch(`https://wild-play-api-git-bookingsfix-todin13s-projects.vercel.app/api/bookings/${bookingId}/paid`, { //http://localhost:${process.env.PORT}/api/
+            const response = await fetch(`https://wild-play-api.vercel.app/api/bookings/${bookingId}/paid`, { //http://localhost:${process.env.PORT}/api/
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' }
             });
