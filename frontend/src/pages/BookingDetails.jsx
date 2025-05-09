@@ -27,9 +27,23 @@ const BookingDetails = () => {
   //payment handler
   const handlePay = async () => {
   try {
+
+    try {
+      await fetch('https://r.stripe.com/b', { method: 'HEAD' });
+    } catch {
+      throw new Error('Stripe services are being blocked. Please disable ad blockers.');
+    }
+
     console.log("Starting payment process....");
     const stripe = await stripePromise;
     console.log("Stripe initialized");
+
+    const stripeReady = await Promise.race([
+      stripePromise,
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Stripe initialization timeout')), 5000)
+      )
+    ]);
 
     const payload = {
       bookingId: booking._id,
@@ -48,15 +62,17 @@ const BookingDetails = () => {
       throw new Error("No sessionId received from backend");
     }
 
+    //fallback
     const { error } = await stripe.redirectToCheckout({
       sessionId: response.data.sessionId
+    }).catch(err => {
+      // manual redirect
+      window.location.href = `https://checkout.stripe.com/pay/${response.data.sessionId}`;
+      return { error: null };
     });
     
-    if (error) {
-      console.error("Stripe redirect error:", error);
-      alert(`payment redirect failed: ${error.message}`);
-      return;
-    }
+    if (error) throw error;
+
   } catch (error) {
     console.error("full payment error:", {
       message: error.message,
@@ -64,12 +80,12 @@ const BookingDetails = () => {
       stack: error.stack
     });
     
-    if (error.response) {
-      alert(`backend error: ${error.response.data?.error || error.response.statusText}`);
-    } else if (error.message.includes("failed to fetch")) {
-      alert("check connection");
+    if (error.message.includes('blocked')) {
+      alert('blocked by browser');
+    } else if (error.message.includes('timeout')) {
+      alert('service is slow');
     } else {
-      alert(`payment failed: ${error.message}`);
+      alert(`failed: ${error.message}`);
     }
   }
 };
@@ -103,6 +119,23 @@ const BookingDetails = () => {
   useEffect(() => {
     fetchBookingDetails();
   }, [fetchBookingDetails]);
+
+
+  useEffect(() => {
+  //Stripe connect on component mount
+  const testStripeConnection = async () => {
+    try {
+      const stripe = await stripePromise;
+      await stripe._apiClient._request('https://r.stripe.com/b', {});
+      console.log('Stripe connection successful');
+    } catch (error) {
+      console.error('Stripe connection failed:', error);
+      alert('Stripe is being blocked. Please disable ad blockers or try a different browser.');
+    }
+  };
+  
+  testStripeConnection();
+}, []);
 
   // Render the component
   return (
