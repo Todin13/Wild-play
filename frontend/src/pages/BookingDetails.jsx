@@ -6,7 +6,7 @@ Author: Kirill Smirnov
 */
 
 import { useEffect, useState, useCallback } from "react";
-import { useParams, useNavigate, useSearchParamss } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { loadStripe } from "@stripe/stripe-js";
 import MainLayout from "@/layouts/MainLayout";
 import BookingDetailsComponent from "@/components/ui/BookingDetailsComponent";
@@ -19,7 +19,6 @@ const BookingDetails = () => {
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [searchParams] = useSearchParams();
 
   const stripePubKey = import.meta.env.VITE_STRIPE_PUB; //payment system public key
   //console.log("stripe key:", stripePubKey); 
@@ -28,7 +27,8 @@ const BookingDetails = () => {
   //payment handler
   const handlePay = async () => {
     try {
-      //payment call payload           
+      console.log("Initiating payment........");
+      
       const payload = {
         bookingId: booking._id,
         amount: booking.amount,
@@ -38,7 +38,7 @@ const BookingDetails = () => {
         } : null
       };
 
-      console.log("payload:", payload);
+      console.log("Sending payload:", payload);
       const response = await API.post("/payment/create-session", payload);
       
       if (!response.data?.sessionId) {        
