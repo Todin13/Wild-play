@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import MainLayout from "@/layouts/MainLayout";
 import { useAddTrip, useUpdateTrip } from "@/hooks/TripHooks";
 import "@/assets/styles/index.css";
@@ -301,6 +301,12 @@ const CreateTripPage = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(true);
   const [searchMarkers, setSearchMarkers] = useState([]);
+  const [selectedSearchIdx, setSelectedSearchIdx] = useState(0);
+  const [selectedSearchPlace, setSelectedSearchPlace] = useState(null);
+  const [placeDetailsMap, setPlaceDetailsMap] = useState({});
+
+  const { addTrip, addTripLoading, addTripError } = useAddTrip();
+  const { updateTrip, updateLoading, updateError } = useUpdateTrip();
 
   const [tripData, setTripData] = useState({
     title: isEditing ? trip.title : "",
@@ -317,9 +323,6 @@ const CreateTripPage = () => {
     van_id: isEditing ? trip.van_id : "",
     van_booked: isEditing ? trip.van_booked : false,
   });
-
-  const { addTrip, addTripLoading, addTripError } = useAddTrip();
-  const { updateTrip, updateLoading, updateError } = useUpdateTrip();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -406,31 +409,93 @@ const CreateTripPage = () => {
         )}&format=json&limit=20&viewbox=${viewbox}&bounded=1`
       );
       const data = await res.json();
+
       setSearchResults(data);
       setSearchMarkers(
         data.map((place) => ({
           lat: parseFloat(place.lat),
           lon: parseFloat(place.lon),
           display_name: place.display_name,
+          osm_id: place.osm_id,
+          osm_type: place.osm_type,
         }))
       );
+
+      const details = await Promise.all(data.map(fetchPlaceDetails));
+      const detailsMap = {};
+      details.forEach((detail, idx) => {
+        if (detail) {
+          detailsMap[`${data[idx].osm_type}-${data[idx].osm_id}`] = detail;
+        }
+      });
+      setPlaceDetailsMap(detailsMap);
     } catch (err) {
       console.error("Search failed:", err);
     }
   };
 
+  const fetchPlaceDetails = async (place) => {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/lookup?format=json&osm_ids=${place.osm_type
+          .charAt(0)
+          .toUpperCase()}${place.osm_id}`
+      );
+      const data = await res.json();
+      return data[0]; // Single result
+    } catch (err) {
+      console.error("Failed to fetch place details:", err);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const selected = searchResults[selectedSearchIdx];
+    if (selected) {
+      const key = `${selected.osm_type}-${selected.osm_id}`;
+      const detail = placeDetailsMap[key];
+      setSelectedSearchPlace({
+        ...selected,
+        detail,
+      });
+    }
+  }, [selectedSearchIdx, searchResults, placeDetailsMap]);
+
   const selectPlaceFromSearch = (place) => {
     const updated = [...tripData.locations];
     const lastIndex = updated.length - 1;
-    updated[lastIndex] = {
-      ...updated[lastIndex],
-      name: place.display_name,
-      lat: parseFloat(place.lat),
-      lon: parseFloat(place.lon),
-    };
+    const lastLoc = updated[lastIndex];
+
+    if (!lastLoc.lat && !lastLoc.lon) {
+      // Fill in the empty last location
+      updated[lastIndex] = {
+        ...lastLoc,
+        name: place.display_name,
+        lat: parseFloat(place.lat),
+        lon: parseFloat(place.lon),
+      };
+    } else {
+      // Append a new filled location + a blank one
+      updated.push({
+        section: "",
+        name: place.display_name,
+        lat: parseFloat(place.lat),
+        lon: parseFloat(place.lon),
+      });
+    }
+
+    updated.push({
+      section: "",
+      name: "",
+      lat: null,
+      lon: null,
+    });
+
     setTripData((prev) => ({ ...prev, locations: updated }));
     setSearchQuery("");
     setSearchResults([]);
+    setSearchMarkers([]);
+    setSelectedSearchPlace(null)
   };
 
   const addSection = () => {
@@ -778,7 +843,15 @@ const CreateTripPage = () => {
                   {searchResults.map((place, idx) => (
                     <li
                       key={idx}
-                      onClick={() => selectPlaceFromSearch(place)}
+                      onClick={() => {
+                        setSelectedSearchIdx(idx); // ← sets the correct index
+                        const key = `${place.osm_type}-${place.osm_id}`;
+                        const detail = placeDetailsMap[key];
+                        setSelectedSearchPlace({
+                          ...place,
+                          detail,
+                        });
+                      }}
                       className="cursor-pointer p-2 hover:bg-gray-100"
                     >
                       {place.display_name}
@@ -839,6 +912,71 @@ const CreateTripPage = () => {
                 </Marker>
               ))}
             </MapContainer>
+
+            {selectedSearchPlace && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-[90%] h-auto min-h-[15%] max-h-[30%] bg-white/90 backdrop-blur-md shadow-lg rounded-xl px-6 py-4 flex items-center justify-between z-[1000]">
+                <div className="w-full">
+                  <div className="flex justify-between items-center mb-2">
+                    <button
+                      onClick={() =>
+                        setSelectedSearchIdx((prev) =>
+                          prev > 0 ? prev - 1 : searchResults.length - 1
+                        )
+                      }
+                      className="text-gray-600 hover:text-black"
+                    >
+                      ◀
+                    </button>
+                    <h3 className="text-md font-semibold text-center flex-1 text-emerald-800 mx-2">
+                      {selectedSearchPlace.display_name}
+                    </h3>
+                    <button
+                      onClick={() =>
+                        setSelectedSearchIdx((prev) =>
+                          prev < searchResults.length - 1 ? prev + 1 : 0
+                        )
+                      }
+                      className="text-gray-600 hover:text-black"
+                    >
+                      ▶
+                    </button>
+                  </div>
+
+                  {selectedSearchPlace.detail?.type && (
+                    <p className="text-sm text-gray-600 mb-1">
+                      Type: {selectedSearchPlace.detail.type}
+                    </p>
+                  )}
+                  {selectedSearchPlace.detail?.address && (
+                    <p className="text-sm text-gray-600">
+                      {Object.values(selectedSearchPlace.detail.address).join(
+                        ", "
+                      )}
+                    </p>
+                  )}
+                </div>
+                <div className="flex flex-col space-y-2 ml-4">
+                  <button
+                    onClick={() =>
+                      selectPlaceFromSearch({
+                        display_name: selectedSearchPlace.display_name,
+                        lat: selectedSearchPlace.lat,
+                        lon: selectedSearchPlace.lon,
+                      })
+                    }
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1 rounded"
+                  >
+                    Add
+                  </button>
+                  <button
+                    onClick={() => setSelectedSearchPlace(null)}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-1 rounded"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
