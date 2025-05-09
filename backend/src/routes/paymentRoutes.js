@@ -42,8 +42,8 @@ router.post('/create-session', async (req, res) => {
         },
         quantity: 1,
       }],
-      success_url: `${req.headers.origin || 'https://wild-play-api.vercel.app/api'}/bookings/${bookingId}`,
-      cancel_url: `https://wild-play-git-bookingsfix-todin13s-projects.vercel.app/api/bookings/${bookingId}`,
+      success_url: `https://wild-play-git-bookingsfix-todin13s-projects.vercel.app/bookings/${bookingId}`,
+      cancel_url: `https://wild-play-git-bookingsfix-todin13s-projects.vercel.app/bookings/${bookingId}`,
       client_reference_id: bookingId.toString(),
     });
 
