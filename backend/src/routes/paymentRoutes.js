@@ -8,22 +8,17 @@ const router = express.Router();
 
 router.post('/create-session', async (req, res) => {
 
-  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.header('Access-Control-Allow-Credentials', 'true');
-
-  const { bookingId, amount, van } = req.body;
-
-  if (!bookingId || !amount) {
-    return res.status(400).json({ 
-      error: "Required fields missing",
-      received: { bookingId, amount, van }
-    });
-  }
-  
   try {
-    if (!amount || !van || !van.manufacturer || !van.model) {
-      return res.status(400).json({ error: "Missing required fields" });
+    const { bookingId, amount, van } = req.body;
+
+    if (!bookingId || isNaN(amount)) {
+      return res.status(400).json({ 
+        error: "invalid booking id or amount",
+        received: req.body
+      });
     }
+
+    const amountInCents = Math.round(parseFloat(amount) * 100);
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -31,23 +26,31 @@ router.post('/create-session', async (req, res) => {
       line_items: [{
         price_data: {
           currency: 'usd',
-          product_data: {name: `${van.manufacturer} ${van.model} Booking`},
-          unit_amount: amount * 100,
+          product_data: {
+            name: van 
+              ? `${van.manufacturer || 'Van'} ${van.model || 'Booking'}` 
+              : 'Vehicle Booking',
+          },
+          unit_amount: amountInCents,
         },
         quantity: 1,
       }],
-      success_url: `${req.headers.origin}/bookings/${bookingId}`, 
-      cancel_url: `${req.headers.origin}/bookings/${bookingId}`, 
-      client_reference_id: bookingId,
+      success_url: `${req.headers.origin || 'https://wild-play-api.vercel.app/api'}/bookings/${bookingId}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin || 'https://wild-play-api.vercel.app/api'}/bookings/${bookingId}`,
+      client_reference_id: bookingId.toString(),
     });
 
-    res.json({ sessionId: session.id });
+    console.log('Stripe session:', session.id);
+    return res.json({ 
+      sessionId: session.id,
+      url: session.url 
+    });
+
   } catch (error) {
-    //console.error("Stripe:", error);
-    res.status(500).json({ 
+    console.error('session error:', error);
+    return res.status(500).json({
       error: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
-      type: error.type 
+      type: error.type      
     });
   }
 });

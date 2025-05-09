@@ -26,69 +26,49 @@ const BookingDetails = () => {
 
   //payment handler
   const handlePay = async () => {
-  try {
-
     try {
-      await fetch('https://r.stripe.com/b', { method: 'HEAD' });
-    } catch {
-      throw new Error('Stripe services are being blocked. Please disable ad blockers.');
+      console.log("Initiating payment........");
+      
+      const payload = {
+        bookingId: booking._id,
+        amount: booking.amount,
+        van: booking.van_id ? {
+          manufacturer: booking.van_id.manufacturer,
+          model: booking.van_id.model
+        } : null
+      };
+
+      console.log("Sending payload:", payload);
+      const response = await API.post("/payment/create-session", payload);
+      
+      if (!response.data?.sessionId) {        
+        if (response.data?.url) {
+          window.location.href = response.data.url;
+          return;
+        }
+        throw new Error("Payment unavailable - please try again later");
+      }
+
+      console.log("Redirecting to Stripe checkout...");
+      const stripe = await stripePromise;
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: response.data.sessionId
+      });
+
+      if (error) {
+        window.location.href = `https://checkout.stripe.com/pay/${response.data.sessionId}`;
+      }
+
+    } catch (error) {
+      console.error("Payment error:", {
+        message: error.message,
+        response: error.response?.data,
+      });
+
+      const friendlyError = error.response?.data?.error || error.message || "Payment service unavailable";      
+      alert(`Payment failed: ${friendlyError}`);
     }
-
-    console.log("Starting payment process....");
-    const stripe = await stripePromise;
-    console.log("Stripe initialized");
-
-    const stripeReady = await Promise.race([
-      stripePromise,
-      new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Stripe initialization timeout')), 5000)
-      )
-    ]);
-
-    const payload = {
-      bookingId: booking._id,
-      amount: booking.amount,
-      van: {
-        manufacturer: booking.van_id.manufacturer,
-        model: booking.van_id.model,
-      },
-    };
-    console.log("Sending payload:", payload);
-
-    const response = await API.post("/payment/create-session", payload);
-    console.log("Backend response:", response.data);
-
-    if (!response.data?.sessionId) {
-      throw new Error("No sessionId received from backend");
-    }
-
-    //fallback
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: response.data.sessionId
-    }).catch(err => {
-      // manual redirect
-      window.location.href = `https://checkout.stripe.com/pay/${response.data.sessionId}`;
-      return { error: null };
-    });
-    
-    if (error) throw error;
-
-  } catch (error) {
-    console.error("full payment error:", {
-      message: error.message,
-      response: error.response?.data,
-      stack: error.stack
-    });
-    
-    if (error.message.includes('blocked')) {
-      alert('blocked by browser');
-    } else if (error.message.includes('timeout')) {
-      alert('service is slow');
-    } else {
-      alert(`failed: ${error.message}`);
-    }
-  }
-};
+  };
 
   //fetching booking details
   const fetchBookingDetails = useCallback(async () => {
@@ -104,16 +84,56 @@ const BookingDetails = () => {
 
   //cancel booking handler
   const handleCancelBooking = async () => {
-  try {
-    const response = await API.patch(`/bookings/${booking_id}/status`, {new_status: "CANCELLED" }); //endpoint call to cancel booking
-    setBooking(response.data);
-    setShowConfirm(false);
-    setTimeout(() => navigate("/bookings"), 500);
-  } catch (error) {
-    console.error("Error cancelling booking:", error);
-    alert("Failed to cancel booking.");
-  }
-};
+    try {
+      const response = await API.patch(`/bookings/${booking_id}/status`, {new_status: "CANCELLED" }); //endpoint call to cancel booking
+      setBooking(response.data);
+      setShowConfirm(false);
+      setTimeout(() => navigate("/bookings"), 500);
+    } catch (error) {
+      console.error("Error cancelling booking:", error);
+      alert("Failed to cancel booking.");
+    }
+  };
+
+  const StripeDebug = () => {
+    const [stripeLoaded, setStripeLoaded] = useState(false);
+
+    useEffect(() => {
+      const checkStripe = async () => {
+        try {
+          await new Promise((resolve) => {
+            if (window.Stripe) return resolve();
+            const script = document.createElement('script');
+            script.src = 'https://js.stripe.com/v3/';
+            script.onload = resolve;
+            document.head.appendChild(script);
+          });
+          setStripeLoaded(true);
+        } catch (e) {
+          console.error('Stripe.js failed to load', e);
+        }
+      };
+      checkStripe();
+    }, []);
+
+    return (
+      <div className="debug-info" style={{ fontSize: '12px', color: '#666' }}>
+        Stripe Status: {stripeLoaded ? 'Loaded' : 'Loading...'}
+        <button onClick={async () => {
+          try {
+            const stripe = await stripePromise;
+            console.log('Stripe instance:', stripe);
+            alert('Stripe is properly initialized');
+          } catch (e) {
+            console.error('Stripe test failed', e);
+            alert('Stripe init error: ' + e.message);
+          }
+        }}>
+          Test Stripe Connection
+        </button>
+      </div>
+    );
+  };
 
   //fetching booking details when the component mounts
   useEffect(() => {
@@ -121,25 +141,11 @@ const BookingDetails = () => {
   }, [fetchBookingDetails]);
 
 
-  useEffect(() => {
-  //Stripe connect on component mount
-  const testStripeConnection = async () => {
-    try {
-      const stripe = await stripePromise;
-      await stripe._apiClient._request('https://r.stripe.com/b', {});
-      console.log('Stripe connection successful');
-    } catch (error) {
-      console.error('Stripe connection failed:', error);
-      alert('Stripe is being blocked. Please disable ad blockers or try a different browser.');
-    }
-  };
-  
-  testStripeConnection();
-}, []);
 
   // Render the component
   return (
     <MainLayout>
+      <StripeDebug />
       <section className="m-8 p-4 max-w-4xl mx-auto">
         {loading ? (
           <div className="text-center text-lg">Loading...</div>
