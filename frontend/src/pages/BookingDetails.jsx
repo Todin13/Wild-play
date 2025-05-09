@@ -100,22 +100,6 @@ const BookingDetails = () => {
     fetchBookingDetails();
   }, [fetchBookingDetails]);
 
-  //payment success/cancel on component mount
-  useEffect(() => {
-    const sessionId = searchParams.get('session_id');
-    const status = window.location.pathname;
-
-    if (status.includes('/payment-success') && sessionId) {
-      // Handle successful payment
-      const bookingId = searchParams.get('booking_id');
-      navigate(`/bookings/${bookingId}`, { state: { paymentSuccess: true } });
-    } else if (status.includes('/payment-cancelled')) {
-      // Handle cancelled payment
-      const bookingId = searchParams.get('booking_id');
-      navigate(`/bookings/${bookingId}`, { state: { paymentCancelled: true } });
-    }
-  }, [navigate, searchParams]);
-
 
   // Render the component
   return (
