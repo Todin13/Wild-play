@@ -1,9 +1,40 @@
-import React from "react";
+import React, { useRef } from "react";
 import MainLayout from "@/layouts/MainLayout";
 import Title from "@/components/ui/Titles";
 import Button from "@/components/ui/Buttons";
+import emailjs from "@emailjs/browser"; // emailjs library for sending emails
 
 const ContactUs = () => {
+
+  const form = useRef(); //ejs form
+  const ejsServiceId = import.meta.env.VITE_EMAILJS_SERVICE_ID; // emailjs service id
+  const ejsTemplateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID; // emailjs template id
+  const ejsPubKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY; // emailjs public key
+
+  //emailing contact form msg to company email
+  const sendEmail = (e) => {
+    e.preventDefault();
+    
+    //sending email
+    emailjs.sendForm(
+      ejsServiceId,
+      ejsTemplateId,
+      form.current,
+      ejsPubKey
+    )
+    .then(
+      (result) => {
+        //console.log('ejs success:', result);
+        alert("Message sent!");
+        form.current.reset();
+      },
+      (error) => {
+        //console.error('ejs error:', error);
+        alert("Failed to send message, try again later.");
+      }
+    );
+  };
+
   return (
     <MainLayout>
       <section className="max-w-4xl mx-auto px-6 py-16 text-center text-text">
@@ -15,7 +46,7 @@ const ContactUs = () => {
           Reach out — we'd love to hear from you.
         </p>
         <div className="bg-deepgreen p-8 rounded-2xl shadow-card">
-          <form className="grid grid-cols-1 gap-6 text-left">
+          <form className="grid grid-cols-1 gap-6 text-left" onSubmit={sendEmail} ref={form}>
             <div>
               <label className="block text-white mb-2" htmlFor="name">
                 Name
@@ -23,6 +54,7 @@ const ContactUs = () => {
               <input
                 type="text"
                 id="name"
+                name="name"
                 placeholder="Your name"
                 className="w-full px-4 py-3 rounded-lg border border-voga-border bg-white placeholder-placeholder text-textDark focus:outline-none focus:ring-2 focus:ring-accent"
               />
@@ -35,6 +67,7 @@ const ContactUs = () => {
               <input
                 type="email"
                 id="email"
+                name="email"
                 placeholder="you@example.com"
                 className="w-full px-4 py-3 rounded-lg border border-voga-border bg-white placeholder-placeholder text-textDark focus:outline-none focus:ring-2 focus:ring-accent"
               />
@@ -46,6 +79,7 @@ const ContactUs = () => {
               </label>
               <textarea
                 id="message"
+                name="message"
                 rows="5"
                 placeholder="Tell us what’s on your mind..."
                 className="w-full px-4 py-3 rounded-lg border border-voga-border bg-white placeholder-placeholder text-textDark focus:outline-none focus:ring-2 focus:ring-accent"
@@ -53,12 +87,9 @@ const ContactUs = () => {
             </div>
 
             <div className="text-center">
-              {/* need to create a trash email to send and receive email using emailjs */}
-              <Button
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert("Message sent!");
-                }}
+              <Button 
+                type="submit"
+                onClick={sendEmail}
               >
                 Send Message
               </Button>

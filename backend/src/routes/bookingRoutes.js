@@ -1,6 +1,7 @@
 /*
 
 All booking routes
+Author: Kirill Smirnov
 
 */
 const express = require("express");
@@ -30,5 +31,7 @@ router.patch("/:booking_id/status", authenticateUser, controllers.changeBookingS
 // route to delete a booking
 router.delete("/:booking_id", authenticateUser, controllers.deleteBooking);
 
+//route for paid booking
+router.patch('/:booking_id/paid', controllers.paidBooking);
 
 module.exports = router;

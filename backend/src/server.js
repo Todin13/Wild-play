@@ -11,6 +11,7 @@ connectDB();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://wild-play.vercel.app",
+  "https://wild-play-git-bookingsfix-todin13s-projects.vercel.app",
   "https://wild-play-todin13s-projects.vercel.app",
 ];
 
@@ -48,6 +49,16 @@ app.use(
   })
 );
 
+// stripe Webhook
+app.use('/api/transaction/webhook', 
+  express.raw({ type: 'application/json' }), 
+  (req, res, next) => {
+    req.rawBody = req.body.toString('utf8');
+    next();
+  },
+  require('./routes/paymentWebhook')
+);
+
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -59,6 +70,8 @@ app.use("/api/search", require("./routes/searchRoutes.js"));
 app.use("/api/campers", require("./routes/campersRoutes.js"));
 app.use("/api/deals", require("./routes/dealsRoutes.js"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
+app.use('/api/payment', require('./routes/paymentRoutes'));
+app.use('/api/transaction', require('./routes/paymentWebhook'));
 app.use("/api/trips", require("./routes/tripRoutes"));
 app.use("/api/guides", require("./routes/guideRoutes"));
 app.use("/api/reviews", require("./routes/reviewsRoutes.js"));

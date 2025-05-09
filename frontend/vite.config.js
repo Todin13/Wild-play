@@ -17,4 +17,5 @@ export default defineConfig({
   //     },
   //   },
   // },
+  envDir: path.resolve(__dirname, "../"), //loads env for stripe pub key
 });

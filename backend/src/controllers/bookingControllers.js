@@ -1,6 +1,7 @@
 /*
 
-All methods for the booking
+All methods for the booking 
+Author: Kirill Smirnov
 
 */
 const { Booking, Van } = require("../models/index");
@@ -292,6 +293,36 @@ const getAvailableCampers = async (req, res) => {
   }
 };
 
+const paidBooking = async (req, res) => {
+  const { booking_id } = req.params;
+
+  try {
+    const booking = await Booking.findById(booking_id);
+    
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    //update paid and status
+    booking.paid = true;
+    booking.status = "CONFIRMED";
+    
+    const updatedBooking = await booking.save();
+    
+    res.status(200).json({
+      message: "Booking payment confirmed",
+      booking: updatedBooking
+    });
+    
+  } catch (error) {
+    console.error("Error confirming payment:", error);
+    res.status(500).json({ 
+      message: "Error confirming payment",
+      error: error.message 
+    });
+  }
+};
+
 module.exports = {
   // export booking controllers
   getAvailableCampers,
@@ -302,4 +333,5 @@ module.exports = {
   editBooking,
   changeBookingStatus,
   deleteBooking,
+  paidBooking
 };
