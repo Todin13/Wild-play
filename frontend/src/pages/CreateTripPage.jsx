@@ -35,7 +35,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-L.Icon.Default.mergeOptions({
+const defaultIcon = L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
@@ -46,6 +46,16 @@ const locationIcon = new L.Icon({
     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png", // Search result icon (green)
   shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
   iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+const largerIcon = new L.Icon({
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png", // Search result icon (green)
+  shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
+  iconSize: [30, 49],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
@@ -495,7 +505,7 @@ const CreateTripPage = () => {
     setSearchQuery("");
     setSearchResults([]);
     setSearchMarkers([]);
-    setSelectedSearchPlace(null)
+    setSelectedSearchPlace(null);
   };
 
   const addSection = () => {
@@ -898,12 +908,15 @@ const CreateTripPage = () => {
                 <Marker
                   key={`search-${idx}`}
                   position={[place.lat, place.lon]}
+                  icon={idx === selectedSearchIdx ? largerIcon : defaultIcon}
                   eventHandlers={{
                     click: () => {
-                      selectPlaceFromSearch({
-                        display_name: place.display_name,
-                        lat: place.lat,
-                        lon: place.lon,
+                      setSelectedSearchIdx(idx);
+                      const key = `${place.osm_type}-${place.osm_id}`;
+                      const detail = placeDetailsMap[key];
+                      setSelectedSearchPlace({
+                        ...place,
+                        detail,
                       });
                     },
                   }}
