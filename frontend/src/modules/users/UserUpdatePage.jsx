@@ -41,6 +41,7 @@ const UserUpdatePage = () => {
   };
 
   return (
+    <form onSubmit={handleSubmit}>
     <div className="flex flex-col w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 max-w-4xl mx-auto custom-font-input scale-90">
       {error &&
         <div key="danger" className="w-full flex items-center my-3 max-w-4xl">
@@ -174,9 +175,10 @@ const UserUpdatePage = () => {
         />
       </div>
 
-      <Button color="success" size="lg" variant="ghost" onPress={handleSubmit}>Update Profile</Button>
+      <Button color="success" size="lg" variant="ghost" type="submit">Update Profile</Button>
 
     </div>
+    </form>
   );
 };
 

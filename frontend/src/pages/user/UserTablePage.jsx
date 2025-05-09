@@ -28,6 +28,23 @@ function UserTable() {
     <MainLayout>
     <div className="flex flex-col w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-8 custom-font-input">
       <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4 max-w-4xl mx-auto">
+        <Checkbox
+          color="success"
+          size="lg"
+          checked={isChecked}
+          onChange={handleBirthdateChecked}
+        >
+        </Checkbox>
+        <Input 
+          label="Date of Birth" 
+          size='sm' 
+          variant="underlined"
+          type="date"
+          className="max-w-xs"
+          disabled={!isChecked}
+          value={birthdate}
+          onChange={handleBirthdate}
+        />
         <Select className="w-full" label="Search Field" size="sm" variant="bordered" defaultSelectedKeys={[searchField]} value={searchField} onChange={(e) => setSearchField(e.target.value)}>
           <SelectItem key="firstName" value="firstName">First Name</SelectItem>
           <SelectItem key="lastName" value="lastName">Last Name</SelectItem>
@@ -52,26 +69,6 @@ function UserTable() {
       </div>
 
       <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4 max-w-4xl mx-auto">
-        <Checkbox
-          color="success"
-          size="lg"
-          checked={isChecked}
-          onChange={handleBirthdateChecked}
-        >
-        </Checkbox>
-        <Input 
-          label="Date of Birth" 
-          size='sm' 
-          variant="underlined"
-          type="date"
-          className="max-w-xs"
-          disabled={!isChecked}
-          value={birthdate}
-          onChange={handleBirthdate}
-        />
-      </div>
-
-      <div>
         <Table 
           bottomContent={
             <div className="flex w-full justify-center">

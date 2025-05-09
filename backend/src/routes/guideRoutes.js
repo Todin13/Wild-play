@@ -5,7 +5,7 @@ All guides routes
 */
 const express = require("express");
 const router = express.Router();
-const { createGuide, getUserGuides, getGuideById, updateGuide, deleteGuide, createGuideFromTrip } = require("../controllers/guideControllers");
+const { createGuide, getUserGuides, getGuideById, updateGuide, deleteGuide, createGuideFromTrip, getGuideByUserId } = require("../controllers/guideControllers");
 const { authenticateUser } = require("../middlewares/authMiddlewares");
 
 
@@ -19,12 +19,15 @@ router.post("/fromTrip", authenticateUser, createGuideFromTrip);
 router.get("/", getUserGuides);
 
 // Get a single guide by ID
-router.get("/:id", authenticateUser, getGuideById);
+//router.get("/:id", authenticateUser, getGuideById);
 
 // Update a guide
 router.put("/:id", authenticateUser, updateGuide);
 
 // Delete a guide
 router.delete("/:id", authenticateUser, deleteGuide);
+
+// Get guides for specific user
+router.get("/userGuides", authenticateUser, getGuideByUserId);
 
 module.exports = router;
