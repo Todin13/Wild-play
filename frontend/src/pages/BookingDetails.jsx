@@ -28,8 +28,7 @@ const BookingDetails = () => {
   //payment handler
   const handlePay = async () => {
     try {
-      console.log("Initiating payment........");
-      
+      //payment call payload           
       const payload = {
         bookingId: booking._id,
         amount: booking.amount,
@@ -39,26 +38,25 @@ const BookingDetails = () => {
         } : null
       };
 
-      console.log("Sending payload:", payload);
+      console.log("payload:", payload);
       const response = await API.post("/payment/create-session", payload);
       
-      if (response.data?.url) {
-        //Stripe checkout
-        window.location.href = response.data.url;
-        return;
+      if (!response.data?.sessionId) {        
+        if (response.data?.url) {
+          window.location.href = response.data.url;
+          return;
+        }
+        throw new Error("Payment unavailable - please try again later");
       }
 
-      if (response.data?.sessionId) {
-        const stripe = await stripePromise;
-        const { error } = await stripe.redirectToCheckout({
-          sessionId: response.data.sessionId
-        });
+      console.log("Redirecting to Stripe checkout...");
+      const stripe = await stripePromise;
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: response.data.sessionId
+      });
 
-        if (error) {
-          throw error;
-        }
-      } else {
-        throw new Error("Payment unavailable - please try again later");
+      if (error) {
+        window.location.href = `https://checkout.stripe.com/pay/${response.data.sessionId}`;
       }
 
     } catch (error) {
