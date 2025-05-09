@@ -95,57 +95,31 @@ const BookingDetails = () => {
     }
   };
 
-  const StripeDebug = () => {
-    const [stripeLoaded, setStripeLoaded] = useState(false);
-
-    useEffect(() => {
-      const checkStripe = async () => {
-        try {
-          await new Promise((resolve) => {
-            if (window.Stripe) return resolve();
-            const script = document.createElement('script');
-            script.src = 'https://js.stripe.com/v3/';
-            script.onload = resolve;
-            document.head.appendChild(script);
-          });
-          setStripeLoaded(true);
-        } catch (e) {
-          console.error('Stripe.js failed to load', e);
-        }
-      };
-      checkStripe();
-    }, []);
-
-    return (
-      <div className="debug-info" style={{ fontSize: '12px', color: '#666' }}>
-        Stripe Status: {stripeLoaded ? 'Loaded' : 'Loading...'}
-        <button onClick={async () => {
-          try {
-            const stripe = await stripePromise;
-            console.log('Stripe instance:', stripe);
-            alert('Stripe is properly initialized');
-          } catch (e) {
-            console.error('Stripe test failed', e);
-            alert('Stripe init error: ' + e.message);
-          }
-        }}>
-          Test Stripe Connection
-        </button>
-      </div>
-    );
-  };
-
   //fetching booking details when the component mounts
   useEffect(() => {
     fetchBookingDetails();
   }, [fetchBookingDetails]);
 
+  //payment success/cancel on component mount
+  useEffect(() => {
+    const sessionId = searchParams.get('session_id');
+    const status = window.location.pathname;
+
+    if (status.includes('/payment-success') && sessionId) {
+      // Handle successful payment
+      const bookingId = searchParams.get('booking_id');
+      navigate(`/bookings/${bookingId}`, { state: { paymentSuccess: true } });
+    } else if (status.includes('/payment-cancelled')) {
+      // Handle cancelled payment
+      const bookingId = searchParams.get('booking_id');
+      navigate(`/bookings/${bookingId}`, { state: { paymentCancelled: true } });
+    }
+  }, [navigate, searchParams]);
 
 
   // Render the component
   return (
-    <MainLayout>
-      <StripeDebug />
+    <MainLayout>      
       <section className="m-8 p-4 max-w-4xl mx-auto">
         {loading ? (
           <div className="text-center text-lg">Loading...</div>
