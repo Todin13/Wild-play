@@ -1,3 +1,10 @@
+/*
+
+routes for stripe webhook
+Author: Kirill Smirnov
+
+*/
+
 const express = require('express');
 const Stripe = require('stripe');
 
@@ -35,7 +42,7 @@ router.post('/create-session', async (req, res) => {
         },
         quantity: 1,
       }],
-      success_url: `${req.headers.origin || 'https://wild-play-api.vercel.app/api'}/bookings/${bookingId}?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${req.headers.origin || 'https://wild-play-api.vercel.app/api'}/bookings/${bookingId}`,
       cancel_url: `${req.headers.origin || 'https://wild-play-api.vercel.app/api'}/bookings/${bookingId}`,
       client_reference_id: bookingId.toString(),
     });
