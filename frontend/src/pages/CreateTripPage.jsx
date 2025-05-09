@@ -35,15 +35,25 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
-const defaultIcon = L.Icon.Default.mergeOptions({
+L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
 });
 
+const defaultIcon = new L.Icon({
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
 const locationIcon = new L.Icon({
   iconUrl:
-    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png", // Search result icon (green)
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png",
   shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -53,7 +63,7 @@ const locationIcon = new L.Icon({
 
 const largerIcon = new L.Icon({
   iconUrl:
-    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png", // Search result icon (green)
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
   shadowUrl: "https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png",
   iconSize: [30, 49],
   iconAnchor: [12, 41],
@@ -162,7 +172,6 @@ const SectionGroup = ({
   group,
   setTripData,
   handleLocationChange,
-  totalLocations,
   moveSection,
 }) => {
   const [tempSectionName, setTempSectionName] = useState(sectionName);
@@ -452,7 +461,7 @@ const CreateTripPage = () => {
           .toUpperCase()}${place.osm_id}`
       );
       const data = await res.json();
-      return data[0]; // Single result
+      return data[0];
     } catch (err) {
       console.error("Failed to fetch place details:", err);
       return null;
@@ -540,7 +549,7 @@ const CreateTripPage = () => {
   const [activeLocation, setActiveLocation] = useState(null);
 
   const moveSection = (sectionName, direction) => {
-    setTripData((prev) => {
+    setTripData((prev) => {v
       const locations = [...prev.locations];
 
       // Group locations by section
@@ -886,11 +895,6 @@ const CreateTripPage = () => {
                   setTripData((prev) => ({ ...prev, locations: updated }));
                 }}
               />
-              {tripData.locations.map((loc, idx) =>
-                loc.lat && loc.lon ? (
-                  <Marker key={idx} position={[loc.lat, loc.lon]} />
-                ) : null
-              )}
               {tripData.locations.map((loc, idx) =>
                 loc.lat || loc.lon ? (
                   <Marker

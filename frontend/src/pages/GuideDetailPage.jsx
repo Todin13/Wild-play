@@ -12,7 +12,8 @@ import Button from "@/components/ui/Buttons";
 import CreateTripFromGuideButton from "@/modules/trips/CreateTripButton";
 import { useUserDashboard } from "@/hooks/UserHooks";
 import { useDeleteGuide } from "@/hooks/GuideHooks";
-import { useNavigate } from "react-router-dom"; // Add this import at the top
+import useNavigationHooks from "@/hooks/NavigationHooks";
+import { useNavigate } from "react-router-dom";
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -36,6 +37,8 @@ const GuideDetailPage = () => {
       : [48.8566, 2.3522]; // fallback to Paris
 
   const navigate = useNavigate();
+
+  const {goToCreateGuidePage} = useNavigationHooks();
 
   // Fetch reviews using the custom hook
   const { reviews, reviewsLoading, reviewsError } = useReviews(
@@ -77,6 +80,13 @@ const GuideDetailPage = () => {
                   className="text-3xl py-6 px-10 font-semibold"
                 >
                   {deletingGuideLoading ? "Deleting..." : "Delete Guide"}
+                </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => goToCreateGuidePage(guide)}
+                  className="text-3xl py-6 px-10 font-semibold"
+                >
+                  Update guide
                 </Button>
               </div>
             )}
