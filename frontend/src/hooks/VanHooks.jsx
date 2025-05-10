@@ -1,45 +1,150 @@
-import { useState, useEffect } from "react";
-import { getAllVans } from "@/modules/vans/api.js";
+import { useState, useEffect, useCallback } from 'react';
+import {
+  getAllVans,
+  createVan,
+  getVanById,
+  updateVan,
+  deleteVan,
+  getVanFilters,
+} from '@/modules/vans/api';
 
-// Custom hook to get the first 10 distinct types of vans
-const useTypesVans = () => {
+export function useVans(filters = {}) {
   const [vans, setVans] = useState([]);
-  const [loading_van, setLoading] = useState(true);
-  const [error_van, setError] = useState(null);
+  const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const fetchVans = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await getAllVans(filters);
+      setVans(response.campers || []);
+      setCount(response.count || 0);
+    } catch (err) {
+      console.error('Error fetching vans:', err);
+      setError(err.message || 'Failed to fetch vans');
+    } finally {
+      setLoading(false);
+    }
+  }, [JSON.stringify(filters)]);
+
+  useEffect(() => {
+    fetchVans();
+  }, [fetchVans]);
+
+  const addVan = async (vanData) => {
+    try {
+      const newVan = await createVan(vanData);
+      setVans((prev) => [newVan, ...prev]);
+      setCount((prev) => prev + 1);
+      return newVan;
+    } catch (err) {
+      throw new Error(err.message || 'Failed to create van');
+    }
+  };
+
+  const removeVan = async (vanId) => {
+    try {
+      await deleteVan(vanId);
+      setVans((prev) => prev.filter((van) => van.id !== vanId));
+      setCount((prev) => Math.max(prev - 1, 0));
+    } catch (err) {
+      throw new Error(err.message || 'Failed to delete van');
+    }
+  };
+
+  const modifyVan = async (id, vanData) => {
+    try {
+      const updatedVan = await updateVan(id, vanData);
+      setVans((prev) =>
+        prev.map((van) => (van.id === id ? updatedVan : van))
+      );
+      return updatedVan;
+    } catch (err) {
+      throw new Error(err.message || 'Failed to update van');
+    }
+  };
+
+  const getVan = async (id) => {
+    try {
+      return await getVanById(id);
+    } catch (err) {
+      throw new Error(err.message || 'Failed to fetch van by ID');
+    }
+  };
+
+  return {
+    vans,
+    count,
+    loading,
+    error,
+    refetch: fetchVans,
+    addVan,
+    removeVan,
+    modifyVan,
+    getVan,
+  };
+}
+
+export const useTypesVans = () => {
+  const [vans, setVans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchVans = async () => {
       try {
-        // Fetch all vans with no filters for now
         const response = await getAllVans({});
-        const allVans = response.campers;
+        const allVans = response.campers || [];
 
-        // Get unique types of vans
-        const uniqueTypes = [];
+        const uniqueTypes = new Set();
         const uniqueVans = [];
 
-        // Loop through all vans to filter unique types
-        allVans.forEach((van) => {
-          if (!uniqueTypes.includes(van.type)) {
-            uniqueTypes.push(van.type);
+        for (const van of allVans) {
+          if (!uniqueTypes.has(van.type)) {
+            uniqueTypes.add(van.type);
             uniqueVans.push(van);
+            if (uniqueVans.length === 10) break;
           }
-        });
+        }
 
-        // Limit to the first 10 unique van types
-        setVans(uniqueVans.slice(0, 10));
+        setVans(uniqueVans);
       } catch (err) {
-        console.error("Error fetching vans:", err);
-        setError("Failed to fetch vans");
+        console.error('Error fetching vans:', err);
+        setError('Failed to fetch vans');
       } finally {
         setLoading(false);
       }
     };
 
     fetchVans();
-  }, []); // Empty dependency array means this effect runs once when the component mounts
+  }, []);
 
-  return { vans, loading_van, error_van };
+  return { vans, loading, error };
 };
 
-export { useTypesVans };
+export const useVanFilters = () => {
+  const [manufacturers, setManufacturers] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchFilters = async () => {
+      try {
+        const data = await getVanFilters();
+        setManufacturers(data.manufacturers || []);
+        setTypes(data.types || []);
+      } catch (err) {
+        console.error('Error fetching van filters:', err);
+        setError('Failed to load filter options');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFilters();
+  }, []);
+
+  return { manufacturers, types, loading, error };
+};

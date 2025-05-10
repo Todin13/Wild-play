@@ -13,6 +13,18 @@ export const getAllVans = async (filters) => {
   }
 };
 
+// Fetch unique camper manufacturers and types
+export const getVanFilters = async () => {
+  try {
+    const response = await API.get('/campers/filters');
+    return response.data; // { manufacturers: [...], types: [...] }
+  } catch (error) {
+    console.error('Failed to fetch van filter options:', error);
+    throw error;
+  }
+};
+
+
 // Create a new van (camper)
 export const createVan = async (vanData) => {
   try {

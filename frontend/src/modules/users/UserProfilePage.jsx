@@ -62,7 +62,7 @@ export default function Profile() {
         
       </div>
 
-      <div className="flex flex-col flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-3 max-w-4xl mx-auto custom-font-input bg-intro-card p-8 space-y-6 rounded-lg shadow-card mt-8">
+      <div className="flex flex-col flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 max-w-4xl mx-auto custom-font-input bg-intro-card p-8 space-y-6 rounded-lg shadow-card mt-8">
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         {user && user.detail ? (

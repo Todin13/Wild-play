@@ -24,9 +24,6 @@ const TopBar = () => {
           <Link to="/" className="topbar-button">
             Home
           </Link>
-          <Link to="/bookings/campers" className="topbar-button">
-              Vans
-            </Link>
           <Link to="/search-guides" className="topbar-button">
             Travel Guide
           </Link>

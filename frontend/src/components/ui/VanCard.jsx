@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CalendarIcon,
   MapPinIcon,
@@ -10,10 +11,18 @@ const VanCard = ({ van, large= false }) => {
   const formattedPrice = `$${van.price.toLocaleString()}`;
   const formattedBaseRate = `$${van.baseRate.toLocaleString()}`;
 
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/campervans/${van._id}`);
+  };
+
   return (
-    <div className={`${
-      large ? "w-96" : "w-72"
-    } rounded-xl shadow-md p-4 bg-voga-card border border-voga-border transition-all duration-200`}>
+    <div 
+    onClick={handleClick}
+    className={`${
+      large ? "w-96" : "w-64"
+    } rounded-xl shadow-md p-4  border bg-white/80
+                backdrop-blur-md transition-all duration-200`}>
       <div className="space-y-4">
         <h2 className="text-xl font-bold text-voga-title">
           {van.manufacturer} {van.model}

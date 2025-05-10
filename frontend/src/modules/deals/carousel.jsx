@@ -27,10 +27,14 @@ export default function DealsCarousel() {
   // Update transform when index or gap change
   useEffect(() => {
     if (!carouselRef.current || deals.length === 0) return;
-    const card = carouselRef.current.children[currentIndex];
-    if (!card) return;
-    const shift = card.offsetWidth * currentIndex + gap * currentIndex;
-    carouselRef.current.style.transform = `translateX(-${shift}px)`;
+  
+    // Comment this block just for testing
+    // const card = carouselRef.current.children[currentIndex];
+    // if (!card) return;
+    // const shift = card.offsetWidth * currentIndex + gap * currentIndex;
+    // carouselRef.current.style.transform = `translateX(-${shift}px)`;
+  
+    console.log('Carousel render check:', deals.length);
   }, [currentIndex, gap, deals.length]);
 
   const handlePrev = () => {
