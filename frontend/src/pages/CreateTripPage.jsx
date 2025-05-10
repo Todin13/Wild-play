@@ -311,7 +311,7 @@ const CreateTripPage = () => {
   const { trip } = location.state || {};
   const isEditing = trip && Object.keys(trip).length > 0;
 
-  const { goToTripDetail } = useNavigationHooks();
+  const { goToTripDetail, goToSearchBooking } = useNavigationHooks();
 
   const mapDivRef = useRef(null);
   const [mapInstance, setMapInstance] = useState(null);
@@ -585,6 +585,10 @@ const CreateTripPage = () => {
     });
   };
 
+  const handleBookVan = () => {
+    goToSearchBooking(tripData.start_date, tripData.end_date);
+  };
+
   return (
     <MainLayout>
       <div className="w-full px-4 lg:px-12 py-16 mx-auto min-w-[95vw]">
@@ -627,18 +631,28 @@ const CreateTripPage = () => {
                 />
               </div>
 
-              {/* Van Booked */}
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="van_booked"
-                  checked={tripData.van_booked}
-                  onChange={(e) =>
-                    setTripData({ ...tripData, van_booked: e.target.checked })
-                  }
-                />
-                Van Booked
-              </label>
+              {tripData.start_date !== "" && tripData.end_date !== "" && (
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="van_booked"
+                    checked={tripData.van_booked}
+                    onChange={(e) =>
+                      setTripData({ ...tripData, van_booked: e.target.checked })
+                    }
+                  />
+                  Van Booked
+                  {!tripData.van_booked && (
+                    <button
+                      type="button"
+                      onClick={() => handleBookVan()} // replace with your van booking logic
+                      className="ml-4 px-4 py-2 bg-voga-accent text-white rounded hover:bg-voga-accent-dark"
+                    >
+                      Book Van
+                    </button>
+                  )}
+                </label>
+              )}
 
               {/* Locations Section */}
               <div className="space-y-6">

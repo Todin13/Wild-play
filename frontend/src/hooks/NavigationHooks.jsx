@@ -48,6 +48,13 @@ function useNavigationHooks() {
     navigate("/create-guide", { state: { guide } });
   };
 
+  /**
+   * Navigate to the guide detail page with the guide object passed in state
+   */
+  const goToSearchBooking = (start, end) => {
+    navigate("/campervans", { state: { start: start, end: end } });
+  };
+
   return {
     goToSearch,
     goToContactUs,
@@ -55,6 +62,7 @@ function useNavigationHooks() {
     goToCreateTripPage,
     goToGuideDetail,
     goToCreateGuidePage,
+    goToSearchBooking,
   };
 }
 
