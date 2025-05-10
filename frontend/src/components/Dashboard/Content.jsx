@@ -37,10 +37,6 @@ const Content = ({ section}) => {
               <DealForm />
             </div>
           </div>)
-        case "Guides":
-          return <p className="text-gray-600">Guides management coming soon!</p>;
-        default:
-          return null;
       }
     };
   

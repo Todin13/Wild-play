@@ -1,7 +1,7 @@
 import "@/assets/styles/sidebar.css"; 
 
 const Sidebar = ({ onSelect }) => {
-  const menuItems = ["UserTable", "Campers", "Deals", "Guides"];
+  const menuItems = ["UserTable", "Campers", "Deals"];
 
   return (
     <aside className="sidebar">
