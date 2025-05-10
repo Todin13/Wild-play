@@ -1,3 +1,10 @@
+/*
+
+van table for admin dashboard
+Author: HERVET Thibaut
+
+*/
+
 import {
   Table,
   TableHeader,

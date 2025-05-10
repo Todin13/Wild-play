@@ -1,3 +1,9 @@
+/*
+
+UI to search results
+Author: HERVET Thibaut
+
+*/
 import React from "react";
 import ResultCard from "@/components/ui/ResultCard";
 import CampersCarousel from "@/modules/vans/CampersCarousel";
@@ -12,10 +18,11 @@ export default function SearchResults({ results, loading, error }) {
     <div className="space-y-8">
       {/* totalResults banner */}
       <p className="mb-4 text-gray-700">
-        Found <span className="font-semibold">{results.totalResults}</span> result
-        {results.totalResults > 1 ? 's' : ''}
+        Found <span className="font-semibold">{results.totalResults}</span>{" "}
+        result
+        {results.totalResults > 1 ? "s" : ""}
       </p>
-      
+
       {results.vans?.length > 0 && (
         <section>
           <h3 className="text-xl font-semibold mb-2">Vans</h3>
@@ -48,7 +55,7 @@ export default function SearchResults({ results, loading, error }) {
         </section>
       )}
 
-{results.deals?.length > 0 && (
+      {results.deals?.length > 0 && (
         <section>
           <h3 className="text-xl font-semibold mb-2">Deals</h3>
           <div className="overflow-hidden pb-4">
@@ -80,9 +87,9 @@ export default function SearchResults({ results, loading, error }) {
         </section>
       )}
 
-      {Object.values(results).every((arr) => Array.isArray(arr) && arr.length === 0) && (
-        <p>No results found.</p>
-      )}
+      {Object.values(results).every(
+        (arr) => Array.isArray(arr) && arr.length === 0
+      ) && <p>No results found.</p>}
     </div>
   );
 }

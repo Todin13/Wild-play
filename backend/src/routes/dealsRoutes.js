@@ -1,6 +1,7 @@
 /*
 
 All discounts routes
+Author: HERVET Thibaut
 
 */
 const express = require('express');

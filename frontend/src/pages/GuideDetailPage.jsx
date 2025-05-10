@@ -1,3 +1,9 @@
+/*
+
+Guide Detail Page
+Author: ODIN Thomas
+
+*/
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";

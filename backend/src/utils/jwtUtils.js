@@ -1,6 +1,7 @@
 /*
 
 Utility using jsonwebtoken like the generation of a new token with user information
+Author: Xiang Yu Oon
 
 */
 const jwt = require("jsonwebtoken");

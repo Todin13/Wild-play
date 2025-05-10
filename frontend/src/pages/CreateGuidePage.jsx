@@ -1,3 +1,9 @@
+/*
+
+Create Guide Page
+Author: ODIN Thomas
+
+*/
 import { useAddGuide, useUpdateGuide } from "@/hooks/GuideHooks";
 import { useState, useEffect, useRef } from "react";
 import MainLayout from "@/layouts/MainLayout";

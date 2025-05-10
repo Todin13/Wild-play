@@ -1,3 +1,9 @@
+/*
+
+Create Trip Page
+Author: ODIN Thomas
+
+*/
 import { useState, useEffect, useRef } from "react";
 import MainLayout from "@/layouts/MainLayout";
 import { useAddTrip, useUpdateTrip } from "@/hooks/TripHooks";

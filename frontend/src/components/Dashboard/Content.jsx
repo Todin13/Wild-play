@@ -1,3 +1,9 @@
+/*
+
+ main content of admin dashboard
+Author: HERVET Thibaut
+
+*/
 import { useState } from "react";
 import UserTable from "@/pages/user/UserTablePage";
 import Title from "@/components/ui/Titles";

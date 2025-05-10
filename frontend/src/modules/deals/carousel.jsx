@@ -1,3 +1,9 @@
+/*
+
+Component to display small deal info and switch between
+Author: HERVET Thibaut
+
+*/
 import React, { useState, useRef, useEffect } from 'react';
 import { DealCard } from '@/components/ui/DealCard';
 import { useDeals } from '@/hooks/DealsHooks';

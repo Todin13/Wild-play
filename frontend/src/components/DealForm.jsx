@@ -1,3 +1,9 @@
+/*
+
+UI to add a deal on the db 
+Author: HERVET Thibaut
+
+*/
 import { useState, useEffect } from 'react';
 import { addDeal } from '@/modules/deals/api';
 import API from '@/utils/api';

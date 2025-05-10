@@ -1,3 +1,9 @@
+/*
+
+Navigation bar of the website
+Author: ODIN Thomas
+
+*/
 import { Link } from "react-router-dom";
 import { MagnifyingGlassIcon, Bars3Icon } from "@heroicons/react/24/outline";
 import "@/assets/styles/navbar.css";

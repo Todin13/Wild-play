@@ -1,3 +1,9 @@
+/*
+
+Link for react and the function linked to the backend for the guides
+Author: ODIN Thomas
+
+*/
 import { useEffect, useState } from "react";
 import {
   createGuide,
@@ -193,18 +199,17 @@ const useGuideByUserId = () => {
   useEffect(() => {
     const fetchGuide = async () => {
       try {
-        setLoading(true); 
+        setLoading(true);
         const data = await getGuideByUserId();
-        setGuideData(data); 
+        setGuideData(data);
       } catch (error) {
-        setError(error); 
+        setError(error);
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
     fetchGuide();
-
   }, []);
 
   return { guideData, loading, error };

@@ -1,3 +1,9 @@
+/*
+
+Function to request on backend api for trip
+Author: ODIN Thomas
+
+*/
 import API from "@/utils/api"; // Import the Axios instance
 
 // Create a new trip

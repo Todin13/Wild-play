@@ -1,3 +1,9 @@
+/*
+
+Not found page (error 404)
+Author: ODIN Thomas
+
+*/
 import React from "react";
 import MountainSVG from "@/assets/images/mountain-svg";
 import MainLayout from "@/layouts/MainLayout";

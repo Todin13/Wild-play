@@ -1,3 +1,9 @@
+/*
+
+Search Guide Page
+Author: ODIN Thomas
+
+*/
 import MainLayout from "@/layouts/MainLayout";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";

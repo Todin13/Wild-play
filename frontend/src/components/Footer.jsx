@@ -1,3 +1,9 @@
+/*
+
+Footer of the website
+Author: ODIN Thomas
+
+*/
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaInstagram, FaTwitter, FaFacebook, FaLinkedin } from "react-icons/fa";

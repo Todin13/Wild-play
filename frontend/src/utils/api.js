@@ -1,4 +1,9 @@
-// src/utils/api.js
+/*
+
+Connection to the backend api
+Author: ODIN Thomas
+
+*/
 import axios from "axios";
 
 const API = axios.create({

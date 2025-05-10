@@ -1,3 +1,10 @@
+/*
+
+Function to request on backend api for deals
+Author: HERVET Thibaut
+
+*/
+
 import API from '@/utils/api';
 
 

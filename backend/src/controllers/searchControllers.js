@@ -1,3 +1,9 @@
+/*
+
+All methods for the search engine (search page)
+Author: Thibaut Hervet
+
+*/
 const { Van, VanReview, GuideReview, Deal, Guide, Trip } = require('../models');
 
 exports.searchAll = async (req, res) => {

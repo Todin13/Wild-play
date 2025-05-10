@@ -1,3 +1,9 @@
+/*
+
+Link for react and the function linked to the backend for the deals
+Author: HERVET Thibaut
+
+*/
 import { useState, useEffect, useCallback } from 'react';
 import { getAllDeals, addDeal, deleteDeal } from '@/modules/deals/api';
 

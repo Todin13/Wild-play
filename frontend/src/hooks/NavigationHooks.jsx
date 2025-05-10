@@ -1,3 +1,9 @@
+/*
+
+Custom navigation route for common one
+Author: ODIN THomas
+
+*/
 import { useNavigate } from "react-router-dom";
 
 /**

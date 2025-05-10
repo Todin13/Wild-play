@@ -1,3 +1,9 @@
+/*
+
+UI of the deals
+Author: HERVET Thibaut
+
+*/
 import React, { useState, useEffect } from "react";
 import { MapPinIcon, TruckIcon } from "@heroicons/react/24/outline"; // Assuming you're using Heroicons
 import { getAllVans } from "@/modules/vans/api.js";

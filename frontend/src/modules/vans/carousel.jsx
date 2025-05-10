@@ -1,3 +1,9 @@
+/*
+
+Component to display small van info and switch between
+Author: HERVET Thibaut
+
+*/
 import { useState, useRef, useLayoutEffect } from "react";
 import VanCard from "@/components/ui/VanCard"; // Import your VanCard component
 

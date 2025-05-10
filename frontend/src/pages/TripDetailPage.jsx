@@ -1,3 +1,9 @@
+/*
+
+Trip detail Page
+Author: ODIN Thomas
+
+*/
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import MainLayout from "@/layouts/MainLayout";

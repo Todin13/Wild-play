@@ -1,3 +1,9 @@
+/*
+
+Deals Page
+Author: Hervet Thibaut
+
+*/
 import React from 'react';
 import MainLayout from '@/layouts/MainLayout';
 import DealsCarousel from '@/modules/deals/carousel';

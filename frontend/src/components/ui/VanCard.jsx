@@ -1,3 +1,9 @@
+/*
+
+Small UI for the Trips
+Author: HERVET Thibaut
+
+*/
 import { useNavigate } from "react-router-dom";
 import {
   CalendarIcon,

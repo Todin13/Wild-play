@@ -1,4 +1,9 @@
-// TripCard.jsx
+/*
+
+Small UI for the Trips
+Author: ODIN Thomas
+
+*/
 import React from "react";
 import dayjs from "dayjs";
 import {

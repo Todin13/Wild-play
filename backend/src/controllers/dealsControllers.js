@@ -1,6 +1,7 @@
 /*
 
 All methods for the discounts (deal pages)
+Author: Thibaut Hervet
 
 */
 const { Deal } = require('../models');

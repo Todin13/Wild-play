@@ -1,3 +1,9 @@
+/*
+
+Big UI for the Trips more detail
+Author: ODIN Thomas
+
+*/
 import React from "react";
 import dayjs from "dayjs";
 import {
@@ -11,7 +17,8 @@ import {
 const TripDetailCard = ({ trip }) => {
   const formattedStart = dayjs(trip.start_date).format("MMMM D, YYYY");
   const formattedEnd = dayjs(trip.end_date).format("MMMM D, YYYY");
-  const tripDuration = dayjs(trip.end_date).diff(dayjs(trip.start_date), "day") + 1;
+  const tripDuration =
+    dayjs(trip.end_date).diff(dayjs(trip.start_date), "day") + 1;
 
   // Group locations by section
   const sectionMap = trip.locations.reduce((acc, loc) => {

@@ -1,6 +1,7 @@
 /*
 
 utils to hash and compare has string (here password)
+Author: ODIN Thomas
 
 */
 

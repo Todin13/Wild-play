@@ -1,3 +1,9 @@
+/*
+
+User Table Components
+Author: Xiang Yu Oon
+
+*/
 import { Link } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { useUserTable } from "@/hooks/UserHooks";

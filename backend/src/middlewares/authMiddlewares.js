@@ -1,6 +1,7 @@
 /*
 
 Middleware (cookies) to check if the user is logged in
+Author: Xiang Yu Oon
 
 */
 const jwt = require("jsonwebtoken");

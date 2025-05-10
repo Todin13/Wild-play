@@ -1,3 +1,9 @@
+/*
+
+Campervan Page
+Author: HERVET Thibaut
+
+*/
 import React, { useState, useEffect, useCallback } from "react";
 import MainLayout from "@/layouts/MainLayout";
 import { CircularProgress } from "@heroui/react";
@@ -21,8 +27,8 @@ export default function Campervans() {
     manufacturer: "",
     transmission: "",
     type: "",
-    startDate: start || null,  // Set startDate from location.state
-    endDate: end || null,      // Set endDate from location.state
+    startDate: start || null, // Set startDate from location.state
+    endDate: end || null, // Set endDate from location.state
   });
 
   const handleChange = (name, value) => {
@@ -51,47 +57,54 @@ export default function Campervans() {
   const hasDatesSelected = filters.startDate && filters.endDate;
 
   //fetch campers with filters
-  const fetchCampers = useCallback(async (optionalFilters = filters) => {
-    //fetch if both dates are selected
-    if (!optionalFilters.startDate || !optionalFilters.endDate) {
-      setVansByType({});
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const params = {};
-  
-      if (optionalFilters.startDate && optionalFilters.endDate) {
-        params.start_date = optionalFilters.startDate;
-        params.end_date = optionalFilters.endDate;
+  const fetchCampers = useCallback(
+    async (optionalFilters = filters) => {
+      //fetch if both dates are selected
+      if (!optionalFilters.startDate || !optionalFilters.endDate) {
+        setVansByType({});
+        return;
       }
-  
-      if (optionalFilters.manufacturer) params.manufacturer = optionalFilters.manufacturer;
-      if (optionalFilters.transmission) params.transmission = optionalFilters.transmission;
-      if (optionalFilters.type) params.type = optionalFilters.type;
-  
-      const response = await API.get("/bookings/available_campers", { params });
-  
-      const items = response.data.availableCampers || [];
-  
-      const grouped = items.reduce((acc, van) => {
-        const type = van.type || "other";
-        if (!acc[type]) acc[type] = [];
-        acc[type].push(van);
-        return acc;
-      }, {});
-  
-      setVansByType(grouped);
-      setError(null);
-    } catch (err) {
-      console.error("Error loading campers:", err);
-      setError("Could not load campers.");
-      setVansByType({});
-    } finally {
-      setLoading(false);
-    }
-  }, [filters]);
+
+      setLoading(true);
+      try {
+        const params = {};
+
+        if (optionalFilters.startDate && optionalFilters.endDate) {
+          params.start_date = optionalFilters.startDate;
+          params.end_date = optionalFilters.endDate;
+        }
+
+        if (optionalFilters.manufacturer)
+          params.manufacturer = optionalFilters.manufacturer;
+        if (optionalFilters.transmission)
+          params.transmission = optionalFilters.transmission;
+        if (optionalFilters.type) params.type = optionalFilters.type;
+
+        const response = await API.get("/bookings/available_campers", {
+          params,
+        });
+
+        const items = response.data.availableCampers || [];
+
+        const grouped = items.reduce((acc, van) => {
+          const type = van.type || "other";
+          if (!acc[type]) acc[type] = [];
+          acc[type].push(van);
+          return acc;
+        }, {});
+
+        setVansByType(grouped);
+        setError(null);
+      } catch (err) {
+        console.error("Error loading campers:", err);
+        setError("Could not load campers.");
+        setVansByType({});
+      } finally {
+        setLoading(false);
+      }
+    },
+    [filters]
+  );
 
   // Effect to trigger fetching campers on filter change
   useEffect(() => {
@@ -129,18 +142,22 @@ export default function Campervans() {
           ) : error ? (
             <p className="text-red-500 text-center">{error}</p>
           ) : Object.keys(vansByType).length === 0 ? (
-            <p className="text-center">No campers available for the selected dates.</p>
+            <p className="text-center">
+              No campers available for the selected dates.
+            </p>
           ) : (
             Object.entries(vansByType).map(([type, vans]) => (
               <div key={type}>
-                <h2 className="text-2xl font-bold capitalize mb-4">{type} vans</h2>
-                <CampersCarousel 
-                  vans={vans.map(van => ({
+                <h2 className="text-2xl font-bold capitalize mb-4">
+                  {type} vans
+                </h2>
+                <CampersCarousel
+                  vans={vans.map((van) => ({
                     ...van,
                     startDate: filters.startDate,
-                    endDate: filters.endDate
-                  }))} 
-                  visibleCount={4} 
+                    endDate: filters.endDate,
+                  }))}
+                  visibleCount={4}
                 />
               </div>
             ))

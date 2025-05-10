@@ -1,6 +1,7 @@
 /*
 
 All van routes
+Author: Thibaut HERVET
 
 */
 const express = require('express');

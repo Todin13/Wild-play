@@ -1,3 +1,9 @@
+/*
+
+Svg in form of Mountains
+Author: ODIN Thomas
+
+*/
 import React from "react";
 
 const MountainSVG = ({

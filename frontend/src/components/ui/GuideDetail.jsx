@@ -1,3 +1,9 @@
+/*
+
+Big UI for the guide
+Author: ODIN Thomas
+
+*/
 import React from "react";
 import dayjs from "dayjs";
 import {
