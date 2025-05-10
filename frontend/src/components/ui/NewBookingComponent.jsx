@@ -182,6 +182,14 @@ const NewBookingComponent = ({
               <p className="text-red-500 text-xs mt-1">{promoError}</p>
             )}
           </div>
+          
+          {/* Promo Message */}
+          {!formData.promocode && discount > 0 && (
+            <p className="text-green-600 text-xs mt-1 italic">
+              A {discount}% deal discount has been automatically applied.
+            </p>
+          )}
+
 
           {/* Price Summary */}
           <div className="border-t border-voga-border pt-4">

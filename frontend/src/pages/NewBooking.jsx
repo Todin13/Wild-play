@@ -17,9 +17,10 @@ import MountainSVG from "@/assets/images/mountain-svg";
 const NewBooking = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { van, startDate, endDate } = state || {};
+  const { van, startDate, endDate, discount: dealDiscount = 0, } = state || {};
 
   // Data template for the booking
+  const [discount, setDiscount] = useState(dealDiscount);
   const [formData, setFormData] = useState({
     van_id: van?._id || "",
     start_date: startDate || "",
@@ -36,7 +37,6 @@ const NewBooking = () => {
   const [vans, setVans] = useState([van]);
   const [selectedVan, setSelectedVan] = useState(van);
   const [amount, setAmount] = useState(0);
-  const [discount, setDiscount] = useState(0);
   const [finalAmount, setFinalAmount] = useState(0);
   const [promoError, setPromoError] = useState("");
 

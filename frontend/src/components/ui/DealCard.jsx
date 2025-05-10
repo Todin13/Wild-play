@@ -40,7 +40,12 @@ export const DealCard = ({ deal }) => {
 
   const handleBookingClick = () => {
     navigate("/bookings/new", {
-      state: { van, startDate, endDate },
+      state: { 
+        van, 
+        startDate: deal.startDate, 
+        endDate: deal.endDate,
+        discount: deal.discount,
+      },
     });
   };
 
