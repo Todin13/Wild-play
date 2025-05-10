@@ -1,20 +1,8 @@
-/*
-
-Page with van details and reviews
-Author: Kirill Smirnov
-
-*/
-
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import API from "@/utils/api";
 import MainLayout from "@/layouts/MainLayout";
-import VanCardDetailed from "@/components/ui/VanCardDetailed";
-import Title from "@/components/ui/Titles";
-import ReviewCard from "@/components/ui/ReviewCard";
 import "@/assets/styles/index.css";
-import MountainSVG from "@/assets/images/mountain-svg";
-
 
 const VanDetails = () => {
   const { van_id } = useParams();
@@ -53,7 +41,7 @@ const VanDetails = () => {
       setReviews(response.data || []);
     } catch (err) {
       console.error("Error fetching reviews:", err);
-      setReviewsError("Failed to load reviews.");
+      setError("Failed to load reviews.");
     } finally {
       setLoadingReviews(false);
     }
@@ -75,10 +63,6 @@ const VanDetails = () => {
 
   return (
     <MainLayout>
-      <div className="fixed bottom-0 left-0 w-full z-[-1] pointer-events-none transform xl:translate-y-[30%]">
-        <MountainSVG className="w-full h-auto object-cover text-mountain-deepgreen" />
-      </div>
-
       <section className="m-8 p-4">
         {loadingVan ? (
           <div className="text-center text-lg">Loading van details...</div>
@@ -86,13 +70,12 @@ const VanDetails = () => {
           <div className="text-center text-lg text-red-500">Van not found.</div>
         ) : (
           <div className="bg-[#dcf2eb] shadow-md rounded-2xl p-6 max-w-4xl mx-auto space-y-6 text-left">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
-            {van.manufacturer} {van.model}
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Van Details</h2>
 
             <div className="space-y-4">
               <p><strong>Type:</strong> {van.type}</p>
-            
+              <p><strong>Manufacturer:</strong> {van.manufacturer}</p>
+              <p><strong>Model:</strong> {van.model}</p>
               <p><strong>Color:</strong> {van.color}</p>
               <p><strong>Price:</strong> ${van.price}</p>
               <p><strong>Base Rate:</strong> ${van.baseRate}</p>
@@ -116,9 +99,9 @@ const VanDetails = () => {
           </div>
         )}
 
-            {/* Reviews Section */}
-            <div className="mt-8">
-              <Title variant="section" className="mb-6">Customer Reviews</Title>
+        {/* Reviews Section */}
+        <div className="mt-8 max-w-4xl mx-auto">
+          <h3 className="text-xl font-bold text-gray-800 mb-4">Reviews</h3>
 
           {loadingReviews ? (
             <div className="text-center text-lg">Loading reviews...</div>
@@ -144,12 +127,13 @@ const VanDetails = () => {
                   <span className="font-bold text-yellow-500">Rating:</span>{" "}
                   {review.rating} / 5
                 </div>
-              ) : (
-                <div className="text-center text-lg text-gray-500">No reviews yet</div>
-              )}
-            </div>
-          </div>
-        )}
+                <p className="mt-2 text-gray-700">{review.review}</p>
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-lg text-gray-500">No reviews yet.</div>
+          )}
+        </div>
       </section>
     </MainLayout>
   );
