@@ -38,6 +38,11 @@ export const DealCard = ({ deal }) => {
     fetchVan();
   }, [deal.van_id]);
 
+  const handleMoreInfoClick = () => {
+    navigate(`/campervans/${van._id}`);
+  };
+
+  // Function to handle booking click
   const handleBookingClick = () => {
     navigate("/bookings/new", {
       state: { 
@@ -107,14 +112,16 @@ export const DealCard = ({ deal }) => {
         </div>
 
         <div className="mt-auto flex space-x-2">
-          <Button className="flex-1 text-center py-2 border border-green-600 text-green-600 rounded hover:bg-green-50 transition">
-            More info
-          </Button>
           <Button
           color="success"
-          variant='bordered'
-          onPress={handleBookingClick}
-          className="flex-1 text-center py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+          onPress={handleMoreInfoClick}>
+            More info
+          </Button>
+
+          <Button
+          color="success"
+          variant='ghost'
+          onPress={handleBookingClick}>
             Book now
           </Button>
         </div>
