@@ -1,3 +1,9 @@
+/*
+
+Link for react and the function linked to the backend for the trips
+Author: ODIN Thomas
+
+*/
 import { useState, useCallback } from "react";
 import {
   getUserTrips,

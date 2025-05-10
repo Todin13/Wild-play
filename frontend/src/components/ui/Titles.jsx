@@ -1,3 +1,9 @@
+/*
+
+UI for titles
+Author: ODIN Thomas
+
+*/
 import React from "react";
 
 const Title = ({ children, variant = "section" , className = ""}) => {

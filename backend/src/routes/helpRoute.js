@@ -1,6 +1,7 @@
 /*
 
 Help route
+Author: ODIN Thomas
 
 */
 const express = require("express");

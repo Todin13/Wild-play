@@ -1,9 +1,16 @@
-import { usePasswordUpdate } from '@/hooks/UserHooks';
-import { useState } from 'react';
+/*
+
+Password update pop up
+Author: Xiang Yu Oon
+
+*/
+import { usePasswordUpdate } from "@/hooks/UserHooks";
+import { useState } from "react";
 import { Input, Button, Alert } from "@heroui/react";
 import "@/assets/styles/index.css";
 
-export const EyeSlashFilledIcon = (props) => { // Code from heroUI for password desgin
+export const EyeSlashFilledIcon = (props) => {
+  // Code from heroUI for password desgin
   return (
     <svg
       aria-hidden="true"
@@ -39,7 +46,8 @@ export const EyeSlashFilledIcon = (props) => { // Code from heroUI for password 
   );
 };
 
-export const EyeFilledIcon = (props) => { // Code from heroUI for password desgin
+export const EyeFilledIcon = (props) => {
+  // Code from heroUI for password desgin
   return (
     <svg
       aria-hidden="true"
@@ -63,85 +71,97 @@ export const EyeFilledIcon = (props) => { // Code from heroUI for password desgi
   );
 };
 
-
 function PasswordUpdate() {
-  const { password, confirmPw, setPassword, setConfirmPw, handleSubmit, error, success } = usePasswordUpdate();
+  const {
+    password,
+    confirmPw,
+    setPassword,
+    setConfirmPw,
+    handleSubmit,
+    error,
+    success,
+  } = usePasswordUpdate();
 
   const [isVisible1, setIsVisible1] = useState(false);
   const [isVisible2, setIsVisible2] = useState(false);
-    
+
   const toggleVisibility1 = () => setIsVisible1(!isVisible1);
   const toggleVisibility2 = () => setIsVisible2(!isVisible2);
-  
+
   return (
     <>
-    <form onSubmit={handleSubmit}>
-      <div className="flex flex-col flex-wrap justify-center items-center max-w-4xl mx-auto md:flex-nowrap gap-4 mb-5 mt-5 custom-font-input">
-        {error &&
-          <div key="danger" className="w-full flex items-center my-3 max-w-4xl">
-            <Alert color="danger" title={error} />
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col flex-wrap justify-center items-center max-w-4xl mx-auto md:flex-nowrap gap-4 mb-5 mt-5 custom-font-input">
+          {error && (
+            <div
+              key="danger"
+              className="w-full flex items-center my-3 max-w-4xl"
+            >
+              <Alert color="danger" title={error} />
+            </div>
+          )}
+
+          {success && (
+            <div key="success" className="w-full flex items-center my-3">
+              <Alert color="success" title={success} />
+            </div>
+          )}
+          <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-5">
+            <Input
+              endContent={
+                <button
+                  aria-label="toggle password visibility"
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibility1}
+                >
+                  {isVisible1 ? (
+                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  ) : (
+                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  )}
+                </button>
+              }
+              label="Password"
+              size="lg"
+              variant="underlined"
+              type={isVisible1 ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
-        }
-            
-        {success &&
-          <div key="success" className="w-full flex items-center my-3">
-            <Alert color="success" title={success} />
+
+          <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-5">
+            <Input
+              endContent={
+                <button
+                  aria-label="toggle password visibility"
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibility2}
+                >
+                  {isVisible2 ? (
+                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  ) : (
+                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  )}
+                </button>
+              }
+              label="Retype Password"
+              size="lg"
+              variant="underlined"
+              type={isVisible2 ? "text" : "password"}
+              value={confirmPw}
+              onChange={(e) => setConfirmPw(e.target.value)}
+            />
           </div>
-        }
-        <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-5">
-          <Input
-            endContent={
-              <button
-                aria-label="toggle password visibility"
-                className="focus:outline-none"
-                type="button"
-                onClick={toggleVisibility1}
-              >
-                {isVisible1 ? (
-                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                ) : (
-                  <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                )}
-              </button>
-            }
-            label="Password"
-            size='lg'
-            variant='underlined'
-            type={isVisible1 ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
         </div>
 
-        <div className="flex w-full flex-wrap md:flex-nowrap gap-4 mb-5">
-          <Input
-            endContent={
-              <button
-                aria-label="toggle password visibility"
-                className="focus:outline-none"
-                type="button"
-                onClick={toggleVisibility2}
-              >
-                {isVisible2 ? (
-                  <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                ) : (
-                  <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-                )}
-              </button>
-            } 
-            label="Retype Password"
-            size='lg'
-            variant='underlined'
-            type={isVisible2 ? "text" : "password"}
-            value={confirmPw}
-            onChange={(e) => setConfirmPw(e.target.value)}
-          />
+        <div className="flex w-full flex-wrap justify-center md:flex-nowrap gap-4 mt-5 mb-5">
+          <Button color="success" size="lg" variant="ghost" type="submit">
+            Update Password
+          </Button>
         </div>
-      </div>
-
-      <div className="flex w-full flex-wrap justify-center md:flex-nowrap gap-4 mt-5 mb-5">
-        <Button color="success" size='lg' variant="ghost" type="submit">Update Password</Button>
-      </div>
       </form>
     </>
   );

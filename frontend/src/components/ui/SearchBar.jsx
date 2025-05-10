@@ -1,3 +1,10 @@
+/*
+
+UI of the search bar
+Author: HERVET Thibaut
+
+*/
+
 "use client";
 import React from "react";
 import { Button } from "@heroui/button";

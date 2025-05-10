@@ -1,3 +1,9 @@
+/*
+
+UI to create a Review 
+Author: ODIN Thomas
+
+*/
 import React, { useState } from "react";
 import { useCreateReview } from "@/hooks/ReviewsHooks";
 import Button from "@/components/ui/Buttons"; // Importing the Button component
@@ -117,7 +123,8 @@ const ReviewForm = ({ type, id, setShowReviewForm }) => {
           <p>
             Error occurred while submitting your review. Please try again later.
           </p>
-          <p className="mt-2">{reviewsError}</p> {/* Display the actual error message */}
+          <p className="mt-2">{reviewsError}</p>{" "}
+          {/* Display the actual error message */}
         </div>
       )}
     </div>

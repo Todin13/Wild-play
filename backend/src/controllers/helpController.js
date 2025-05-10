@@ -1,6 +1,7 @@
 /*
 
 Help controller
+Author: ODIN Thomas
 
 */
 

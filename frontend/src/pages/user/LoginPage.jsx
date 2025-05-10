@@ -1,3 +1,9 @@
+/*
+
+Login Page
+Author: Xiang Yu Oon
+
+*/
 import { useState } from 'react';
 import { useUser } from '@/hooks/UserHooks'; // Import this to use UserContext
 import { Link } from 'react-router-dom';

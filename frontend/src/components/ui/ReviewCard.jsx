@@ -1,3 +1,9 @@
+/*
+
+UI for the reviews
+Author: ODIN Thomas
+
+*/
 import React from "react";
 
 const ReviewCard = ({ username, rating, review }) => {

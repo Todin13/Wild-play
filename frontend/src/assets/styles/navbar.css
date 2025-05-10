@@ -1,3 +1,9 @@
+/*
+
+Top bar (navigation bar) style, actual css and tailwind css
+Author: ODIN Thomas
+
+*/
 /* Apply nav bar colors from Tailwind theme */
 .topbar {
   @apply flex justify-between items-center px-8 py-4 

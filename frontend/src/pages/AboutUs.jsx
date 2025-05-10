@@ -1,3 +1,9 @@
+/*
+
+About Us Page
+Author: ODIN Thomas
+
+*/
 import React from "react";
 import MainLayout from "@/layouts/MainLayout";
 import Title from "@/components/ui/Titles";

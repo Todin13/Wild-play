@@ -1,3 +1,9 @@
+/*
+
+Component to display and switch between them
+Author: ODIN Thomas
+
+*/
 import { useState } from "react";
 
 const PhotoCarousel = ({ photos = [] }) => {
@@ -62,17 +68,16 @@ const PhotoCarousel = ({ photos = [] }) => {
         </div>
         {/* Index Indicator (Mobile Only) */}
         <div className="flex justify-center gap-2 mt-4">
-        {photos.map((_, i) => (
+          {photos.map((_, i) => (
             <div
-            key={i}
-            className={`h-2 rounded-full transition-all duration-300 ${
+              key={i}
+              className={`h-2 rounded-full transition-all duration-300 ${
                 i === index ? "w-6 bg-deepgreen" : "w-2 bg-gray-300"
-            }`}
+              }`}
             />
-        ))}
+          ))}
         </div>
       </div>
-
 
       {/* Navigation Arrows - Hidden on Mobile */}
       <div className="absolute left-4 top-1/2 -translate-y-1/2 desktop-only">

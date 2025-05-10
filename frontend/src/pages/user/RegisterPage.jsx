@@ -1,11 +1,18 @@
+/*
+
+Register Page
+Author: Xiang Yu Oon
+
+*/
 import { useState, useEffect } from "react";
 import { useRegister } from "@/hooks/UserHooks";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { Input, Button, Select, SelectItem, Alert } from "@heroui/react";
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 
-export const EyeSlashFilledIcon = (props) => { // Code from heroUI for password desgin
+export const EyeSlashFilledIcon = (props) => {
+  // Code from heroUI for password desgin
   return (
     <svg
       aria-hidden="true"
@@ -41,7 +48,8 @@ export const EyeSlashFilledIcon = (props) => { // Code from heroUI for password 
   );
 };
 
-export const EyeFilledIcon = (props) => { // Code from heroUI for password desgin
+export const EyeFilledIcon = (props) => {
+  // Code from heroUI for password desgin
   return (
     <svg
       aria-hidden="true"
@@ -66,7 +74,16 @@ export const EyeFilledIcon = (props) => { // Code from heroUI for password desgi
 };
 
 export default function Register() {
-  const { handleRegister, loading, error, countryCodes, selectedCode, setSelectedCode, success, setError } = useRegister();
+  const {
+    handleRegister,
+    loading,
+    error,
+    countryCodes,
+    selectedCode,
+    setSelectedCode,
+    success,
+    setError,
+  } = useRegister();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -75,7 +92,11 @@ export default function Register() {
   const [phone, setPhone] = useState([]);
   const [birthdate, setBirthdate] = useState("");
   const [billing_address, setBillingAddress] = useState({
-    street: "", city: "", county: "", zip: "", country: ""
+    street: "",
+    city: "",
+    county: "",
+    zip: "",
+    country: "",
   });
   const [driver_license, setDriverLicense] = useState("");
   const [username, setUsername] = useState("");
@@ -84,7 +105,7 @@ export default function Register() {
 
   const [isVisible1, setIsVisible1] = useState(false);
   const [isVisible2, setIsVisible2] = useState(false);
-  
+
   const toggleVisibility1 = () => setIsVisible1(!isVisible1);
   const toggleVisibility2 = () => setIsVisible2(!isVisible2);
 
@@ -107,9 +128,16 @@ export default function Register() {
     }
 
     const userData = {
-      firstName, lastName, email, phone,
+      firstName,
+      lastName,
+      email,
+      phone,
       user_type: "USER",
-      birthdate, billing_address, driver_license, username, password
+      birthdate,
+      billing_address,
+      driver_license,
+      username,
+      password,
     };
 
     handleRegister(userData);
@@ -117,101 +145,234 @@ export default function Register() {
 
   return (
     <MainLayout>
-    <div className="flex flex-col w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 ">
-    <form onSubmit={onSubmit} className="custom-font-input bg-intro-card p-6 space-y-6 rounded-lg shadow-card mt-8">
-      {error &&
-        <div key="danger" className="w-full flex items-center my-3 max-w-4xl">
-          <Alert color="danger" title={error} />
-        </div>
-      }
-
-      {success &&
-        <div key="success" className="w-full flex items-center my-3">
-          <Alert color="success" title={success} />
-        </div>
-      }
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
-        <Input label="First Name" size='lg' variant="underlined" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} />
-        <Input label="Last Name" size='lg' variant="underlined" type="text" value={lastName} onChange={e => setLastName(e.target.value)} />
-      </div>
-
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
-        <Input label="Email" size='lg' variant="underlined" type="text"  value={email} onChange={e => setEmail(e.target.value)} />
-      </div>
-
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
-        <Select className="w-full" label="Select a Country Code" size="lg" variant="bordered" defaultSelectedKeys={["+353"]} onChange={(e) => setSelectedCode(e.target.value)}>
-          {countryCodes.map((item) => (
-            <SelectItem textValue={`${item.name} ${item.code}`} key={item.code} value={item.code}>{item.name}({item.code})</SelectItem >
-          ))}
-        </Select>
-        <Input className="w-full" label="Phone Number" size='lg' variant="underlined" type="tel" value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)} />
-      </div>
-
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
-        <Input label="Date of Birth" size='lg' variant="underlined" type="date" value={birthdate} onChange={e => setBirthdate(e.target.value)} />
-      </div>
-
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
-        <Input label="Street" size='lg' variant="underlined" type="text" name="street" value={billing_address.street} onChange={handleChange} />
-        <Input label="City" size='lg' variant="underlined" type="text" name="city" value={billing_address.city} onChange={handleChange} />
-        <Input label="County" size='lg' variant="underlined" type="text" name="county" value={billing_address.county} onChange={handleChange} />
-        <Input label="Zip Code" size='lg' variant="underlined" type="text" name="zip" value={billing_address.zip} onChange={handleChange} />
-        <Input label="Country" size='lg' variant="underlined" type="text" name="country" value={billing_address.country} onChange={handleChange} />
-      </div>
-
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
-        <Input label="Driving License ID" size='lg' variant="underlined" type="text" value={driver_license} onChange={e => setDriverLicense(e.target.value)} />
-      </div>
-
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
-        <Input label="Username" size='lg' variant="underlined" type="text" value={username} onChange={e => setUsername(e.target.value)} />
-      </div>
-
-      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
-        <Input 
-          endContent={
-            <button
-              aria-label="toggle password visibility"
-              className="focus:outline-none"
-              type="button"
-              onClick={toggleVisibility1}
+      <div className="flex flex-col w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 ">
+        <form
+          onSubmit={onSubmit}
+          className="custom-font-input bg-intro-card p-6 space-y-6 rounded-lg shadow-card mt-8"
+        >
+          {error && (
+            <div
+              key="danger"
+              className="w-full flex items-center my-3 max-w-4xl"
             >
-              {isVisible1 ? (
-                <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-              ) : (
-                <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-              )}
-            </button>
-           }
-        label="Password" size='lg' variant="underlined" type={isVisible1 ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)} />
-        <Input
-          endContent={
-            <button
-              aria-label="toggle password visibility"
-              className="focus:outline-none"
-              type="button"
-              onClick={toggleVisibility2}
+              <Alert color="danger" title={error} />
+            </div>
+          )}
+
+          {success && (
+            <div key="success" className="w-full flex items-center my-3">
+              <Alert color="success" title={success} />
+            </div>
+          )}
+          <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+            <Input
+              label="First Name"
+              size="lg"
+              variant="underlined"
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+            />
+            <Input
+              label="Last Name"
+              size="lg"
+              variant="underlined"
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+            />
+          </div>
+
+          <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+            <Input
+              label="Email"
+              size="lg"
+              variant="underlined"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+            <Select
+              className="w-full"
+              label="Select a Country Code"
+              size="lg"
+              variant="bordered"
+              defaultSelectedKeys={["+353"]}
+              onChange={(e) => setSelectedCode(e.target.value)}
             >
-              {isVisible2 ? (
-                <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-              ) : (
-                <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
-              )}
-            </button>
-          } 
-          label="Confirm Password" size='lg' variant="underlined"put type={isVisible2 ? "text" : "password"} value={confirmPw} onChange={e => setConfirmPw(e.target.value)} />
-      </div>
+              {countryCodes.map((item) => (
+                <SelectItem
+                  textValue={`${item.name} ${item.code}`}
+                  key={item.code}
+                  value={item.code}
+                >
+                  {item.name}({item.code})
+                </SelectItem>
+              ))}
+            </Select>
+            <Input
+              className="w-full"
+              label="Phone Number"
+              size="lg"
+              variant="underlined"
+              type="tel"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </div>
 
-      <div className="flex justify-center items-center">
-        <Button color="success" size="lg" variant="ghost" type="submit" disabled={loading}>{loading ? "Submitting..." : "Submit"}</Button>
-      </div>
+          <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+            <Input
+              label="Date of Birth"
+              size="lg"
+              variant="underlined"
+              type="date"
+              value={birthdate}
+              onChange={(e) => setBirthdate(e.target.value)}
+            />
+          </div>
 
-      <div className="flex justify-center items-center md:flex-nowrap gap-4 mt-5 mb-5">
-        Already have an account? <Button color="primary" size="sm" variant="light"><Link to="/login">Sign In</Link></Button>
+          <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+            <Input
+              label="Street"
+              size="lg"
+              variant="underlined"
+              type="text"
+              name="street"
+              value={billing_address.street}
+              onChange={handleChange}
+            />
+            <Input
+              label="City"
+              size="lg"
+              variant="underlined"
+              type="text"
+              name="city"
+              value={billing_address.city}
+              onChange={handleChange}
+            />
+            <Input
+              label="County"
+              size="lg"
+              variant="underlined"
+              type="text"
+              name="county"
+              value={billing_address.county}
+              onChange={handleChange}
+            />
+            <Input
+              label="Zip Code"
+              size="lg"
+              variant="underlined"
+              type="text"
+              name="zip"
+              value={billing_address.zip}
+              onChange={handleChange}
+            />
+            <Input
+              label="Country"
+              size="lg"
+              variant="underlined"
+              type="text"
+              name="country"
+              value={billing_address.country}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+            <Input
+              label="Driving License ID"
+              size="lg"
+              variant="underlined"
+              type="text"
+              value={driver_license}
+              onChange={(e) => setDriverLicense(e.target.value)}
+            />
+          </div>
+
+          <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+            <Input
+              label="Username"
+              size="lg"
+              variant="underlined"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+
+          <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4">
+            <Input
+              endContent={
+                <button
+                  aria-label="toggle password visibility"
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibility1}
+                >
+                  {isVisible1 ? (
+                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  ) : (
+                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  )}
+                </button>
+              }
+              label="Password"
+              size="lg"
+              variant="underlined"
+              type={isVisible1 ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Input
+              endContent={
+                <button
+                  aria-label="toggle password visibility"
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibility2}
+                >
+                  {isVisible2 ? (
+                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  ) : (
+                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                  )}
+                </button>
+              }
+              label="Confirm Password"
+              size="lg"
+              variant="underlined"
+              put
+              type={isVisible2 ? "text" : "password"}
+              value={confirmPw}
+              onChange={(e) => setConfirmPw(e.target.value)}
+            />
+          </div>
+
+          <div className="flex justify-center items-center">
+            <Button
+              color="success"
+              size="lg"
+              variant="ghost"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Submitting..." : "Submit"}
+            </Button>
+          </div>
+
+          <div className="flex justify-center items-center md:flex-nowrap gap-4 mt-5 mb-5">
+            Already have an account?{" "}
+            <Button color="primary" size="sm" variant="light">
+              <Link to="/login">Sign In</Link>
+            </Button>
+          </div>
+        </form>
       </div>
-    </form>
-    </div>
     </MainLayout>
   );
 }

@@ -1,6 +1,7 @@
 /*
 
 All methods for the user
+Author: Xiang Yu Oon
 
 */
 const { hashPassword, comparePassword } = require("../utils/hashUtils");

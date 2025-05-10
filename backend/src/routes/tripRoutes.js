@@ -1,6 +1,7 @@
 /*
 
 Trip planning routes for the api
+Author: ODIN Thomas
 
 */
 const express = require("express");

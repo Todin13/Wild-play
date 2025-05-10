@@ -1,4 +1,9 @@
-// middleware to validate booking details before saving
+/*
+
+middleware to validate booking details before saving
+Author: Kirill Smirnov
+
+*/
 const validateBookingData = (req, res, next) => {
     const { user_id, van_id, start_date, end_date, return_location, amount } = req.body;
 

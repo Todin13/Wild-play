@@ -1,3 +1,9 @@
+/*
+
+Date filter for the van search filter
+Author: HERVET Thibaut
+
+*/
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 

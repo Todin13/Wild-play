@@ -1,6 +1,11 @@
+/*
+
+Admin Daashboard Page
+Author: HERVET Thibaut
+
+*/
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-
 
 import Sidebar from "@/components/Dashboard/Sidebar";
 import Content from "@/components/Dashboard/Content";
@@ -21,12 +26,10 @@ const AdminDashboard = () => {
     <MainLayout>
       <Sidebar onSelect={handleSelect} />
       <div className="flex h-screen ml-64 bg-gray-100">
-        <Content
-          section={section}
-        />
+        <Content section={section} />
       </div>
     </MainLayout>
-  );        
+  );
 };
 
 export default AdminDashboard;

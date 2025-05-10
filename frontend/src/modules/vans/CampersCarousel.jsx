@@ -1,8 +1,14 @@
+/*
+
+Component to display van info and switch between
+Author: HERVET Thibaut
+
+*/
 import { useState, useRef, useLayoutEffect } from "react";
 import VanCard from "@/components/ui/VanCard";
 
 /**
- * Slides exactly one card per arrow click, 
+ * Slides exactly one card per arrow click,
  * always showing 4 full cards.
  */
 export default function CamperCarousel({ vans = [] }) {
@@ -16,24 +22,24 @@ export default function CamperCarousel({ vans = [] }) {
   useLayoutEffect(() => {
     const vp = viewportRef.current;
     if (!vp) return;
-    const card = vp.querySelector(".van-card");  // each VanCard wrapper
+    const card = vp.querySelector(".van-card"); // each VanCard wrapper
     const gap = parseInt(getComputedStyle(vp).gap, 10) || 0;
     const shift = (card.offsetWidth + gap) * index;
     vp.style.transform = `translateX(-${shift}px)`;
   }, [index]);
 
-  const prev = () => setIndex(i => (i === 0 ? maxIndex : i - 1));
-  const next = () => setIndex(i => (i === maxIndex ? 0 : i + 1));
+  const prev = () => setIndex((i) => (i === 0 ? maxIndex : i - 1));
+  const next = () => setIndex((i) => (i === maxIndex ? 0 : i + 1));
 
   return (
     <div className="relative overflow-hidden h-96">
       {/* 4‑card window */}
-      <div 
+      <div
         ref={viewportRef}
         className="flex gap-6 transition-transform duration-500 ease-in-out"
         style={{ cursor: "grab" }}
       >
-        {vans.map(van => (
+        {vans.map((van) => (
           <div key={van._id} className="flex-none w-1/4 van-card">
             <VanCard van={van} />
           </div>

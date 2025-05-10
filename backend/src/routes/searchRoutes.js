@@ -1,6 +1,7 @@
 /*
 
 All search routes
+Author: HERVET Thibaut
 
 */
 const express = require('express');

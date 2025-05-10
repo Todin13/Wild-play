@@ -1,3 +1,9 @@
+/*
+
+UI to the van search filter 
+Author: HERVET Thibaut
+
+*/
 import React from "react";
 import Title from "@/components/ui/Titles";
 import Button from "@/components/ui/Buttons";

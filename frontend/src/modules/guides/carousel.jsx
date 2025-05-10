@@ -1,3 +1,9 @@
+/*
+
+Component to display small guide info and swithc between
+Author: ODIN Thomas
+
+*/
 import { useState } from "react";
 import GuideCard from "@/components/ui/GuideCard";
 

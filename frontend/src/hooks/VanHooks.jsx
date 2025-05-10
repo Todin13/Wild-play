@@ -1,3 +1,9 @@
+/*
+
+Link for react and the function linked to the backend for the vans
+Author: HERVET Thibaut
+
+*/
 import { useState, useEffect, useCallback } from 'react';
 import {
   getAllVans,

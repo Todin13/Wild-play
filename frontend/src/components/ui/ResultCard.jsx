@@ -1,3 +1,9 @@
+/*
+
+Search result ui
+Author: Hervet Thibaut
+
+*/
 import React from "react";
 import { Card, CardBody, CardFooter } from "@heroui/card";
 

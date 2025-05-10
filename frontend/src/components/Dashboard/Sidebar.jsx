@@ -1,3 +1,9 @@
+/*
+
+Sidebar of admin dashboard
+Author: HERVET Thibaut
+
+*/
 import "@/assets/styles/sidebar.css"; 
 
 const Sidebar = ({ onSelect }) => {

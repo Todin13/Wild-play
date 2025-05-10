@@ -1,3 +1,9 @@
+/*
+
+Image as a banner
+Author: HERVET Thibaut
+
+*/
 import React from 'react';
 import photos from '@/data/photos.json';
 

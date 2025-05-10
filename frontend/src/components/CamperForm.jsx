@@ -1,3 +1,9 @@
+/*
+
+UI to add a new van to db
+Author: HERVET Thibaut
+
+*/
 import React, { useState } from "react";
 import API from "../utils/api";
 import CamperFormFields from "@/components/ui/CamperFormFields";

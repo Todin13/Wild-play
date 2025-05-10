@@ -1,3 +1,9 @@
+/*
+
+Search Page
+Author: HERVET Thibaut
+
+*/
 import React, { useState, useEffect } from "react";
 import SearchBar from "@/components/ui/SearchBar";
 import SearchResults from "@/components/SearchResults";

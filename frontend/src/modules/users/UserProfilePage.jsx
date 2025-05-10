@@ -1,3 +1,9 @@
+/*
+
+User profile page
+Author: Xiang Yu Oon
+
+*/
 import TripCard from "@/components/ui/TripCard";
 import GuideCard from "@/components/ui/GuideCard";
 import { useUserTrips } from "@/hooks/TripHooks";

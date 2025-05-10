@@ -1,3 +1,9 @@
+/*
+
+deal table 
+Author: HERVET Thibaut
+
+*/
 import { useState } from "react";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Button } from "@heroui/react";
 import { useDeals } from "@/hooks/DealsHooks";

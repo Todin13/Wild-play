@@ -1,3 +1,9 @@
+/*
+
+Button to create trip from a guide, and asking start and end date
+Author: ODIN Thomas
+
+*/
 import React, { useState } from "react";
 import Button from "@/components/ui/Buttons"; // Import your Button component
 import { useCreateTripFromGuide } from "@/hooks/TripHooks"; // Import the hook for creating a trip from guide

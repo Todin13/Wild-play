@@ -1,6 +1,7 @@
 /*
 
 All methods for the reviews
+Author: ODIN Thomas
 
 */
 const { VanReview, GuideReview } = require("../models");

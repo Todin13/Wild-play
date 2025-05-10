@@ -1,3 +1,9 @@
+/*
+
+Link for react and the function linked to the backend for the reviews
+Author: ODIN Thomas
+
+*/
 import { useState, useEffect } from "react";
 import {
   getVanReviews,

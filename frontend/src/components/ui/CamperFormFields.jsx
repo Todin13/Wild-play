@@ -1,3 +1,9 @@
+/*
+
+Fomr to search van
+Author: HERVET Thibaut
+
+*/
 import React from "react";
 
 const CamperFormFields = ({ formData, handleChange }) => (

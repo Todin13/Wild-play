@@ -1,6 +1,7 @@
 /*
 
 All methods for the guides
+Author: ODIN Thomas
 
 */
 const { Guide, User, Trip } = require("../models");

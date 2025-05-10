@@ -1,4 +1,10 @@
-// Home.jsx
+
+/*
+
+Home Page
+Author: ODIN Thomas
+
+*/
 import MainLayout from "@/layouts/MainLayout";
 import "@/assets/styles/index.css";
 import IrlandSVG from "@/assets/images/irland-svg";

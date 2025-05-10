@@ -1,13 +1,19 @@
-// src/modules/guides/api.js
-import API from '@/utils/api';
+/*
+
+Function to request on backend api for guides
+Author: ODIN Thomas
+
+*/
+
+import API from "@/utils/api";
 
 // Create a new guide
 export const createGuide = async (guideData) => {
   try {
-    const response = await API.post('/guides', guideData);
+    const response = await API.post("/guides", guideData);
     return response.data;
   } catch (error) {
-    console.error('Failed to create guide:', error);
+    console.error("Failed to create guide:", error);
     throw error;
   }
 };
@@ -19,7 +25,7 @@ export const getUserGuides = async (filters) => {
     const response = await API.get(`/guides?${queryString}`);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch guides:', error);
+    console.error("Failed to fetch guides:", error);
     throw error;
   }
 };
@@ -60,10 +66,10 @@ export const deleteGuide = async (id) => {
 // Create a guide from a trip
 export const createGuideFromTrip = async (tripId) => {
   try {
-    const response = await API.post('/guides/fromTrip', { trip_id: tripId });
+    const response = await API.post("/guides/fromTrip", { trip_id: tripId });
     return response.data;
   } catch (error) {
-    console.error('Failed to create guide from trip:', error);
+    console.error("Failed to create guide from trip:", error);
     throw error;
   }
 };
@@ -71,10 +77,10 @@ export const createGuideFromTrip = async (tripId) => {
 // Get guide for specfic user
 export const getGuideByUserId = async () => {
   try {
-    const response = await API.get('/guides/userGuides');
+    const response = await API.get("/guides/userGuides");
     return response.data;
   } catch (error) {
-    console.error('Failed to create guide from trip:', error);
+    console.error("Failed to create guide from trip:", error);
     throw error;
   }
 };

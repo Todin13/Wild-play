@@ -104,6 +104,28 @@ Using this as a template https://dev.to/noruwa/folder-structure-for-modern-web-a
 
 ## Task Repartition
 
+### ODIN Thomas
+
+- Deployment of the website, github gestion
+
+- Home Page
+
+- Create Guide Page
+
+- Guide Detail Page
+
+- Create Trip Page
+
+- Trip Detail Page
+
+- Search Guide Page
+
+- Error 404 Page
+
+- Main layout (top bar and footer)
+
+- Code Project Architecture
+
 ### Thibaut Hervet
 
 - Search Page - A page to find by a the help of keywords any information a client could search (Campervans, Deals, Trips, Guides, etc...)

@@ -1,3 +1,9 @@
+/*
+
+Component to display reviews info and switch between
+Author: ODIN Thomas
+
+*/
 import { useState } from "react";
 import ReviewCard from "@/components/ui/ReviewCard"; // Assuming you already have ReviewCard component
 

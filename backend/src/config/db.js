@@ -1,6 +1,7 @@
 /*
 
 Method to connect and deconnect to db 
+Author: ODIN Thomas
 
 */
 const mongoose = require('mongoose');

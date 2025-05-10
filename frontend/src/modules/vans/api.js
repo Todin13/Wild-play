@@ -1,5 +1,11 @@
+/*
+
+Function to request on backend api for vans
+Author: HERVET Thibaut
+
+*/
 // src/modules/vans/api.js
-import API from '@/utils/api';
+import API from "@/utils/api";
 
 // Get all vans with optional filtering
 export const getAllVans = async (filters) => {
@@ -8,7 +14,7 @@ export const getAllVans = async (filters) => {
     const response = await API.get(`/campers?${queryString}`);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch vans:', error);
+    console.error("Failed to fetch vans:", error);
     throw error;
   }
 };
@@ -16,22 +22,21 @@ export const getAllVans = async (filters) => {
 // Fetch unique camper manufacturers and types
 export const getVanFilters = async () => {
   try {
-    const response = await API.get('/campers/filters');
+    const response = await API.get("/campers/filters");
     return response.data; // { manufacturers: [...], types: [...] }
   } catch (error) {
-    console.error('Failed to fetch van filter options:', error);
+    console.error("Failed to fetch van filter options:", error);
     throw error;
   }
 };
 
-
 // Create a new van (camper)
 export const createVan = async (vanData) => {
   try {
-    const response = await API.post('/campers', vanData);
+    const response = await API.post("/campers", vanData);
     return response.data;
   } catch (error) {
-    console.error('Failed to create van:', error);
+    console.error("Failed to create van:", error);
     throw error;
   }
 };

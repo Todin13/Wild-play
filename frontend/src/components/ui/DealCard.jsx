@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
+/*
+
+UI of the deals
+Author: HERVET Thibaut
+
+*/
+import React, { useState, useEffect } from "react";
 import { MapPinIcon, TruckIcon } from "@heroicons/react/24/outline"; // Assuming you're using Heroicons
 import { getAllVans } from "@/modules/vans/api.js";
-import {Button} from "@heroui/react";
+import { Button } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
- // Assuming the API file for vans is the same
+// Assuming the API file for vans is the same
 
 /**
  * DealCard displays the information about a deal and the associated van.
@@ -14,14 +20,16 @@ export const DealCard = ({ deal }) => {
   const [loadingVan, setLoadingVan] = useState(true);
   const [errorVan, setErrorVan] = useState(null);
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVan = async () => {
       try {
         // Fetch vans based on the van_id from the deal
         const response = await getAllVans({});
-        const foundVan = response.campers.find(van => van._id === deal.van_id);
+        const foundVan = response.campers.find(
+          (van) => van._id === deal.van_id
+        );
         if (foundVan) {
           setVan(foundVan);
         } else {
@@ -44,16 +52,29 @@ export const DealCard = ({ deal }) => {
 
   // Function to handle booking click
   const handleBookingClick = () => {
+    const formatDate = (date) => {
+      if (!date) return null;
+      const d = new Date(date);
+      return isNaN(d.getTime()) ? null : d.toISOString().split("T")[0];
+    };
+
+    const startDateFormatted = formatDate(deal.start_date);
+    const endDateFormatted = formatDate(deal.end_date);
+
+    if (!startDateFormatted || !endDateFormatted) {
+      console.error("Invalid date(s) in deal:", deal.start_date, deal.end_date);
+      return;
+    }
+
     navigate("/bookings/new", {
-      state: { 
-        van, 
-        startDate: deal.startDate, 
-        endDate: deal.endDate,
+      state: {
+        van,
+        startDate: startDateFormatted,
+        endDate: endDateFormatted,
         discount: deal.discount,
       },
     });
   };
-
 
   if (loadingVan) {
     return <div>Loading van information...</div>;
@@ -73,19 +94,17 @@ export const DealCard = ({ deal }) => {
     `Transmission: ${van?.transmission || "N/A"}`,
   ];
 
-  
-
   return (
-    <div className="w-72 rounded-xl shadow-md p-4  border bg-white/80
-                backdrop-blur-md transition-all duration-200">
+    <div
+      className="w-72 rounded-xl shadow-md p-4  border bg-white/80
+                backdrop-blur-md transition-all duration-200"
+    >
       <div className="p-4 flex-1 flex flex-col">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">
           {van.manufacturer} {van.model}
         </h3>
 
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
-          {van.type}
-        </h3> 
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">{van.type}</h3>
 
         <div className="flex items-center text-sm text-gray-600 mb-2">
           <MapPinIcon className="w-5 h-5 mr-1 text-gray-500" />
@@ -103,29 +122,28 @@ export const DealCard = ({ deal }) => {
 
         <div className="mb-4">
           <div className="flex items-baseline space-x-2">
-            <span className="text-xl font-bold text-green-600">€{discountedPrice}</span>
+            <span className="text-xl font-bold text-green-600">
+              €{discountedPrice}
+            </span>
             {discountedPrice > 0 && (
-              <span className="text-sm line-through text-gray-400">€{originalPrice.toFixed(2)}</span>
+              <span className="text-sm line-through text-gray-400">
+                €{originalPrice.toFixed(2)}
+              </span>
             )}
           </div>
           <span className="text-xs text-gray-500">/ day</span>
         </div>
 
         <div className="mt-auto flex space-x-2">
-          <Button
-          color="success"
-          onPress={handleMoreInfoClick}>
+          <Button color="success" onPress={handleMoreInfoClick}>
             More info
           </Button>
 
-          <Button
-          color="success"
-          variant='ghost'
-          onPress={handleBookingClick}>
+          <Button color="success" variant="ghost" onPress={handleBookingClick}>
             Book now
           </Button>
         </div>
       </div>
     </div>
   );
-}
+};

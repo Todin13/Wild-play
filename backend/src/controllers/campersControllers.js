@@ -1,6 +1,7 @@
 /*
 
 All methods for the van access an view
+Author: Thibaut Hervet
 
 */
 const { Van } = require('../models');
