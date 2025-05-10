@@ -11,6 +11,7 @@ import MainLayout from "@/layouts/MainLayout";
 import API from "@/utils/api";
 import NewBookingComponent from "@/components/ui/NewBookingComponent";
 import "@/assets/styles/index.css";
+import MountainSVG from "@/assets/images/mountain-svg";
 
 // NewBooking component to create a new booking
 const NewBooking = () => {
@@ -147,6 +148,7 @@ const NewBooking = () => {
             }),
       };
 
+      console.log("Submitting booking data:", bookingData);
       const response = await API.post("/bookings", bookingData);
 
       const newBooking = response.data;
@@ -160,6 +162,9 @@ const NewBooking = () => {
   // Render the booking form
   return (
     <MainLayout>
+      <div className="fixed bottom-0 left-0 w-full z-[-1] pointer-events-none transform xl:translate-y-[30%]">
+        <MountainSVG className="w-full h-auto object-cover text-mountain-deepgreen" />
+      </div>
       <div className="p-4 m-8 max-w-4xl mx-auto">
         <NewBookingComponent
           van={van}

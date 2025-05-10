@@ -6,6 +6,7 @@ import CamperSidebar from "@/components/CamperSidebar";
 import { useLocation } from "react-router-dom";
 import MountainSVG from "@/assets/images/mountain-svg";
 import API from "@/utils/api";
+import Title from "@/components/ui/Titles";
 
 export default function Campervans() {
   const location = useLocation();
@@ -46,8 +47,17 @@ export default function Campervans() {
     fetchCampers(); // Reset campers too
   };
 
-  // Fetch campers with optional filters (including start and end dates)
+  //check if both dates are selected
+  const hasDatesSelected = filters.startDate && filters.endDate;
+
+  //fetch campers with filters
   const fetchCampers = useCallback(async (optionalFilters = filters) => {
+    //fetch if both dates are selected
+    if (!optionalFilters.startDate || !optionalFilters.endDate) {
+      setVansByType({});
+      return;
+    }
+
     setLoading(true);
     try {
       const params = {};
@@ -61,12 +71,9 @@ export default function Campervans() {
       if (optionalFilters.transmission) params.transmission = optionalFilters.transmission;
       if (optionalFilters.type) params.type = optionalFilters.type;
   
-      const response = optionalFilters.startDate && optionalFilters.endDate
-        ? await API.get("/bookings/available_campers", { params })
-        : await API.get("/campers", { params });
+      const response = await API.get("/bookings/available_campers", { params });
   
-      const items =
-        response.data.availableCampers || response.data.campers || [];
+      const items = response.data.availableCampers || [];
   
       const grouped = items.reduce((acc, van) => {
         const type = van.type || "other";
@@ -109,19 +116,32 @@ export default function Campervans() {
         </aside>
 
         <div className="w-full xl:w-3/4">
-          {loading ? (
+          {!hasDatesSelected ? (
+            <div className="w-auto flex flex-col items-center justify-center h-64 rounded-2xl shadow-lg border bg-white/85 backdrop-blur-md transition-all duration-200">
+              <Title className="text-lg text-center mb-4">
+                Please select your booking dates to see available campers
+              </Title>
+            </div>
+          ) : loading ? (
             <div className="flex justify-center items-center h-40">
               <CircularProgress aria-label="Loading vans" />
             </div>
           ) : error ? (
             <p className="text-red-500 text-center">{error}</p>
           ) : Object.keys(vansByType).length === 0 ? (
-            <p className="text-center">No campers available.</p>
+            <p className="text-center">No campers available for the selected dates.</p>
           ) : (
             Object.entries(vansByType).map(([type, vans]) => (
               <div key={type}>
                 <h2 className="text-2xl font-bold capitalize mb-4">{type} vans</h2>
-                <CampersCarousel vans={vans} visibleCount={4} />
+                <CampersCarousel 
+                  vans={vans.map(van => ({
+                    ...van,
+                    startDate: filters.startDate,
+                    endDate: filters.endDate
+                  }))} 
+                  visibleCount={4} 
+                />
               </div>
             ))
           )}

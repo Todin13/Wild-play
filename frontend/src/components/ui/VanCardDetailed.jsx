@@ -20,7 +20,7 @@ const VanCardDetailed = ({ van, onBookNow }) => {
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       {/* Van Details Card */}
-      <div className="rounded-xl shadow-md p-6 bg-voga-card border border-voga-border">
+      <div className="rounded-xl shadow-md p-6 border bg-white/85 backdrop-blur-md transition-all duration-200">
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <Title className="text-3xl">
