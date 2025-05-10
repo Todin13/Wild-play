@@ -423,7 +423,8 @@ const CreateTripPage = () => {
 
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+        // https://cors-anywhere.herokuapp.com/ is only for the demo and not for the all time, as the cors problem only appeared on the last day before the due date it was the quickiest solution as proxy did not work well, we need to create a new service in backend
+        `https://cors-anywhere.herokuapp.com/https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
           searchQuery
         )}&format=json&limit=20&viewbox=${viewbox}&bounded=1`
       );
@@ -456,7 +457,8 @@ const CreateTripPage = () => {
   const fetchPlaceDetails = async (place) => {
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/lookup?format=json&osm_ids=${place.osm_type
+        // https://cors-anywhere.herokuapp.com/ is only for the demo and not for the all time, as the cors problem only appeared on the last day before the due date it was the quickiest solution as proxy did not work well, we need to create a new service in backend
+        `https://cors-anywhere.herokuapp.com/https://nominatim.openstreetmap.org/lookup?format=json&osm_ids=${place.osm_type
           .charAt(0)
           .toUpperCase()}${place.osm_id}`
       );
@@ -549,7 +551,7 @@ const CreateTripPage = () => {
   const [activeLocation, setActiveLocation] = useState(null);
 
   const moveSection = (sectionName, direction) => {
-    setTripData((prev) => {v
+    setTripData((prev) => {
       const locations = [...prev.locations];
 
       // Group locations by section
