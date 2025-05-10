@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { addDeal } from '@/modules/deals/api';
 import API from '@/utils/api';
 
@@ -42,7 +42,7 @@ export default function DealForm({ onSuccess }) {
       await addDeal(form);
       setSuccessMsg('Deal successfully added!');
       setForm({ van_id: '', discount: '', start_date: '', end_date: '' });
-      onSuccess?.(); // Notify parent if needed
+      onSuccess?.();
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create deal');
     } finally {

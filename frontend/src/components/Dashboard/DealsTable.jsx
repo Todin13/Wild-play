@@ -5,7 +5,7 @@ import { useDeals } from "@/hooks/DealsHooks";
 import dayjs from "dayjs";
 
 function DealsTable() {
-  const { deals, count, loading, error, removeDeal } = useDeals();
+  const { deals, count, loading, error, removeDeal, refetch } = useDeals();
   const [page, setPage] = useState(1);
   const rowsPerPage = 10;
 
@@ -54,7 +54,10 @@ function DealsTable() {
                 color="danger"
                 size="lg"
                 variant="shadow"
-                onPress={() => removeDeal(deal._id)}
+                onPress={async () => {
+                  await removeDeal(deal._id); // or deal.id, depending on your code
+                  await refetch(); // 👈 refresh list from server
+                }}
               >
                 Delete
               </Button>
