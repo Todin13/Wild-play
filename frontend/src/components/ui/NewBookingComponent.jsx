@@ -29,7 +29,7 @@ const NewBookingComponent = ({
     
     // Booking form
     return (
-        <div className="w-full rounded-2xl shadow-lg p-6 bg-voga-card border border-voga-border">
+        <div className="w-full rounded-2xl shadow-lg p-6 border bg-white/85 backdrop-blur-md transition-all duration-200">
           <div className="space-y-6">
 
         {/* Title Section */}

@@ -69,7 +69,7 @@ const BookingDetailsComponent = ({
   };
 
   return (
-    <div className="w-full rounded-2xl shadow-lg p-6 bg-voga-card border border-voga-border">
+    <div className="w-full rounded-2xl shadow-lg p-6 border bg-white/85 backdrop-blur-md transition-all duration-200">
       <div className="space-y-6">
         {/* Booking Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-voga-border pb-4">
@@ -248,17 +248,17 @@ const BookingDetailsComponent = ({
           </div>
         )}
 
-        {!booking.paid && booking.status !== "CANCELLED" && (
-          <div className="pt-4 text-center">
-            <Button variant="primary" onClick={onPay}>
-              Pay Now
-            </Button>
-          </div>
-        )}
-
+        
         {/* Cancel Button and Create Trip Button */}
         {booking.status !== "CANCELLED" && (
           <div className="flex justify-center gap-4 pt-1">
+
+            {!booking.paid && booking.status !== "CANCELLED" && (              
+              <Button variant="primary" onClick={onPay}>
+                Pay Now
+              </Button>              
+            )}
+
             <Button variant="primary" onClick={() => setShowConfirm(true)}>
               Cancel Booking
             </Button>

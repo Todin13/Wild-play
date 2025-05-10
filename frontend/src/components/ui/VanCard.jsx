@@ -12,8 +12,15 @@ const VanCard = ({ van, large= false }) => {
   const formattedBaseRate = `$${van.baseRate.toLocaleString()}`;
 
   const navigate = useNavigate();
+  
   const handleClick = () => {
-    navigate(`/campervans/${van._id}`);
+    navigate(`/campervans/${van._id}`, {
+      state: { 
+        van, 
+        startDate: van.startDate, 
+        endDate: van.endDate 
+      }
+    });
   };
 
   return (

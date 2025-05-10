@@ -12,6 +12,7 @@ import MainLayout from "@/layouts/MainLayout";
 import BookingDetailsComponent from "@/components/ui/BookingDetailsComponent";
 import API from "@/utils/api";
 import "@/assets/styles/index.css";
+import MountainSVG from "@/assets/images/mountain-svg";
 
 const BookingDetails = () => {
   const { booking_id } = useParams();
@@ -101,7 +102,10 @@ const BookingDetails = () => {
 
   // Render the component
   return (
-    <MainLayout>      
+    <MainLayout>
+      <div className="fixed bottom-0 left-0 w-full z-[-1] pointer-events-none transform xl:translate-y-[30%]">
+        <MountainSVG className="w-full h-auto object-cover text-mountain-deepgreen" />
+      </div>
       <section className="m-8 p-4 max-w-4xl mx-auto">
         {loading ? (
           <div className="text-center text-lg">Loading...</div>

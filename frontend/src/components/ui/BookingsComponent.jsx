@@ -23,7 +23,7 @@ const BookingsComponent = ({ bookings, loading }) => {
     return (
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             {bookings.map((booking) => (
-                <Link key={booking._id} to={`/bookings/${booking._id}`} className="bg-voga-card border border-voga-border rounded-2xl p-4 flex flex-col h-full hover:shadow-lg transition-all duration-200">
+                <Link key={booking._id} to={`/bookings/${booking._id}`} className="bg-white/85 backdrop-blur-md border border-gray-200 shadow-lg hover:shadow-xl hover:scale-105 rounded-2xl p-4 flex flex-col h-full hover:shadow-lg transition-all duration-200">
                 
                 {/* Van Info Header */}
                 <div className="flex items-start mb-4">

@@ -27,7 +27,7 @@ const ReviewCard = ({ username, rating, review }) => {
   };
 
   return (
-    <div className="max-w-xs w-full bg-white border border-gray-200 rounded-lg shadow-lg p-6 flex flex-col items-center text-center transition-all hover:shadow-xl hover:scale-105">
+    <div className="max-w-xs w-full bg-white/85 backdrop-blur-md transition-all duration-200 border border-gray-200 rounded-lg shadow-lg p-6 flex flex-col items-center text-center hover:shadow-xl hover:scale-105">
       {/* User Info */}
       <h3 className="text-xl sm:text-lg md:text-xl lg:text-2xl font-semibold mb-2">
         {username}
