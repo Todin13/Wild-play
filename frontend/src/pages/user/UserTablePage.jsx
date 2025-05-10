@@ -3,6 +3,7 @@ import { useState, useMemo } from "react";
 import { useUserTable } from "@/hooks/UserHooks";
 import { Input, Button, Select, SelectItem, Checkbox, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination } from "@heroui/react";
 import "@/assets/styles/index.css";
+import MainLayout from "@/layouts/MainLayout";
 
 function UserTable() {
   const {
@@ -24,6 +25,7 @@ function UserTable() {
   }, [page, users]);
 
   return (
+    <MainLayout>
     <div className="flex flex-col w-full flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 mt-8 custom-font-input">
       <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4 max-w-4xl mx-auto">
         <Checkbox
@@ -66,27 +68,7 @@ function UserTable() {
         <Button color="success" size="lg" variant="ghost" onPress={handleSearch}>Search</Button>
       </div>
 
-      <div className="flex w-full md:flex-nowrap mt-4 mb-4 gap-4 max-w-4xl mx-auto">
-        <Checkbox
-          color="success"
-          size="lg"
-          checked={isChecked}
-          onChange={handleBirthdateChecked}
-        >
-        </Checkbox>
-        <Input 
-          label="Date of Birth" 
-          size='sm' 
-          variant="underlined"
-          type="date"
-          className="max-w-xs"
-          disabled={!isChecked}
-          value={birthdate}
-          onChange={handleBirthdate}
-        />
-      </div>
-
-      <div>
+      <div className="flex w-full flex-wrap md:flex-nowrap mt-4 mb-4 gap-4 max-w-4xl mx-auto">
         <Table 
           bottomContent={
             <div className="flex w-full justify-center">
@@ -128,7 +110,7 @@ function UserTable() {
         </Table>
       </div>
     </div>
-
+    </MainLayout>
   );
 }
 
