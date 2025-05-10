@@ -79,5 +79,4 @@ const CamperSidebar = ({ filters, onChange, onSearch, onReset }) => {
     </div>
   );
 };
-
 export default CamperSidebar;

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { MapPinIcon, TruckIcon } from "@heroicons/react/24/outline"; // Assuming you're using Heroicons
 import { getAllVans } from "@/modules/vans/api.js";
+import {Button} from "@heroui/react";
+import { useNavigate } from "react-router-dom";
  // Assuming the API file for vans is the same
 
 /**
@@ -11,6 +13,8 @@ export const DealCard = ({ deal }) => {
   const [van, setVan] = useState(null);
   const [loadingVan, setLoadingVan] = useState(true);
   const [errorVan, setErrorVan] = useState(null);
+
+   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVan = async () => {
@@ -33,6 +37,23 @@ export const DealCard = ({ deal }) => {
 
     fetchVan();
   }, [deal.van_id]);
+
+  const handleMoreInfoClick = () => {
+    navigate(`/campervans/${van._id}`);
+  };
+
+  // Function to handle booking click
+  const handleBookingClick = () => {
+    navigate("/bookings/new", {
+      state: { 
+        van, 
+        startDate: deal.startDate, 
+        endDate: deal.endDate,
+        discount: deal.discount,
+      },
+    });
+  };
+
 
   if (loadingVan) {
     return <div>Loading van information...</div>;
@@ -91,12 +112,18 @@ export const DealCard = ({ deal }) => {
         </div>
 
         <div className="mt-auto flex space-x-2">
-          <a className="flex-1 text-center py-2 border border-green-600 text-green-600 rounded hover:bg-green-50 transition">
+          <Button
+          color="success"
+          onPress={handleMoreInfoClick}>
             More info
-          </a>
-          <a className="flex-1 text-center py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+          </Button>
+
+          <Button
+          color="success"
+          variant='ghost'
+          onPress={handleBookingClick}>
             Book now
-          </a>
+          </Button>
         </div>
       </div>
     </div>

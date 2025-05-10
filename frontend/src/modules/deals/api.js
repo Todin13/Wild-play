@@ -23,8 +23,8 @@ export async function addDeal(dealData) {
 }
 
 
-
 export async function deleteDeal(dealId) {
+  console.log("Deleting deal with ID:", dealId);
   const response = await API.delete(`/deals/${dealId}`);
   return response.data;
 }

@@ -46,8 +46,6 @@ export function useVans(filters = {}) {
   const removeVan = async (vanId) => {
     try {
       await deleteVan(vanId);
-      setVans((prev) => prev.filter((van) => van.id !== vanId));
-      setCount((prev) => Math.max(prev - 1, 0));
     } catch (err) {
       throw new Error(err.message || 'Failed to delete van');
     }

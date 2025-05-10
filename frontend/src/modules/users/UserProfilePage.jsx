@@ -192,11 +192,6 @@ export default function Profile() {
 
               {user.detail.user_type === "ADMIN" && (
                 <Button color="primary" size="sm" variant="light">
-                  <Link to="/userTable">User Table</Link>
-                </Button>
-              )}
-              {user.detail.user_type === "ADMIN" && (
-                <Button color="primary" size="sm" variant="light">
                   <Link to="/admin">Admin Dashboard</Link>
                 </Button>
               )}

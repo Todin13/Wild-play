@@ -35,12 +35,11 @@ export function useDeals(filters = {}) {
     }
   };
 
-  const handleDeleteDeal = async (dealId) => {
+  const removeDeal = async (dealId) => {
     try {
       await deleteDeal(dealId);
-      setDeals((prev) => prev.filter((deal) => deal.id !== dealId));
-      setCount((prev) => Math.max(prev - 1, 0));
     } catch (err) {
+      console.error("Error deleting deal:", err);
       throw new Error(err.message || 'Failed to delete deal');
     }
   };
@@ -52,6 +51,6 @@ export function useDeals(filters = {}) {
     error,
     refetch: fetchDeals,
     addDeal: handleAddDeal,
-    deleteDeal: handleDeleteDeal,
+    removeDeal,
   };
 }

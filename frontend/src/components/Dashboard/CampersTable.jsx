@@ -20,7 +20,7 @@ const CampersTable = () => {
     type: "",
   });
 
-  const { vans, count, loading, removeVan } = useVans(filters);
+  const { vans, count, loading, removeVan, refetch } = useVans(filters);
   const { manufacturers, types, loading: loadingFilters } = useVanFilters();
 
   const [page, setPage] = useState(1);
@@ -121,7 +121,9 @@ const CampersTable = () => {
                       color="danger"
                       size="lg"
                       variant="shadow"
-                      onPress={() => removeVan(van._id)}
+                      onPress={async () => {
+                        await removeVan(van._id);
+                        await refetch() }}
                     >
                       Delete
                     </Button>
