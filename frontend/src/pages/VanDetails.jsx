@@ -1,8 +1,19 @@
+/*
+
+Page with van details and reviews
+Author: Kirill Smirnov
+
+*/
+
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import API from "@/utils/api";
 import MainLayout from "@/layouts/MainLayout";
+import VanCardDetailed from "@/components/ui/VanCardDetailed";
+import Title from "@/components/ui/Titles";
+import ReviewCard from "@/components/ui/ReviewCard";
 import "@/assets/styles/index.css";
+import MountainSVG from "@/assets/images/mountain-svg";
 
 const VanDetails = () => {
   const { van_id } = useParams();
@@ -11,12 +22,15 @@ const VanDetails = () => {
 
   const [van, setVan] = useState(state?.van || null);
   const startDate = state?.startDate || null;
-  const endDate = state?.endDate || null;
+  const endDate = state?.endDate || null;  
+  const [error, setError] = useState("");
+  const [loadingVan, setLoadingVan] = useState(!state?.van); // fetch if no state
+
 
   const [reviews, setReviews] = useState([]);
-  const [loadingVan, setLoadingVan] = useState(!state?.van); // fetch if no state
   const [loadingReviews, setLoadingReviews] = useState(true);
-  const [error, setError] = useState("");
+  const [reviewsError, setReviewsError] = useState("");
+  
 
   const fetchVan = useCallback(async () => {
     if (!van_id || van) return;
@@ -58,82 +72,52 @@ const VanDetails = () => {
     });
   };
 
-  const getReviewBackgroundColor = (rating) =>
-    rating < 3 ? "bg-red-100" : "bg-green-100";
-
   return (
     <MainLayout>
-      <section className="m-8 p-4">
-        {loadingVan ? (
-          <div className="text-center text-lg">Loading van details...</div>
-        ) : !van ? (
-          <div className="text-center text-lg text-red-500">Van not found.</div>
+      <div className="fixed bottom-0 left-0 w-full z-[-1] pointer-events-none transform xl:translate-y-[30%]">
+        <MountainSVG className="w-full h-auto object-cover text-mountain-deepgreen" />
+      </div>
+      <section className="m-8 p-4 max-w-6xl mx-auto">
+        {!van ? (
+          <Title className="text-center text-lg">Van not found</Title>
         ) : (
-          <div className="bg-[#dcf2eb] shadow-md rounded-2xl p-6 max-w-4xl mx-auto space-y-6 text-left">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">Van Details</h2>
+          <div className="space-y-8">
+            <VanCardDetailed van={van} onBookNow={handleBookingClick} />
 
-            <div className="space-y-4">
-              <p><strong>Type:</strong> {van.type}</p>
-              <p><strong>Manufacturer:</strong> {van.manufacturer}</p>
-              <p><strong>Model:</strong> {van.model}</p>
-              <p><strong>Color:</strong> {van.color}</p>
-              <p><strong>Price:</strong> ${van.price}</p>
-              <p><strong>Base Rate:</strong> ${van.baseRate}</p>
-              <p><strong>Seats:</strong> {van.seats}</p>
-              <p><strong>Beds:</strong> {van.beds}</p>
-              {Array.isArray(van.dimension) && van.dimension.length > 0 && (
-                <p><strong>Dimensions:</strong> {van.dimension.join("m x ")}m</p>
-              )}
-              <p><strong>Location:</strong> {van.location}</p>
-              <p><strong>Info:</strong> {van.info}</p>
-            </div>
-
-            <div className="mt-6 text-center">
-              <button
-                onClick={handleBookingClick}
-                className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full text-xl"
+            {/* Reviews Section */}
+            <div className="mt-8 flex flex-col items-center">
+              <Title
+                variant="section"
+                className=" max-w-xs w-full mb-6 p-2 bg-white/85 border border-gray-200 rounded-lg backdrop-blur-md transition-all duration-200"
               >
-                Book this Van
-              </button>
+                Customer Reviews
+              </Title>
+
+              {loadingReviews ? (
+                <div className="text-center text-lg">Loading reviews...</div>
+              ) : reviewsError ? (
+                <div className="text-center text-red-500">{reviewsError}</div>
+              ) : reviews.length > 0 ? (
+                <div className="flex justify-center">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center max-w-7xl">
+                    {reviews.map((review) => (
+                      <ReviewCard
+                        key={review._id}
+                        username={review.user_id?.username || "Anonymous"}
+                        rating={review.rating}
+                        review={review.review}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="px-3 py-1 text-center text-lg text-gray-500 bg-white/85 border border-gray-200 rounded-lg backdrop-blur-md transition-all duration-200">
+                  No reviews yet
+                </div>
+              )}
             </div>
           </div>
         )}
-
-        {/* Reviews Section */}
-        <div className="mt-8 max-w-4xl mx-auto">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Reviews</h3>
-
-          {loadingReviews ? (
-            <div className="text-center text-lg">Loading reviews...</div>
-          ) : error ? (
-            <div className="text-center text-red-500">{error}</div>
-          ) : reviews.length > 0 ? (
-            reviews.map((review) => (
-              <div
-                key={review._id}
-                className={`${getReviewBackgroundColor(
-                  review.rating
-                )} shadow-md rounded-2xl p-4 mb-4`}
-              >
-                <div className="flex justify-between">
-                  <span className="font-semibold text-gray-700">
-                    {review.user_id?.username || "Anonymous"}
-                  </span>
-                  <span className="text-gray-500">
-                    {new Date(review.date).toLocaleDateString()}
-                  </span>
-                </div>
-                <div className="mt-2">
-                  <span className="font-bold text-yellow-500">Rating:</span>{" "}
-                  {review.rating} / 5
-                </div>
-                <p className="mt-2 text-gray-700">{review.review}</p>
-              </div>
-            ))
-          ) : (
-            <div className="text-center text-lg text-gray-500">No reviews yet.</div>
-          )}
-        </div>
       </section>
     </MainLayout>
   );

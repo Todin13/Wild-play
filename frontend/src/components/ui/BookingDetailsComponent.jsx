@@ -1,7 +1,7 @@
 /*
 
 Style component for the booking details with van info
-Main Author: Kirill Smirnov
+Author: Kirill Smirnov
 Button to create trip added by: ODIN Thomas
 
 */
@@ -248,15 +248,13 @@ const BookingDetailsComponent = ({
           </div>
         )}
 
-        
         {/* Cancel Button and Create Trip Button */}
         {booking.status !== "CANCELLED" && (
           <div className="flex justify-center gap-4 pt-1">
-
-            {!booking.paid && booking.status !== "CANCELLED" && (              
+            {!booking.paid && booking.status !== "CANCELLED" && (
               <Button variant="primary" onClick={onPay}>
                 Pay Now
-              </Button>              
+              </Button>
             )}
 
             <Button variant="primary" onClick={() => setShowConfirm(true)}>
