@@ -2,7 +2,7 @@ import TripCard from "@/components/ui/TripCard";
 import GuideCard from "@/components/ui/GuideCard";
 import { useUserTrips } from "@/hooks/TripHooks";
 import { useProfile, useUserLogout } from "@/hooks/UserHooks";
-import { useGuideByUserId } from '@/hooks/GuideHooks';
+import { useGuideByUserId } from "@/hooks/GuideHooks";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Update from "@/modules/users/UserUpdatePage";
@@ -47,20 +47,18 @@ export default function Profile() {
   const navigate = useNavigate(); // Use navigate hook
 
   const goToCreateGuidePage = () => {
-    navigate('/create-guide'); // Change '/about' to your target route
+    navigate("/create-guide"); // Change '/about' to your target route
   };
 
   return (
     <MainLayout>
-      <div className="mt-8 max-w-4xl mx-auto">
+      <div className="mt-8 max-w-4xl mx-auto text-center">
         <Btn variant="primary" onClick={() => navigate("/bookings")}>
           Bookings
         </Btn>
       </div>
 
-      <div className="flex flex-col flex-wrap md:flex-nowrap gap-4 mt-8 max-w-4xl mx-auto ">
-        
-      </div>
+      <div className="flex flex-col flex-wrap md:flex-nowrap gap-4 mt-8 max-w-4xl mx-auto "></div>
 
       <div className="flex flex-col flex-wrap justify-center items-center md:flex-nowrap gap-4 mb-5 max-w-4xl mx-auto custom-font-input bg-intro-card p-8 space-y-6 rounded-lg shadow-card mt-8">
         {error && <p style={{ color: "red" }}>{error}</p>}
@@ -243,7 +241,7 @@ export default function Profile() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {trips.map((trip) => (
                 <Link to="/trips" state={{ trip: trip }} key={trip._id}>
-                  <TripCard key={trip._id} trip={trip}/>
+                  <TripCard key={trip._id} trip={trip} />
                 </Link>
               ))}
             </div>
@@ -254,7 +252,18 @@ export default function Profile() {
       {/* User Guides */}
       {user && user.detail && (
         <div className="mt-12 max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Your Guides</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold">Your Guides</h2>
+            <Button
+              onPress={goToCreateGuidePage}
+              className="bg-buttonBg text-buttonText"
+              size="lg"
+              radius="full"
+            >
+              Create New Guide
+            </Button>
+          </div>
+          <hr className="border-t-2 border-voga-border mb-6" />
           {guideLoading ? (
             <p>Loading guides...</p>
           ) : !guideData || guideData.length === 0 ? (
@@ -262,18 +271,12 @@ export default function Profile() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {guideData.map((guide) => (
-                  <GuideCard key={guide._id} guide={guide} />
+                <GuideCard key={guide._id} guide={guide} />
               ))}
             </div>
           )}
-          <div className="flex justify-end mb-4">
-            <Button onPress={goToCreateGuidePage} color="primary">
-              Create New Guide
-            </Button>
-          </div>
         </div>
       )}
-
     </MainLayout>
   );
 }
