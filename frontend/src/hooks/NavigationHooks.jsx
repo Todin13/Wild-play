@@ -24,21 +24,45 @@ function useNavigationHooks() {
    * Navigate to the trip detail page with the trip object passed in state
    */
   const goToTripDetail = (trip) => {
-    navigate("/trips", { state: { trip: { trip } } });
+    navigate("/trips", { state: { trip } });
   };
 
   /**
    * Navigate to the create trip page with the current trip object passed in state
    */
   const goToCreateTripPage = (trip) => {
-    navigate("/plan-trip", { state: { trip } }); // Assuming /create-trip is the path for creating a trip
+    navigate("/plan-trip", { state: { trip } });
+  };
+
+  /**
+   * Navigate to the guide detail page with the guide object passed in state
+   */
+  const goToGuideDetail = (guide) => {
+    navigate("/guides", { state: { guide } });
+  };
+
+  /**
+   * Navigate to the guide detail page with the guide object passed in state
+   */
+  const goToCreateGuidePage = (guide) => {
+    navigate("/create-guide", { state: { guide } });
+  };
+
+  /**
+   * Navigate to the guide detail page with the guide object passed in state
+   */
+  const goToSearchBooking = (start, end) => {
+    navigate("/campervans", { state: { start: start, end: end } });
   };
 
   return {
     goToSearch,
     goToContactUs,
     goToTripDetail,
-    goToCreateTripPage, // Include goToCreateTripPage in the returned object
+    goToCreateTripPage,
+    goToGuideDetail,
+    goToCreateGuidePage,
+    goToSearchBooking,
   };
 }
 

@@ -1,15 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { format } from "date-fns";
 
-export default function DateRangeFilter({ onApply }) {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+export default function DateRangeFilter({
+  startDate: initialStartDate,
+  endDate: initialEndDate,
+  onApply,
+}) {
+  const [startDate, setStartDate] = useState(initialStartDate || "");
+  const [endDate, setEndDate] = useState(initialEndDate || "");
   const today = format(new Date(), "yyyy-MM-dd");
 
+  // If the passed startDate or endDate changes, update the component state
+  useEffect(() => {
+    if (initialStartDate) setStartDate(initialStartDate);
+    if (initialEndDate) setEndDate(initialEndDate);
+  }, [initialStartDate, initialEndDate]);
+
   const handleApply = () => {
+    // If both startDate and endDate are valid, apply the filter
     if (startDate && endDate && endDate > startDate) {
       onApply({ startDate, endDate });
     } else {
+      // If not, reset both startDate and endDate to empty
       onApply({ startDate: "", endDate: "" });
     }
   };
@@ -27,7 +39,7 @@ export default function DateRangeFilter({ onApply }) {
           onChange={(e) => {
             setStartDate(e.target.value);
             if (endDate && e.target.value >= endDate) {
-              setEndDate("");
+              setEndDate(""); // Reset endDate if startDate is changed and invalidates it
             }
           }}
         />
@@ -36,12 +48,19 @@ export default function DateRangeFilter({ onApply }) {
           className="w-full p-2 border rounded-md shadow"
           min={
             startDate
-              ? format(new Date(new Date(startDate).setDate(new Date(startDate).getDate() + 1)), "yyyy-MM-dd")
+              ? format(
+                  new Date(
+                    new Date(startDate).setDate(
+                      new Date(startDate).getDate() + 1
+                    )
+                  ),
+                  "yyyy-MM-dd"
+                )
               : today
           }
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
-          disabled={!startDate}
+          disabled={!startDate} // Disable end date until a start date is selected
         />
       </div>
 

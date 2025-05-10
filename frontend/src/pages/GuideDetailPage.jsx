@@ -12,6 +12,8 @@ import Button from "@/components/ui/Buttons";
 import CreateTripFromGuideButton from "@/modules/trips/CreateTripButton";
 import { useUserDashboard } from "@/hooks/UserHooks";
 import { useDeleteGuide } from "@/hooks/GuideHooks";
+import useNavigationHooks from "@/hooks/NavigationHooks";
+import { useNavigate } from "react-router-dom";
 
 // Fix for default marker icons in Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -34,6 +36,10 @@ const GuideDetailPage = () => {
       ? [firstLocation.lat, firstLocation.lon]
       : [48.8566, 2.3522]; // fallback to Paris
 
+  const navigate = useNavigate();
+
+  const {goToCreateGuidePage} = useNavigationHooks();
+
   // Fetch reviews using the custom hook
   const { reviews, reviewsLoading, reviewsError } = useReviews(
     "guide",
@@ -50,6 +56,7 @@ const GuideDetailPage = () => {
       try {
         await remove(guide._id); // Delete the guide
         alert("Guide deleted successfully.");
+        navigate(-1);
       } catch (error) {
         alert(deletingGuideError || "Failed to delete the guide.");
       }
@@ -58,13 +65,13 @@ const GuideDetailPage = () => {
 
   return (
     <MainLayout>
-      <section className="px-4 lg:px-12 py-12 mx-auto min-w-[95vw]">
-        <div className="flex flex-col items-center gap-6 lg:flex-row lg:gap-20 lg:justify-center">
+      <section className="px-4 lg:px-12 py-16 mx-auto min-w-[95vw]">
+        <div className="flex flex-col gap-6 lg:flex-row lg:gap-20 lg:justify-center">
           {/* Guide Card */}
           <div className="w-full lg:w-[45%] max-w-[525px]">
             <GuideDetailCard guide={guide} />
             {/* Button to Delete Guide */}
-            {user && guide?.user_id === user.id && (
+            {user && guide?.user_id && guide?.user_id.__id === user.id && (
               <div className="flex justify-center gap-4 mt-6">
                 <Button
                   variant="primary"
@@ -74,13 +81,20 @@ const GuideDetailPage = () => {
                 >
                   {deletingGuideLoading ? "Deleting..." : "Delete Guide"}
                 </Button>
+                <Button
+                  variant="primary"
+                  onClick={() => goToCreateGuidePage(guide)}
+                  className="text-3xl py-6 px-10 font-semibold"
+                >
+                  Update guide
+                </Button>
               </div>
             )}
           </div>
 
           {/* Map */}
           {guide.locations && guide.locations.length > 0 && (
-            <div className="w-full lg:w-[50%] sticky top-24 h-[50vh] lg:h-[80vh] relative">
+            <div className="w-full lg:w-[50%] sticky top-36 h-[50vh] lg:h-[80vh] relative">
               <div className="w-full h-full rounded-3xl overflow-hidden shadow-lg border border-voga-border relative">
                 <MapContainer
                   center={defaultCenter}

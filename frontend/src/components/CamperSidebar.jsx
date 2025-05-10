@@ -5,12 +5,7 @@ import DateRangeFilter from "@/components/ui/DateRangeFilter";
 import { Select, SelectItem } from "@heroui/react";
 import { useVanFilters } from "@/hooks/VanHooks";
 
-const CamperSidebar = ({
-  filters,
-  onChange,
-  onSearch,
-  onReset,
-}) => {
+const CamperSidebar = ({ filters, onChange, onSearch, onReset }) => {
   const { manufacturers, types, loading } = useVanFilters();
 
   const handleSelectChange = (name) => (key) => {
@@ -27,6 +22,8 @@ const CamperSidebar = ({
 
         <div className="space-y-4">
           <DateRangeFilter
+            startDate={filters.startDate} // Pass startDate
+            endDate={filters.endDate} // Pass endDate
             onApply={({ startDate, endDate }) => {
               onChange("startDate", startDate);
               onChange("endDate", endDate);
@@ -82,4 +79,5 @@ const CamperSidebar = ({
     </div>
   );
 };
+
 export default CamperSidebar;

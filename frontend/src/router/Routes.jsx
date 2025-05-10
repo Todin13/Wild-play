@@ -20,6 +20,7 @@ import SearchPage from "@/pages/SearchPage";
 import Campervans from "@/pages/Campervans"; 
 import Deals from "@/pages/Deals";
 import AdminDashboard from "@/pages/AdminDashboard";
+import NotFoundPage from "@/pages/NotFoundPage"; 
 
 const AppRoutes = () => (
     <Routes>
@@ -44,6 +45,7 @@ const AppRoutes = () => (
       <Route path="/trips" element={<TripDetailPage />} />
       <Route path="/plan-trip" element={<CreateTripPage />} />
       <Route path="/create-guide" element={<CreateGuidePage />} />
+      <Route path="*" element={<NotFoundPage />} /> 
     </Routes>
 );
 

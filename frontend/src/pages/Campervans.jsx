@@ -3,20 +3,25 @@ import MainLayout from "@/layouts/MainLayout";
 import { CircularProgress } from "@heroui/react";
 import CampersCarousel from "@/modules/vans/CampersCarousel";
 import CamperSidebar from "@/components/CamperSidebar";
+import { useLocation } from "react-router-dom";
 import MountainSVG from "@/assets/images/mountain-svg";
 import API from "@/utils/api";
 
 export default function Campervans() {
+  const location = useLocation();
+  const { start, end } = location.state || {}; // Get start and end from location.state
+
   const [vansByType, setVansByType] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Initialize filters with start and end dates from location.state
   const [filters, setFilters] = useState({
     manufacturer: "",
     transmission: "",
     type: "",
-    startDate: null,
-    endDate: null,
+    startDate: start || null,  // Set startDate from location.state
+    endDate: end || null,      // Set endDate from location.state
   });
 
   const handleChange = (name, value) => {
@@ -25,7 +30,6 @@ export default function Campervans() {
       [name]: value,
     }));
   };
-  
 
   const handleDateRange = ({ startDate, endDate }) => {
     setFilters((prev) => ({ ...prev, startDate, endDate }));
@@ -42,6 +46,7 @@ export default function Campervans() {
     fetchCampers(); // Reset campers too
   };
 
+  // Fetch campers with optional filters (including start and end dates)
   const fetchCampers = useCallback(async (optionalFilters = filters) => {
     setLoading(true);
     try {
@@ -80,8 +85,8 @@ export default function Campervans() {
       setLoading(false);
     }
   }, [filters]);
-  
 
+  // Effect to trigger fetching campers on filter change
   useEffect(() => {
     fetchCampers();
   }, [fetchCampers]);
