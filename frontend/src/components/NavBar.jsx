@@ -102,7 +102,7 @@ const TopBar = () => {
             <Link to="/bookings/campers" className="topbar-button">
               Vans
             </Link>
-            <Link to="/guide" className="topbar-button">
+            <Link to="/search-guides" className="topbar-button">
               Travel Guide
             </Link>
             <Link to="/campervans" className="topbar-button">
